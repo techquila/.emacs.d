@@ -1,0 +1,13 @@
+auto-save-list/
+backups/
+elpa/
+secrets/
+snippets/
+bookmarks
+erc-config.el
+erc-config.org
+projectile-bookmarks.eld
+projectile-cache
+sod.el
+%backup%~
+.#*

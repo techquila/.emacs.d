@@ -1,0 +1,619 @@
+#+TITLE: sod.org
+#+AUTHOR: @sodoscarfono
+
+* Description:
+Org file to better manage my emacs configuration using Babel and literate programming techniques.
+
+
+* Credits:
+These wonderful people have shared tools, tips, and configs that have helped me have such an amazing emacs experience.
+
+** [[https://github.com/jwiegley/dot-emacs/blob/master/init.el][John Wiegly]]
+** [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua]]
+** [[http://www.wisdomandwonder.com/wp-content/uploads/2014/03/C3F.html][Grant Rettke]]
+** [[https://github.com/technomancy/emacs-starter-kit][Phil Hagelberg]]
+** [[https://eschulte.github.io/emacs24-starter-kit/][Eric Schulte]]
+** [[https://github.com/rdallasgray/graphene][Robert Dallas Gray]]
+
+
+* Aims
+** Automate as much as I can get away with
+** Increase my overall productivity by integrating more of the powerful tools that org-mode offers, such as org-capture templates etc
+** Enhance my knowledge by learning new ways of yeilding productivity gains through emacs, and seeing how others achieve results
+** Providing sufficient meaningful documentation in order that the next time i am inspired to play with my configuration I know whats up
+** Provide some sort of meaningful structure to my configuration
+
+
+* Source
+
+** Personalisation
+
+ #+BEGIN_SRC emacs-lisp :tangle yes
+
+(setq user-full-name "Sod Oscarfono"
+      user-mail-address "sod@oscarfono.com")
+
+ #+END_SRC
+
+** [[https://www.emacswiki.org/emacs/ELPA][Package Management]]
+Emacs is highly extensible and using packages is a great way to enhance our experience.
+
+*** Package Initialistion
+    Activate all the packages, (in particular autoloads), and set load path.
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+
+(require 'package)
+(package-initialize)
+
+    #+END_SRC
+
+*** Package sources
+We source our packages from the following repositories:
+
+**** [[https://elpa.gnu.org/packages][gnu]]
+
+**** [[https://marmalade-repo.org/packages][marmalade]]
+
+**** [[https://melpa.org/packages][melpa]]
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                         ("marmalade" . "https://marmalade-repo.org/packages/")
+                         ("melpa" . "https://melpa.org/packages/")))
+
+    #+END_SRC
+
+*** Fetch available packages
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+
+(unless package-archive-contents
+  (package-refresh-contents))
+
+    #+END_SRC
+
+*** Package Activation
+Ensure [[https://github.com/jwiegley/use-package/blob/master/README.md][use-package]] is present, else install it.
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+(setq use-package-verbose t)
+
+(require 'use-package)
+(use-package auto-compile
+  :config (auto-compile-on-load-mode))
+(setq load-prefer-newer t)
+
+#+END_SRC
+
+Ensure that [[https://github.com/jwiegley/use-package/blob/master/README.md][use-package]] downloads and installs packages that are not found locally. This requires [[http://wikemacs.org/wiki/Package.el][package.el]]
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(setq use-package-always-ensure t)
+
+#+END_SRC
+
+*** [[https://github.com/myrjola/diminish.el][diminish]]
+This package implements hiding or abbreviation of the mode line displays (lighters) of minor-modes.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package diminish)
+
+#+END_SRC
+
+*** [[https://github.com/jwiegley/use-package/blob/master/bind-key.el][bind-key]]
+If you have lots of keybindings set in your .emacs file, it can be
+hard to know which ones you haven't set yet, and which may now be
+overriding some new default in a new emacs version.  This module aims
+to solve that problem.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package bind-key)
+
+#+END_SRC
+
+** [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Windows-and-Frames.html#Windows-and-Frames][Frames]]
+   
+*** Menu bar
+Hide the menu bar so we get that space back.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(menu-bar-mode 0)
+
+#+END_SRC
+
+*** Scroll bars
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(scroll-bar-mode 1)
+
+#+END_SRC
+
+*** Tool bar
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(tool-bar-mode 0)
+
+#+END_SRC
+
+*** [[https://www.emacswiki.org/emacs/WinnerMode][Winner mode]]
+lets you use C-c <left> and C-c <right> to switch between window
+configurations.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package winner
+  :defer t
+  :config (winner-mode 1))
+
+#+END_SRC
+
+** [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Basic-Windows.html#Basic-Windows][Window Management]]
+
+*** Line numbers
+I like to see the line numbers generally
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(global-linum-mode 0)
+
+#+END_SRC
+
+*** Column numbers
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(column-number-mode 1)
+
+#+END_SRC
+
+*** Faster navigation with [[https://www.emacswiki.org/emacs/AceJump][ace-jump]]
+ace-jump-mode is an fast/direct cursor location minor mode. It will
+create the N-Branch search tree internal and marks all the possible
+position with predefined keys in current view. Allowing you to move to
+the character/word/line almost directly.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package ace-jump-mode
+  :commands ace-jump-mode)
+
+#+END_SRC
+
+** Theme
+
+*** Inhibit startup screen.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(setq inhibit-startup-message t)
+
+#+END_SRC
+
+*** [[https://github.com/techquila/melancholy-theme.el][melancholy-theme]]
+This is a theme I created which I think looks ok and works well for me.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(load-theme 'melancholy t)
+
+#+END_SRC
+
+** Encoding
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(prefer-coding-system 'utf-8)
+(set-language-environment 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+
+#+END_SRC
+
+** Shell
+   
+*** Terminal Emulation with [[https://www.emacswiki.org/emacs/MultiTerm][multi-term]]
+Multiple concurrent terminal buffers
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package multi-term)
+
+#+END_SRC
+
+** Authentication
+
+*** IRC
+Load configuration and authentication info from an external source.
+
+#+BEGIN_SRC emacs-lisp :tangle no
+
+(load "~/.config/emacs/24.x/.emacs.d/secrets/erc-config.org")
+
+#+END_SRC
+
+** Encryption
+
+*** GPG Agent
+Use an agent to manage GPG between shell sessions.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(setq epg-gpg-program "/usr/bin/gpg")
+
+#+END_SRC
+
+*** [[https://www.emacswiki.org/emacs/EasyPG][EasyPG]] to encrypt/decrypt files with a .gpg extension
+Add the following line to the top of the document to be encrypted and save the file with a .gpg extension.
+
+#+BEGIN_SRC emacs-lisp :tangle no
+
+# -*- mode:org; epa-file-encrypt-to: ("sod@oscarfono.com") -*-
+
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(require 'epa-file)
+(epa-file-enable)
+
+#+END_SRC
+
+** Remote File Access with [[https://www.emacswiki.org/emacs/TrampMode][TRAMP]]
+TRAMP (Transparent Remote Access, Multiple Protocols) is a package for
+editing remote files, similar to AngeFtp or efs. Whereas the others
+use FTP to connect to the remote host and to transfer the files, TRAMP
+uses a remote shell connection (rlogin, telnet, ssh). It can transfer
+the files using rcp or a similar program, or it can encode the file
+contents (using uuencode or base64) and transfer them right through
+the shell connection.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(setq tramp-default-user "sod")
+(setq tramp-default-method "ssh")
+
+#+END_SRC
+
+** Productivity Management
+*** Conveniences
+**** yes/no becomes y/n
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(fset 'yes-or-no-p 'y-or-n-p)
+
+#+END_SRC
+
+**** [[https://github.com/Fuco1/smartparens/wiki][Smartparens]]
+Smartparens is minor mode for Emacs that deals with parens pairs and
+tries to be smart about it. 
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package smartparens-config
+    :ensure smartparens
+    :config
+    (progn
+      (show-smartparens-global-mode t)))
+
+(add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
+(add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
+
+    #+END_SRC
+
+**** [[https://julien.danjou.info/projects/emacs-packages][rainbow-mode]] 
+rainbow-mode is a minor mode for Emacs which highlights text representing color codes in various forms by setting the background color of the text accordingly.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package rainbow-mode)
+
+#+END_SRC
+
+**** [[https://www.emacswiki.org/emacs/ElDoc][Eldoc]]
+A very simple but effective thing, eldoc-mode is a MinorMode which shows you, in the echo area, the argument list of the function call you are currently writing. Very handy. By NoahFriedman. Part of Emacs.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package "eldoc"
+  :diminish eldoc-mode
+  :commands turn-on-eldoc-mode
+  :defer t
+  :init
+  (progn
+  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+  (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)))
+
+#+END_SRC
+
+*** Autocompletion
+**** [[http://company-mode.github.io/][company-mode]]
+Company is a text completion framework for Emacs. The name stands for "complete anything". It uses pluggable back-ends and front-ends to retrieve and display completion candidates.
+
+     #+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package company
+  :config
+    (add-hook 'prog-mode-hook 'company-mode))
+
+     #+END_SRC
+
+**** [[https://github.com/emacs-helm/helm][Helm]]
+Helm is an Emacs framework for incremental completions and narrowing selections. It helps to rapidly complete file names, buffer names, or any other Emacs interactions requiring selecting an item from a list of possible choices.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package helm
+  :diminish helm-mode
+  :init
+  (progn
+    (require 'helm-config)
+    (setq helm-candidate-number-limit 100)
+    ;; From https://gist.github.com/antifuchs/9238468
+    (setq helm-idle-delay 0.0
+          helm-input-idle-delay 0.01
+          helm-yas-display-key-on-candidate t
+          helm-quick-update t
+          helm-M-x-requires-pattern nil
+          helm-ff-skip-boring-files t)
+    (helm-mode))
+  :bind (("C-c h" . helm-mini)
+         ("C-h a" . helm-apropos)
+         ("C-x C-b" . helm-buffers-list)
+         ("C-x b" . helm-buffers-list)
+         ("M-y" . helm-show-kill-ring)
+         ("M-x" . helm-M-x)
+         ("C-x c o" . helm-occur)
+         ("C-x c s" . helm-swoop)
+         ("C-x c y" . helm-yas-complete)
+         ("C-x c Y" . helm-yas-create-snippet-on-region)
+         ("C-x c b" . my/helm-do-grep-book-notes)
+         ("C-x c SPC" . helm-all-mark-rings)))
+
+#+END_SRC
+
+*** Snippets
+**** [[https://github.com/smihica/emmet-mode][emmet-mode]]
+This is a major mode for html and css expansion that i'm trying out.  Forked from as [[https://github.com/rooney/zencoding][zencoding-mode]].
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package emmet-mode
+  :config
+    (progn (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+           (add-hook 'css-mode-hook  'emmet-mode)))
+
+#+END_SRC
+
+**** [[https://www.emacswiki.org/emacs/Yasnippet][Yasnippet]]
+YASnippet is a template system for Emacs. It allows you to type an abbreviation and automatically expand it into function templates.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package yasnippet
+  :diminish yas-minor-mode
+  :init (yas-global-mode)
+  :config
+  (progn
+    (yas-global-mode)
+    (add-hook 'hippie-expand-try-functions-list 'yas-hippie-try-expand)
+    (setq yas-key-syntaxes '("w_" "w_." "^ "))
+    (setq yas-installed-snippets-dir "~/.config/emacs/24.x/.emacs.d/snippets")
+    (setq yas-expand-only-for-last-commands nil)
+    (yas-global-mode 1)
+    (bind-key "\t" 'hippie-expand yas-minor-mode-map)
+    (add-to-list 'yas-prompt-functions 'shk-yas/helm-prompt)))
+
+#+END_SRC
+
+*** Project managment with [[https://github.com/bbatsov/projectile][projectile]]
+Helm support using [[https://github.com/bbatsov/helm-projectile][helm-projectile]]
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package projectile
+  :diminish projectile-mode
+  :config
+  (progn
+    (setq projectile-keymap-prefix (kbd "C-c p"))
+    (setq projectile-completion-system 'helm)
+    (setq projectile-enable-caching t)
+    (setq projectile-indexing-method 'alien)
+    (add-to-list 'projectile-globally-ignored-files "node-modules"))
+  :config
+  (projectile-global-mode))
+(use-package helm-projectile
+  :config (helm-projectile-on))
+
+#+END_SRC
+
+*** Language modes
+**** [[https://www.emacswiki.org/emacs/Js2Mode][js2-mode]]
+This JavaScript editing mode supports:
+
+ - strict recognition of the Ecma-262 language standard
+ - support for most Rhino and SpiderMonkey extensions from 1.5 and up
+ - parsing support for ECMAScript for XML (E4X, ECMA-357)
+ - accurate syntax highlighting using a recursive-descent parser
+ - on-the-fly reporting of syntax errors and strict-mode warnings
+ - undeclared-variable warnings using a configurable externs framework
+ - "bouncing" line indentation to choose among alternate indentation points
+ - smart line-wrapping within comments and strings
+ - code folding:
+   - show some or all function bodies as {...}
+   - show some or all block comments as /*...*/
+ - context-sensitive menu bar and popup menus
+ - code browsing using the `imenu' package
+ - many customization options
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package js2-mode
+  :commands js2-mode
+  :init
+  (progn
+    (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+    (setq-default js2-basic-offset 2)
+    (add-to-list 'interpreter-mode-alist (cons "node" 'js2-mode)))
+  :config
+  (progn
+    (js2-imenu-extras-setup)
+    (bind-key "C-x C-e" 'js-send-last-sexp js2-mode-map)
+    (bind-key "C-M-x" 'js-send-last-sexp-and-go js2-mode-map)
+    (bind-key "C-c b" 'js-send-buffer js2-mode-map)
+    (bind-key "C-c d" 'my/insert-or-flush-debug js2-mode-map)
+    (bind-key "C-c C-b" 'js-send-buffer-and-go js2-mode-map)
+    (bind-key "C-c w" 'my/copy-javascript-region-or-buffer js2-mode-map)))
+
+#+END_SRC
+
+**** [[https://github.com/emacsmirror/ldap-mode][ldap-mode]]
+major modes for editing LDAP schema and LDIF files
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package ldap-mode
+  :commands ldap-mode)
+
+#+END_SRC
+
+**** [[http://orgmode.org/][org-mode]]
+
+***** [[http://orgmode.org/manual/Capture.html#Capture][org-capture]]
+Capture lets you quickly store notes with little interruption of your work flow.  
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(setq org-default-notes-file (concat org-directory "/notes.org"))
+(define-key global-map "\C-cc" 'org-capture)
+
+#+END_SRC
+
+***** [[http://orgmode.org/manual/Capture-templates.html#Capture-templates][org-capture-templates]]
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (setq org-capture-templates
+   '(("t" "Todo" entry (file+headline "~/Dropbox/org/gtd.org" "Tasks")
+          "* TODO %?\n  %i\n  %a")
+     ("j" "Journal" entry (file+datetree "~/Dropbox/org/journal.org")
+          "* %?\nEntered on %U\n  %i\n  %a")))
+
+#+END_SRC
+
+***** [[https://github.com/sabof/org-bullets][org-bullets]]
+Show org-mode bullets as UTF-8 characters.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package org-bullets
+  :config (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+#+END_SRC
+
+***** [[http://orgmode.org/worg/org-contrib/babel/languages/ob-doc-ditaa.html][ditaa]]
+Ditaa is a command-line utility that converts diagrams drawn using ASCII art into bitmap graphics, and is distributed with org-mode.  Invoke [[https://www.emacswiki.org/emacs/ArtistMode][artist-mode]] within the org file and use your mouse to draw
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((ditaa . t))) ; this line activates ditaa
+
+#+END_SRC
+
+**** scss-mode
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package scss-mode
+  :commands scss-mode
+  :mode "\\.s{a|c}ss?\\'")
+
+#+END_SRC
+
+*** Linting
+**** Flycheck
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package flycheck
+  :config
+    (global-flycheck-mode))
+
+#+END_SRC
+
+*** Syntax Highlighting
+Activate syntax highlighting globally
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(global-font-lock-mode 1)
+
+#+END_SRC
+
+** Links
+Use [[https://www.mozilla.org/en-US/firefox/new/][Firefox]] to open urls
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(setq browse-url-browser-function 'browse-url-generic)
+(setq browse-url-generic-program "firefox-browser")
+
+#+END_SRC
+
+** Notifications
+Replace annoying bell with visible-bell
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(setq visible-bell t)
+
+#+END_SRC
+
+** Backups
+
+*** Set backup directory so working backups are not saved in pwd
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(setq backup-directory-alist '(("." . "~/.config/emacs/24.x/.emacs.d/backups")))
+
+#+END_SRC
+
+*** Add versioning
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(setq delete-old-versions -1)
+(setq version-control t)
+(setq vc-make-backup-files t)
+(setq auto-save-file-name-transforms '((".*" "~/.config/emacs/24.x/.emacs.d/auto-save-list/" t)))
+
+#+END_SRC
+
+** End INIT
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(provide 'init)
+;;; sod.org ends here
+
+#+END_SRC
+
+
+

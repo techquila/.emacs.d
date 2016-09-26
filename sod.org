@@ -25,7 +25,7 @@ These wonderful people have shared tools, tips, and configs that have helped me 
 
 
 * Source
-
+  
 ** Personalisation
 
  #+BEGIN_SRC emacs-lisp :tangle yes
@@ -189,9 +189,7 @@ the character/word/line almost directly.
   :commands ace-jump-mode)
 
 #+END_SRC
-
 ** Theme
-
 *** Inhibit startup screen.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -201,10 +199,10 @@ the character/word/line almost directly.
 #+END_SRC
 
 *** [[https://github.com/techquila/melancholy-theme.el][melancholy-theme]]
-This is a theme I created which I think looks ok and works well for me.
+This is a theme I'm working on which I think looks ok.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-
+;;(use-package melancholy-theme)
 (load-theme 'melancholy t)
 
 #+END_SRC
@@ -289,14 +287,30 @@ the shell connection.
 
 ** Productivity Management
 *** Conveniences
-**** yes/no becomes y/n
+**** [[https://www.emacswiki.org/emacs/ElDoc][Eldoc]]
+A very simple but effective thing, eldoc-mode is a MinorMode which shows you, in the echo area, the argument list of the function call you are currently writing. Very handy. By NoahFriedman. Part of Emacs.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 
-(fset 'yes-or-no-p 'y-or-n-p)
+(use-package "eldoc"
+  :diminish eldoc-mode
+  :commands turn-on-eldoc-mode
+  :defer t
+  :init
+  (progn
+  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+  (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)))
 
 #+END_SRC
+**** [[https://julien.danjou.info/projects/emacs-packages][rainbow-mode]] 
+rainbow-mode is a minor mode for Emacs which highlights text representing color codes in various forms by setting the background color of the text accordingly.
 
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package rainbow-mode)
+
+#+END_SRC
 **** [[https://github.com/Fuco1/smartparens/wiki][Smartparens]]
 Smartparens is minor mode for Emacs that deals with parens pairs and
 tries to be smart about it. 
@@ -313,30 +327,11 @@ tries to be smart about it.
 (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 
     #+END_SRC
-
-**** [[https://julien.danjou.info/projects/emacs-packages][rainbow-mode]] 
-rainbow-mode is a minor mode for Emacs which highlights text representing color codes in various forms by setting the background color of the text accordingly.
+**** yes/no becomes y/n
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 
-(use-package rainbow-mode)
-
-#+END_SRC
-
-**** [[https://www.emacswiki.org/emacs/ElDoc][Eldoc]]
-A very simple but effective thing, eldoc-mode is a MinorMode which shows you, in the echo area, the argument list of the function call you are currently writing. Very handy. By NoahFriedman. Part of Emacs.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-
-(use-package "eldoc"
-  :diminish eldoc-mode
-  :commands turn-on-eldoc-mode
-  :defer t
-  :init
-  (progn
-  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-  (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)))
+(fset 'yes-or-no-p 'y-or-n-p)
 
 #+END_SRC
 
@@ -416,7 +411,8 @@ YASnippet is a template system for Emacs. It allows you to type an abbreviation 
     (setq yas-expand-only-for-last-commands nil)
     (yas-global-mode 1)
     (bind-key "\t" 'hippie-expand yas-minor-mode-map)
-    (add-to-list 'yas-prompt-functions 'shk-yas/helm-prompt)))
+    (add-to-list 'yas-prompt-functions 'shk-yas/helm-prompt)
+    (add-hook 'term-mode-hook (lambda()(yas-minor-mode -1)))))
 
 #+END_SRC
 
@@ -484,7 +480,7 @@ This JavaScript editing mode supports:
 **** [[https://github.com/emacsmirror/ldap-mode][ldap-mode]]
 major modes for editing LDAP schema and LDIF files
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
 
 (use-package ldap-mode
   :commands ldap-mode)
@@ -508,10 +504,13 @@ Capture lets you quickly store notes with little interruption of your work flow.
 #+BEGIN_SRC emacs-lisp :tangle yes
 
   (setq org-capture-templates
-   '(("t" "Todo" entry (file+headline "~/Dropbox/org/gtd.org" "Tasks")
+   '(("j" "journal" entry (file+datetree "~/Dropbox/org/journal.org")
+          "* %?\nEntered on %U\n  %i\n  %a")
+     ("t" "Todo" entry (file+headline "~/Dropbox/org/gtd.org" "Tasks")
           "* TODO %?\n  %i\n  %a")
-     ("j" "Journal" entry (file+datetree "~/Dropbox/org/journal.org")
-          "* %?\nEntered on %U\n  %i\n  %a")))
+     ("J" "Joke" entry (file+headline "~/Dropbox/org/jokes.org" "Jokes"))
+     ("Q" "Quote" entry (file+headline "~/Dropbox/org/quotes.org" "Quotes"))
+     ("R" "Recipe" entry (file+headline "~/Dropbox/org/recipes.org" "Recipes"))))
 
 #+END_SRC
 

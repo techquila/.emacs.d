@@ -1,6 +1,6 @@
 #+TITLE: sod.org
 #+AUTHOR: @sodoscarfono
-
+#+STARTUP: content
 * Description:
 Org file to better manage my emacs configuration using Babel and literate programming techniques.
 
@@ -126,7 +126,7 @@ Hide the menu bar so we get that space back.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 
-(menu-bar-mode 0)
+(menu-bar-mode 1)
 
 #+END_SRC
 
@@ -268,23 +268,6 @@ Add the following line to the top of the document to be encrypted and save the f
 (epa-file-enable)
 
 #+END_SRC
-
-** Remote File Access with [[https://www.emacswiki.org/emacs/TrampMode][TRAMP]]
-TRAMP (Transparent Remote Access, Multiple Protocols) is a package for
-editing remote files, similar to AngeFtp or efs. Whereas the others
-use FTP to connect to the remote host and to transfer the files, TRAMP
-uses a remote shell connection (rlogin, telnet, ssh). It can transfer
-the files using rcp or a similar program, or it can encode the file
-contents (using uuencode or base64) and transfer them right through
-the shell connection.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-
-(setq tramp-default-user "sod")
-(setq tramp-default-method "ssh")
-
-#+END_SRC
-
 ** Productivity Management
 *** Conveniences
 **** [[https://www.emacswiki.org/emacs/ElDoc][Eldoc]]
@@ -303,6 +286,7 @@ A very simple but effective thing, eldoc-mode is a MinorMode which shows you, in
   (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)))
 
 #+END_SRC
+
 **** [[https://julien.danjou.info/projects/emacs-packages][rainbow-mode]] 
 rainbow-mode is a minor mode for Emacs which highlights text representing color codes in various forms by setting the background color of the text accordingly.
 
@@ -311,6 +295,7 @@ rainbow-mode is a minor mode for Emacs which highlights text representing color 
 (use-package rainbow-mode)
 
 #+END_SRC
+
 **** [[https://github.com/Fuco1/smartparens/wiki][Smartparens]]
 Smartparens is minor mode for Emacs that deals with parens pairs and
 tries to be smart about it. 
@@ -327,6 +312,7 @@ tries to be smart about it.
 (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 
     #+END_SRC
+
 **** yes/no becomes y/n
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -335,7 +321,23 @@ tries to be smart about it.
 
 #+END_SRC
 
-*** Autocompletion
+**** Remote File Access with [[https://www.emacswiki.org/emacs/TrampMode][TRAMP]]
+TRAMP (Transparent Remote Access, Multiple Protocols) is a package for
+editing remote files, similar to AngeFtp or efs. Whereas the others
+use FTP to connect to the remote host and to transfer the files, TRAMP
+uses a remote shell connection (rlogin, telnet, ssh). It can transfer
+the files using rcp or a similar program, or it can encode the file
+contents (using uuencode or base64) and transfer them right through
+the shell connection.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(setq tramp-default-user "sod")
+(setq tramp-default-method "ssh")
+
+#+END_SRC
+
+*** Autocompletion and Snippets
 **** [[http://company-mode.github.io/][company-mode]]
 Company is a text completion framework for Emacs. The name stands for "complete anything". It uses pluggable back-ends and front-ends to retrieve and display completion candidates.
 
@@ -381,7 +383,6 @@ Helm is an Emacs framework for incremental completions and narrowing selections.
 
 #+END_SRC
 
-*** Snippets
 **** [[https://github.com/smihica/emmet-mode][emmet-mode]]
 This is a major mode for html and css expansion that i'm trying out.  Forked from as [[https://github.com/rooney/zencoding][zencoding-mode]].
 
@@ -407,11 +408,14 @@ YASnippet is a template system for Emacs. It allows you to type an abbreviation 
     (yas-global-mode)
     (add-hook 'hippie-expand-try-functions-list 'yas-hippie-try-expand)
     (setq yas-key-syntaxes '("w_" "w_." "^ "))
-    (setq yas-installed-snippets-dir "~/.config/emacs/24.x/.emacs.d/snippets")
+    (setq yas-installed-snippets-dir "~/.emacs.d/elpa/yasnippet-20160801.1142/snippets")
     (setq yas-expand-only-for-last-commands nil)
+
     (yas-global-mode 1)
+
     (bind-key "\t" 'hippie-expand yas-minor-mode-map)
-    (add-to-list 'yas-prompt-functions 'shk-yas/helm-prompt)
+;;    (add-to-list 'yas-prompt-functions 'shk-yas/helm-prompt)
+;; yasnippet messes with terminal mode tab completion so let's leave it off for that
     (add-hook 'term-mode-hook (lambda()(yas-minor-mode -1)))))
 
 #+END_SRC
@@ -488,13 +492,82 @@ major modes for editing LDAP schema and LDIF files
 #+END_SRC
 
 **** [[http://orgmode.org/][org-mode]]
+Org is a mode for keeping notes, maintaining TODO lists, and
+project planning with a fast and effective plain-text system. It also
+is an authoring system with unique support for literate programming
+and reproducible research.
 
+It is invoked automatically for files with the *.org* extension.  To
+turn on Org mode in a file that does not have the extension .org, make
+the first line of a file look like this:
+
+#+BEGIN_EXAMPLE
+
+     MY PROJECTS    -*- mode: org; -*-
+
+#+END_EXAMPLE
+
+which will select Org mode for this buffer no matter what the file's
+name is. See also the variable org-insert-mode-line-in-empty-file.
+
+***** global settings:
+
+****** set default notes file
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(setq org-default-notes-file (concat org-directory "/notes.org"))
+
+#+END_SRC
+
+****** set global key-bindings for org-mode features
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-cb" 'org-iswitchb)
+
+#+END_SRC
+
+****** set *TODO* sequence
+When TODO keywords are used as workflow states, you might want to keep
+track of when a state change occurred and maybe take a note about this
+change. You can either record just a timestamp, or a time-stamped note
+for a change. These records will be inserted after the headline as an
+itemized list, newest first1. When taking a lot of notes, you might
+want to get the notes out of the way into a drawer (see
+Drawers). Customize org-log-into-drawer to get this behavior—the
+recommended drawer for this is called LOGBOOK2. You can also overrule
+the setting of this variable for a subtree by setting a
+LOG_INTO_DRAWER property.
+
+Since it is normally too much to record a note for every state, Org
+mode expects configuration on a per-keyword basis for this. This is
+achieved by adding special markers ‘!’ (for a timestamp) or ‘@’ (for a
+note with timestamp) in parentheses after each keyword. For example,
+with the setting:
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(setq org-todo-keywords
+  '((sequence "TODO(t)" "REVIEW(r)" "WAIT(w@/!)" "|" "DONE(d!)" "DELEGATED(D@/!)")))
+
+#+END_SRC
+
+***** [[http://orgmode.org/manual/Agenda-Views.html][org-agenda]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(define-key global-map "\C-ca" 'org-agenda)
+
+(setq org-agenda-custom-commands
+           '(("f" occur-tree "FIXME")))
+
+#+END_SRC
 ***** [[http://orgmode.org/manual/Capture.html#Capture][org-capture]]
 Capture lets you quickly store notes with little interruption of your work flow.  
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 
-(setq org-default-notes-file (concat org-directory "/notes.org"))
 (define-key global-map "\C-cc" 'org-capture)
 
 #+END_SRC
@@ -504,13 +577,17 @@ Capture lets you quickly store notes with little interruption of your work flow.
 #+BEGIN_SRC emacs-lisp :tangle yes
 
   (setq org-capture-templates
-   '(("j" "journal" entry (file+datetree "~/Dropbox/org/journal.org")
+   '(("i" "Ideas" entry (file+datetree "~/Dropbox/org/ideas.org" "Ideas")
+          "* %?\nHad this idea on %U\n  %i\n %a")
+    ("j" "Journal" entry (file+datetree "~/Dropbox/org/journal.org")
           "* %?\nEntered on %U\n  %i\n  %a")
-     ("t" "Todo" entry (file+headline "~/Dropbox/org/gtd.org" "Tasks")
+    ("l" "Lyric" entry (file+headline "~/Dropbox/org/lyrics.org" 
+         "Lyrical Ideas"))
+    ("t" "Todo" entry (file+headline "~/Dropbox/org/gtd.org" "Tasks")
           "* TODO %?\n  %i\n  %a")
-     ("J" "Joke" entry (file+headline "~/Dropbox/org/jokes.org" "Jokes"))
-     ("Q" "Quote" entry (file+headline "~/Dropbox/org/quotes.org" "Quotes"))
-     ("R" "Recipe" entry (file+headline "~/Dropbox/org/recipes.org" "Recipes"))))
+    ("J" "Joke" entry (file+headline "~/Dropbox/org/jokes.org" "Jokes"))
+    ("Q" "Quote" entry (file+headline "~/Dropbox/org/quotes.org" "Quotes"))
+    ("R" "Recipe" entry (file+headline "~/Dropbox/org/recipes.org" "Recipes"))))
 
 #+END_SRC
 
@@ -544,7 +621,6 @@ Ditaa is a command-line utility that converts diagrams drawn using ASCII art int
   :mode "\\.s{a|c}ss?\\'")
 
 #+END_SRC
-
 *** Linting
 **** Flycheck
 
@@ -555,7 +631,6 @@ Ditaa is a command-line utility that converts diagrams drawn using ASCII art int
     (global-flycheck-mode))
 
 #+END_SRC
-
 *** Syntax Highlighting
 Activate syntax highlighting globally
 
@@ -613,6 +688,8 @@ Replace annoying bell with visible-bell
 ;;; sod.org ends here
 
 #+END_SRC
+
+
 
 
 

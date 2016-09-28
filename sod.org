@@ -202,7 +202,7 @@ the character/word/line almost directly.
 This is a theme I'm working on which I think looks ok.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-;;(use-package melancholy-theme)
+(use-package melancholy-theme)
 (load-theme 'melancholy t)
 
 #+END_SRC

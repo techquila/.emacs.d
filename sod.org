@@ -349,6 +349,25 @@ tries to be smart about it.
 (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 
     #+END_SRC
+**** undo-tree
+ People often struggle with the Emacs undo model, where there's really
+ no concept of "redo" - you simply undo the undo.
+
+This lets you use C-x u (undo-tree-visualize) to visually walk through
+the changes you've made, undo back to a certain point (or redo), and
+go down different branches.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package undo-tree
+  :diminish undo-tree-mode
+  :config
+  (progn
+    (global-undo-tree-mode)
+    (setq undo-tree-visualizer-timestamps t)
+    (setq undo-tree-visualizer-diff t)))
+
+#+END_SRC
 **** yes/no becomes y/n
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -500,6 +519,17 @@ I've been wanting to get into blogging for a little while now.  with [[https://g
             :url "http://www.bake-n-chill.com/xmlrpc.php"
             :username ,(car credentials)
             :password ,(cadr credentials))))))
+
+(setq org2blog/wp-buffer-template
+"-----------------------
+#+TITLE: %s
+#+DATE: %s
+-----------------------\n")
+(defun my-format-function (format-string)
+   (format format-string
+   org2blog/wp-default-title
+   (format-time-string "%d-%m-%Y" (current-time))))
+(setq org2blog/wp-buffer-format-function 'my-format-function)
 
 #+END_SRC
 *** Project managment with [[https://github.com/bbatsov/projectile][projectile]]

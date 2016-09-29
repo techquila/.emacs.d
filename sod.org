@@ -227,7 +227,9 @@ Multiple concurrent terminal buffers
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 
-(use-package multi-term)
+(use-package multi-term
+  :bind ("C-M-RET" . multi-term))
+
 
 #+END_SRC
 
@@ -295,6 +297,41 @@ rainbow-mode is a minor mode for Emacs which highlights text representing color 
 (use-package rainbow-mode)
 
 #+END_SRC
+**** Remote File Access with [[https://www.emacswiki.org/emacs/TrampMode][TRAMP]]
+TRAMP (Transparent Remote Access, Multiple Protocols) is a package for
+editing remote files, similar to AngeFtp or efs. Whereas the others
+use FTP to connect to the remote host and to transfer the files, TRAMP
+uses a remote shell connection (rlogin, telnet, ssh). It can transfer
+the files using rcp or a similar program, or it can encode the file
+contents (using uuencode or base64) and transfer them right through
+the shell connection.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(setq tramp-default-user "sod")
+(setq tramp-default-method "ssh")
+
+#+END_SRC
+**** Run emacs-server
+Various programs can invoke your choice of editor to edit a particular
+piece of text. For instance, version control programs invoke an editor
+to enter version control logs, and the Unix mail
+utility invokes an editor to enter a message to send. By convention,
+your choice of editor is specified by the environment variable
+EDITOR. If you set EDITOR to ‘emacs’, Emacs would be invoked, but in
+an inconvenient way—by starting a new Emacs process. This is
+inconvenient because the new Emacs process doesn’t share buffers, a
+command history, or other kinds of information with any existing Emacs
+process.
+
+You can solve this problem by setting up Emacs as an edit server, so
+that it “listens” for external edit requests and acts accordingly.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(server-start)
+
+#+END_SRC
 
 **** [[https://github.com/Fuco1/smartparens/wiki][Smartparens]]
 Smartparens is minor mode for Emacs that deals with parens pairs and
@@ -312,28 +349,11 @@ tries to be smart about it.
 (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 
     #+END_SRC
-
 **** yes/no becomes y/n
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 
 (fset 'yes-or-no-p 'y-or-n-p)
-
-#+END_SRC
-
-**** Remote File Access with [[https://www.emacswiki.org/emacs/TrampMode][TRAMP]]
-TRAMP (Transparent Remote Access, Multiple Protocols) is a package for
-editing remote files, similar to AngeFtp or efs. Whereas the others
-use FTP to connect to the remote host and to transfer the files, TRAMP
-uses a remote shell connection (rlogin, telnet, ssh). It can transfer
-the files using rcp or a similar program, or it can encode the file
-contents (using uuencode or base64) and transfer them right through
-the shell connection.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-
-(setq tramp-default-user "sod")
-(setq tramp-default-method "ssh")
 
 #+END_SRC
 
@@ -420,6 +440,68 @@ YASnippet is a template system for Emacs. It allows you to type an abbreviation 
 
 #+END_SRC
 
+*** Email and Contact management with [[https://www.emacswiki.org/emacs/GnusTutorial][GNU's]] and  [[http://bbdb.sourceforge.net/bbdb.html][BBDB]]
+
+**** [[https://www.emacswiki.org/emacs/GnusTutorial#toc2][GNU's]]
+Gnus, an Emacs package for reading e-mail and Usenet news (and many
+other things). It offers features that other news and mail readers
+lack. It is highly customizable and extensible.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(require 'gnus)
+
+#+END_SRC
+**** TODO BBDB
+BBDB is a rolodex-like database program for GNU Emacs. BBDB stands for Insidious Big Brother Database.
+
+It provides the following features:
+
+***** Integration with mail and news readers, with little or no interaction by the user:
+****** easy (or automatic) display of the record corresponding to the sender of the current message;
+
+****** automatic creation of records based on the contents of the current message;
+
+****** automatic addition of data to arbitrary fields of the record corresponding to the sender of the current message.
+
+
+***** Listing all records which match a regular expression;
+
+***** Listing all records which match a regular expression in a particular field (`company' or `notes,' for example);
+
+#+BEGIN_SRC emacs-lisp :tangle no
+
+(use-package bbdb)
+(bbdb-initialize 'gnus 'message)
+
+#+END_SRC
+
+*** Blogging
+
+**** [[https://github.com/punchagan/org2blog][org2blog]]
+I've been wanting to get into blogging for a little while now.  with [[https://github.com/punchagan/org2blog][org2blog]] I can write using my preferred tools and easily publish to my Wordpress installations.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package org2blog
+  :config
+    (require 'auth-source) ;; or nothing if already in the load-path
+
+    (let (credentials)
+     ;; only required if your auth file is not already in the list of auth-sources
+      (add-to-list 'auth-sources "~/.authinfo")
+      (setq credentials (auth-source-user-and-password "bake-n-chill"))
+      (setq org2blog/wp-blog-alist
+        `(("sod-blog"
+            :url "http://sod.oscarfono.com/xmlrpc.php"
+            :username ,(car credentials)
+            :password ,(cadr credentials))
+          ("bake-n-chill"
+            :url "http://www.bake-n-chill.com/xmlrpc.php"
+            :username ,(car credentials)
+            :password ,(cadr credentials))))))
+
+#+END_SRC
 *** Project managment with [[https://github.com/bbatsov/projectile][projectile]]
 Helm support using [[https://github.com/bbatsov/helm-projectile][helm-projectile]]
 

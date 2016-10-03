@@ -14,15 +14,14 @@ These wonderful people have shared tools, tips, and configs that have helped me 
 ** [[https://github.com/technomancy/emacs-starter-kit][Phil Hagelberg]]
 ** [[https://eschulte.github.io/emacs24-starter-kit/][Eric Schulte]]
 ** [[https://github.com/rdallasgray/graphene][Robert Dallas Gray]]
-
+** [[http://ergoemacs.org/emacs/blog.html][Xah Lee]]
 
 * Aims
 ** Automate as much as I can get away with
 ** Increase my overall productivity by integrating more of the powerful tools that org-mode offers, such as org-capture templates etc
 ** Enhance my knowledge by learning new ways of yeilding productivity gains through emacs, and seeing how others achieve results
-** Providing sufficient meaningful documentation in order that the next time i am inspired to play with my configuration I know whats up
 ** Provide some sort of meaningful structure to my configuration
-
+** Provide sufficient meaningful documentation in order that the next time i am inspired to play with my configuration I know whats up
 
 * Source
   
@@ -38,6 +37,14 @@ These wonderful people have shared tools, tips, and configs that have helped me 
 ** [[https://www.emacswiki.org/emacs/ELPA][Package Management]]
 Emacs is highly extensible and using packages is a great way to enhance our experience.
 
+*** load paths
+
+#+BEGIN_SRC emacs-lisp :tangle no
+
+(setq load-path (cons "~/.config/emacs/24.x/.emacs.d/src/org-mode/lisp" load-path))
+(setq load-path (cons "~/.config/emacs/24.x/.emacs.d/src/org-mode/contrib/lisp" load-path))
+
+#+END_SRC 
 *** Package Initialistion
     Activate all the packages, (in particular autoloads), and set load path.
 
@@ -49,6 +56,16 @@ Emacs is highly extensible and using packages is a great way to enhance our expe
     #+END_SRC
 
 *** Package sources
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                         ("marmalade" . "https://marmalade-repo.org/packages/")
+                         ("melpa" . "https://melpa.org/packages/")
+                         ("org" . "http://orgmode.org/elpa/")))
+
+    #+END_SRC
+
 We source our packages from the following repositories:
 
 **** [[https://elpa.gnu.org/packages][gnu]]
@@ -56,14 +73,6 @@ We source our packages from the following repositories:
 **** [[https://marmalade-repo.org/packages][marmalade]]
 
 **** [[https://melpa.org/packages][melpa]]
-
-    #+BEGIN_SRC emacs-lisp :tangle yes
-
-(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                         ("marmalade" . "https://marmalade-repo.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")))
-
-    #+END_SRC
 
 *** Fetch available packages
 
@@ -234,16 +243,26 @@ Multiple concurrent terminal buffers
 #+END_SRC
 
 ** Authentication
+*** Auth source
+I have a non-world readable file named /.authoinfo/ within my home
+directory where I store my authentication details for the various
+services I need to authenticate to.  ERC and Org2Blog need these credentials to operate.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(require 'auth-source)
+(add-to-list 'auth-sources "~/.authinfo")
+
+#+END_SRC
 
 *** IRC
 Load configuration and authentication info from an external source.
 
 #+BEGIN_SRC emacs-lisp :tangle no
 
-(load "~/.config/emacs/24.x/.emacs.d/secrets/erc-config.org")
+(load "~/.config/emacs/24.x/.emacs.d/secrets/erc-config.el")
 
 #+END_SRC
-
 ** Encryption
 
 *** GPG Agent
@@ -333,7 +352,7 @@ that it “listens” for external edit requests and acts accordingly.
 
 #+END_SRC
 
-**** [[https://github.com/Fuco1/smartparens/wiki][Smartparens]]
+**** [[https://github.com/Fuco1/smartparens/wiki][smartparens]]
 Smartparens is minor mode for Emacs that deals with parens pairs and
 tries to be smart about it. 
 
@@ -349,6 +368,21 @@ tries to be smart about it.
 (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 
     #+END_SRC
+
+**** subwords
+subword-mode changes all cursor movement/edit commands to stop in between the “camelCase” words.
+
+superword-mode  is similar.  It treats text like “x_y” as one word.  Useful for “snake_case”.
+
+subword-mode ＆ superword-mode are mutally exclusive.  Turning one on turns off the other.
+
+To see whether you have subword-mode on, call describe-variable then type “subword-mode”.  Same for superword-mode.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(subword-mode 1)
+
+#+END_SRC
 **** undo-tree
  People often struggle with the Emacs undo model, where there's really
  no concept of "redo" - you simply undo the undo.
@@ -388,7 +422,7 @@ Company is a text completion framework for Emacs. The name stands for "complete 
 
      #+END_SRC
 
-**** [[https://github.com/emacs-helm/helm][Helm]]
+**** [[https://github.com/emacs-helm/helm][helm]]
 Helm is an Emacs framework for incremental completions and narrowing selections. It helps to rapidly complete file names, buffer names, or any other Emacs interactions requiring selecting an item from a list of possible choices.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -478,12 +512,8 @@ It provides the following features:
 
 ***** Integration with mail and news readers, with little or no interaction by the user:
 ****** easy (or automatic) display of the record corresponding to the sender of the current message;
-
 ****** automatic creation of records based on the contents of the current message;
-
 ****** automatic addition of data to arbitrary fields of the record corresponding to the sender of the current message.
-
-
 ***** Listing all records which match a regular expression;
 
 ***** Listing all records which match a regular expression in a particular field (`company' or `notes,' for example);
@@ -504,21 +534,20 @@ I've been wanting to get into blogging for a little while now.  with [[https://g
 
 (use-package org2blog
   :config
-    (require 'auth-source) ;; or nothing if already in the load-path
 
-    (let (credentials)
+    (let (wp-credentials)
      ;; only required if your auth file is not already in the list of auth-sources
-      (add-to-list 'auth-sources "~/.authinfo")
-      (setq credentials (auth-source-user-and-password "bake-n-chill"))
+      
+      (setq wp-credentials (auth-source-user-and-password "bake-n-chill"))
       (setq org2blog/wp-blog-alist
         `(("sod-blog"
             :url "http://sod.oscarfono.com/xmlrpc.php"
-            :username ,(car credentials)
-            :password ,(cadr credentials))
+            :username ,(car wp-credentials)
+            :password ,(cadr wp-credentials))
           ("bake-n-chill"
             :url "http://www.bake-n-chill.com/xmlrpc.php"
-            :username ,(car credentials)
-            :password ,(cadr credentials))))))
+            :username ,(car wp-credentials)
+            :password ,(cadr wp-credentials))))))
 
 (setq org2blog/wp-buffer-template
 "-----------------------
@@ -623,10 +652,10 @@ which will select Org mode for this buffer no matter what the file's
 name is. See also the variable org-insert-mode-line-in-empty-file.
 
 ***** global settings:
-
-****** set default notes file
+****** set default directory and notes file
 #+BEGIN_SRC emacs-lisp :tangle yes
 
+(setq org-directory "~/Dropbox/org")
 (setq org-default-notes-file (concat org-directory "/notes.org"))
 
 #+END_SRC
@@ -635,9 +664,8 @@ name is. See also the variable org-insert-mode-line-in-empty-file.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 
-
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-cb" 'org-iswitchb)
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-cb" 'org-iswitchb)
 
 #+END_SRC
 
@@ -666,6 +694,17 @@ with the setting:
 
 #+END_SRC
 
+***** org-exports
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package ox-mediawiki)
+(use-package ox-reveal)
+
+(setq org-export-backends '(ascii html icalendar latex md mediawiki org reveal))
+
+#+END_SRC
+
 ***** [[http://orgmode.org/manual/Agenda-Views.html][org-agenda]]
 #+BEGIN_SRC emacs-lisp :tangle yes
 
@@ -675,34 +714,6 @@ with the setting:
            '(("f" occur-tree "FIXME")))
 
 #+END_SRC
-***** [[http://orgmode.org/manual/Capture.html#Capture][org-capture]]
-Capture lets you quickly store notes with little interruption of your work flow.  
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-
-(define-key global-map "\C-cc" 'org-capture)
-
-#+END_SRC
-
-***** [[http://orgmode.org/manual/Capture-templates.html#Capture-templates][org-capture-templates]]
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-
-  (setq org-capture-templates
-   '(("i" "Ideas" entry (file+datetree "~/Dropbox/org/ideas.org" "Ideas")
-          "* %?\nHad this idea on %U\n  %i\n %a")
-    ("j" "Journal" entry (file+datetree "~/Dropbox/org/journal.org")
-          "* %?\nEntered on %U\n  %i\n  %a")
-    ("l" "Lyric" entry (file+headline "~/Dropbox/org/lyrics.org" 
-         "Lyrical Ideas"))
-    ("t" "Todo" entry (file+headline "~/Dropbox/org/gtd.org" "Tasks")
-          "* TODO %?\n  %i\n  %a")
-    ("J" "Joke" entry (file+headline "~/Dropbox/org/jokes.org" "Jokes"))
-    ("Q" "Quote" entry (file+headline "~/Dropbox/org/quotes.org" "Quotes"))
-    ("R" "Recipe" entry (file+headline "~/Dropbox/org/recipes.org" "Recipes"))))
-
-#+END_SRC
-
 ***** [[https://github.com/sabof/org-bullets][org-bullets]]
 Show org-mode bullets as UTF-8 characters.
 
@@ -713,8 +724,38 @@ Show org-mode bullets as UTF-8 characters.
 
 #+END_SRC
 
+***** [[http://orgmode.org/manual/Capture.html#Capture][org-capture]]
+Capture lets you quickly store notes with little interruption of your work flow.  
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(define-key global-map "\C-cc" 'org-capture)
+
+#+END_SRC
+***** [[http://orgmode.org/manual/Capture-templates.html#Capture-templates][org-capture-templates]]
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (setq org-capture-templates
+   '(("i" "Ideas" entry (file+datetree "~/Dropbox/org/ideas.org" "Ideas")
+          "* %?\nHad this idea on %U\n  %i\n %a")
+     ("j" "Journal" entry (file+datetree "~/Dropbox/org/journal.org")
+          "* %?\nEntered on %U\n  %i\n  %a")
+     ("J" "Joke" entry (file+headline "~/Dropbox/org/jokes.org" "Jokes"))
+     ("k" "Keybinding" entry (file+headline "~/Dropbox/org/ultimateguide.org"
+          "Emacs" "Keybindings"))
+     ("l" "Lyric" entry (file+headline "~/Dropbox/org/lyrics.org" 
+         "Lyrical Ideas"))
+     ("Q" "Quote" entry (file+headline "~/Dropbox/org/quotes.org" "Quotes"))
+     ("R" "Recipe" entry (file+headline "~/Dropbox/org/recipes.org" "Recipes"))
+     ("t" "Todo" entry (file+headline "~/Dropbox/org/gtd.org" "Tasks")
+         "* TODO %?\n  %i\n  %a")))
+  
+#+END_SRC
 ***** [[http://orgmode.org/worg/org-contrib/babel/languages/ob-doc-ditaa.html][ditaa]]
-Ditaa is a command-line utility that converts diagrams drawn using ASCII art into bitmap graphics, and is distributed with org-mode.  Invoke [[https://www.emacswiki.org/emacs/ArtistMode][artist-mode]] within the org file and use your mouse to draw
+Ditaa is a command-line utility that converts diagrams drawn using
+ASCII art into bitmap graphics, and is distributed with org-mode.
+Invoke [[https://www.emacswiki.org/emacs/ArtistMode][artist-mode]] within the org file and use your mouse to draw
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 

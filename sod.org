@@ -799,7 +799,7 @@ Use [[https://www.mozilla.org/en-US/firefox/new/][Firefox]] to open urls
 #+BEGIN_SRC emacs-lisp :tangle yes
 
 (setq browse-url-browser-function 'browse-url-generic)
-(setq browse-url-generic-program "firefox-browser")
+(setq browse-url-generic-program "firefox")
 
 #+END_SRC
 

@@ -6,6 +6,7 @@ snippets/
 bookmarks
 erc-config.el
 erc-config.org
+.projectile
 projectile-bookmarks.eld
 projectile-cache
 sod.el

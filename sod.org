@@ -237,7 +237,7 @@ Multiple concurrent terminal buffers
 #+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package multi-term
-  :bind ("C-M-RET" . multi-term))
+  :bind ("C-M-SPC" . multi-term))
 
 
 #+END_SRC

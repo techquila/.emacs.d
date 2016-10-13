@@ -37,14 +37,6 @@ These wonderful people have shared tools, tips, and configs that have helped me 
 ** [[https://www.emacswiki.org/emacs/ELPA][Package Management]]
 Emacs is highly extensible and using packages is a great way to enhance our experience.
 
-*** load paths
-
-#+BEGIN_SRC emacs-lisp :tangle no
-
-(setq load-path (cons "~/.config/emacs/24.x/.emacs.d/src/org-mode/lisp" load-path))
-(setq load-path (cons "~/.config/emacs/24.x/.emacs.d/src/org-mode/contrib/lisp" load-path))
-
-#+END_SRC 
 *** Package Initialistion
     Activate all the packages, (in particular autoloads), and set load path.
 
@@ -61,8 +53,7 @@ Emacs is highly extensible and using packages is a great way to enhance our expe
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ("marmalade" . "https://marmalade-repo.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")
-                         ("org" . "http://orgmode.org/elpa/")))
+                         ("melpa" . "https://melpa.org/packages/")))
 
     #+END_SRC
 
@@ -260,7 +251,7 @@ Load configuration and authentication info from an external source.
 
 #+BEGIN_SRC emacs-lisp :tangle no
 
-(load "~/.config/emacs/24.x/.emacs.d/secrets/erc-config.el")
+(load "~/.config/emacs/25.x/.emacs.d/secrets/erc-config.el")
 
 #+END_SRC
 ** Encryption
@@ -279,7 +270,7 @@ Add the following line to the top of the document to be encrypted and save the f
 
 #+BEGIN_SRC emacs-lisp :tangle no
 
-# -*- mode:org; epa-file-encrypt-to: ("sod@oscarfono.com") -*-
+# -*- mode:org; epa-file-encrypt-to: ("sod@catalyst.net.nz") -*-
 
 #+END_SRC
 
@@ -346,8 +337,11 @@ process.
 You can solve this problem by setting up Emacs as an edit server, so
 that it “listens” for external edit requests and acts accordingly.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
 
+(require 'server)
+(setq server-auth-dir "~/.config/emacs/25.x/.emacs.d/server")  ;;Server file location
+(setq server-name "emacs_server0")                             ;;Server mutex file name
 (server-start)
 
 #+END_SRC
@@ -530,7 +524,7 @@ It provides the following features:
 **** [[https://github.com/punchagan/org2blog][org2blog]]
 I've been wanting to get into blogging for a little while now.  with [[https://github.com/punchagan/org2blog][org2blog]] I can write using my preferred tools and easily publish to my Wordpress installations.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
 
 (use-package org2blog
   :config
@@ -696,7 +690,7 @@ with the setting:
 
 ***** org-exports
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
 
 (use-package ox-mediawiki)
 (use-package ox-reveal)
@@ -818,7 +812,7 @@ Replace annoying bell with visible-bell
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 
-(setq backup-directory-alist '(("." . "~/.config/emacs/24.x/.emacs.d/backups")))
+(setq backup-directory-alist '(("." . "~/.config/emacs/25.x/.emacs.d/backups")))
 
 #+END_SRC
 
@@ -829,7 +823,7 @@ Replace annoying bell with visible-bell
 (setq delete-old-versions -1)
 (setq version-control t)
 (setq vc-make-backup-files t)
-(setq auto-save-file-name-transforms '((".*" "~/.config/emacs/24.x/.emacs.d/auto-save-list/" t)))
+(setq auto-save-file-name-transforms '((".*" "~/.config/emacs/25.x/.emacs.d/auto-save-list/" t)))
 
 #+END_SRC
 

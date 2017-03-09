@@ -1,9 +1,8 @@
 #+TITLE: sod.org
 #+AUTHOR: @sodoscarfono
-#+STARTUP: content
+
 * Description:
 Org file to better manage my emacs configuration using Babel and literate programming techniques.
-
 
 * Credits:
 These wonderful people have shared tools, tips, and configs that have helped me have such an amazing emacs experience.
@@ -15,6 +14,8 @@ These wonderful people have shared tools, tips, and configs that have helped me 
 ** [[https://eschulte.github.io/emacs24-starter-kit/][Eric Schulte]]
 ** [[https://github.com/rdallasgray/graphene][Robert Dallas Gray]]
 ** [[http://ergoemacs.org/emacs/blog.html][Xah Lee]]
+
+** [[http://pragmaticemacs.com/emacs/org-mode-basics-vii-a-todo-list-with-schedules-and-deadlines/][Dr Ben Maughan]]
 
 * Aims
 ** Automate as much as I can get away with
@@ -146,6 +147,17 @@ Hide the menu bar so we get that space back.
 
 #+END_SRC
 
+*** Mode line
+Display full path of file on mode line
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(setq-default mode-line-buffer-identification
+              (let ((orig  (car mode-line-buffer-identification)))
+                `(:eval (cons (concat ,orig (abbreviate-file-name default-directory))
+                              (cdr mode-line-buffer-identification)))))
+
+#+END_SRC
 *** [[https://www.emacswiki.org/emacs/WinnerMode][Winner mode]]
 lets you use C-c <left> and C-c <right> to switch between window
 configurations.
@@ -577,6 +589,15 @@ Helm support using [[https://github.com/bbatsov/helm-projectile][helm-projectile
 #+END_SRC
 
 *** Language modes
+
+**** ansible-mode
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package ansible
+  :commands ansible-mode)
+
+#+END_SRC
+
 **** [[https://www.emacswiki.org/emacs/Js2Mode][js2-mode]]
 This JavaScript editing mode supports:
 
@@ -594,8 +615,8 @@ This JavaScript editing mode supports:
  - context-sensitive menu bar and popup menus
  - code browsing using the `imenu' package
  - many customization options
-
-#+BEGIN_SRC emacs-lisp :tangle yes
+   
+ #+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package js2-mode
   :commands js2-mode
@@ -614,8 +635,8 @@ This JavaScript editing mode supports:
     (bind-key "C-c C-b" 'js-send-buffer-and-go js2-mode-map)
     (bind-key "C-c w" 'my/copy-javascript-region-or-buffer js2-mode-map)))
 
-#+END_SRC
-
+ #+END_SRC
+ 
 **** [[https://github.com/emacsmirror/ldap-mode][ldap-mode]]
 major modes for editing LDAP schema and LDIF files
 
@@ -646,11 +667,11 @@ which will select Org mode for this buffer no matter what the file's
 name is. See also the variable org-insert-mode-line-in-empty-file.
 
 ***** global settings:
-****** set default directory and notes file
+****** set default directory and files
 #+BEGIN_SRC emacs-lisp :tangle yes
 
 (setq org-directory "~/Dropbox/org")
-(setq org-default-notes-file (concat org-directory "/notes.org"))
+
 
 #+END_SRC
 
@@ -660,6 +681,26 @@ name is. See also the variable org-insert-mode-line-in-empty-file.
 
 (define-key global-map "\C-cl" 'org-store-link)
 (define-key global-map "\C-cb" 'org-iswitchb)
+
+#+END_SRC
+
+***** TODO's
+
+****** set TODO file and priorities
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+;;file to save todo items
+(setq org-agenda-files (quote ("~/Dropbox/org/todo.org")))
+
+;;set priority range from A to C with default A
+(setq org-highest-priority ?A)
+(setq org-lowest-priority ?C)
+(setq org-default-priority ?A)
+
+;;set colours for priorities
+(setq org-priority-faces '((?A . (:foreground "#f92672" :weight bold))
+                           (?B . (:foreground "#00dfff"))
+                           (?C . (:foreground "Yellow"))))
 
 #+END_SRC
 
@@ -675,8 +716,8 @@ recommended drawer for this is called LOGBOOK2. You can also overrule
 the setting of this variable for a subtree by setting a
 LOG_INTO_DRAWER property.
 
-Since it is normally too much to record a note for every state, Org
-mode expects configuration on a per-keyword basis for this. This is
+Since it is normally too much to record a note for every state, Orgm
+ode expects configuration on a per-keyword basis for this. This is
 achieved by adding special markers ‘!’ (for a timestamp) or ‘@’ (for a
 note with timestamp) in parentheses after each keyword. For example,
 with the setting:
@@ -688,26 +729,67 @@ with the setting:
 
 #+END_SRC
 
-***** org-exports
+****** Log *TODO* done time
+#+BEGIN_SRC emacs-lisp :tangle yes
 
-#+BEGIN_SRC emacs-lisp :tangle no
+(setq org-log-done 'time)
 
-(use-package ox-mediawiki)
-(use-package ox-reveal)
+#+END_SRC
 
-(setq org-export-backends '(ascii html icalendar latex md mediawiki org reveal))
+****** Set line wrap
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(setq org-startup-indented t) 
+(setq org-startup-truncated nil)
 
 #+END_SRC
 
 ***** [[http://orgmode.org/manual/Agenda-Views.html][org-agenda]]
 #+BEGIN_SRC emacs-lisp :tangle yes
 
-(define-key global-map "\C-ca" 'org-agenda)
+  (define-key global-map "\C-ca" 'org-agenda)
 
-(setq org-agenda-custom-commands
-           '(("f" occur-tree "FIXME")))
+  (setq org-agenda-custom-commands
+             '(("f" occur-tree "FIXME")))
+  ;; Emacs contains the calendar and diary by Edward M. Reingold.  The
+  ;; calendar displays a three-month calendar with holidays from
+  ;; different countries and cultures. The diary allows you to keep
+  ;; track of anniversaries, lunar phases, sunrise/set, recurrent
+  ;; appointments (weekly, monthly) and more. In this way, it is quite
+  ;; complementary to Org. It can be very useful to combine output from
+  ;; Org with the diary.
+ 
+  ;; In order to include entries from the Emacs diary into Org mode's
+  ;; agenda, you only need to customize the variable
+
+
+  (setq org-agenda-include-diary t)
+
+  ;;open agenda in current window
+  (setq org-agenda-window-setup (quote current-window))
+  ;;warn me of any deadlines in next 7 days
+  (setq org-deadline-warning-days 7)
+  ;;show me tasks scheduled or due in next fortnight
+  (setq org-agenda-span (quote fortnight))
+  ;;don't show tasks as scheduled if they are already shown as a deadline
+  (setq org-agenda-skip-scheduled-if-deadline-is-shown t)
+  ;;don't give awarning colour to tasks with impending deadlines
+  ;;if they are scheduled to be done
+  (setq org-agenda-skip-deadline-prewarning-if-scheduled (quote pre-scheduled))
+  ;;don't show tasks that are scheduled or have deadlines in the
+  ;;normal todo list
+  (setq org-agenda-todo-ignore-deadlines (quote all))
+  (setq org-agenda-todo-ignore-scheduled (quote all))
+  ;;sort tasks in order of when they are due and then by priority
+  (setq org-agenda-sorting-strategy
+    (quote
+     ((agenda deadline-up priority-down)
+      (todo priority-down category-keep)
+      (tags priority-down category-keep)
+      (search category-keep))))
 
 #+END_SRC
+
 ***** [[https://github.com/sabof/org-bullets][org-bullets]]
 Show org-mode bullets as UTF-8 characters.
 
@@ -726,25 +808,39 @@ Capture lets you quickly store notes with little interruption of your work flow.
 (define-key global-map "\C-cc" 'org-capture)
 
 #+END_SRC
+
 ***** [[http://orgmode.org/manual/Capture-templates.html#Capture-templates][org-capture-templates]]
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 
   (setq org-capture-templates
-   '(("i" "Ideas" entry (file+datetree "~/Dropbox/org/ideas.org" "Ideas")
+   '(("i" "Idea" entry (file+datetree "~/Dropbox/org/ideas.org" "Ideas")
           "* %?\nHad this idea on %U\n  %i\n %a")
+     ("e" "Expense" entry (file+datetree "~/Dropbox/org/ledger.org" "Expenses")
+          "* %?\nIncurred on %U\n %i\n %a")
+     ("J" "Joke" entry (file+headline "~/Dropbox/org/jokes.org" "Jokes"))
      ("j" "Journal" entry (file+datetree "~/Dropbox/org/journal.org")
           "* %?\nEntered on %U\n  %i\n  %a")
-     ("J" "Joke" entry (file+headline "~/Dropbox/org/jokes.org" "Jokes"))
      ("k" "Keybinding" entry (file+headline "~/Dropbox/org/ultimateguide.org"
           "Emacs" "Keybindings"))
      ("l" "Lyric" entry (file+headline "~/Dropbox/org/lyrics.org" 
          "Lyrical Ideas"))
      ("Q" "Quote" entry (file+headline "~/Dropbox/org/quotes.org" "Quotes"))
      ("R" "Recipe" entry (file+headline "~/Dropbox/org/recipes.org" "Recipes"))
-     ("t" "Todo" entry (file+headline "~/Dropbox/org/gtd.org" "Tasks")
+     ("t" "Todo" entry (file+headline "~/Dropbox/org/todo.org" "Inbox")
          "* TODO %?\n  %i\n  %a")))
   
+#+END_SRC
+
+***** org-exports
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package ox-mediawiki)
+(use-package ox-reveal)
+
+(setq org-export-backends '(ascii html icalendar latex md mediawiki reveal))
+
 #+END_SRC
 ***** [[http://orgmode.org/worg/org-contrib/babel/languages/ob-doc-ditaa.html][ditaa]]
 Ditaa is a command-line utility that converts diagrams drawn using
@@ -766,6 +862,15 @@ Invoke [[https://www.emacswiki.org/emacs/ArtistMode][artist-mode]] within the or
 (use-package scss-mode
   :commands scss-mode
   :mode "\\.s{a|c}ss?\\'")
+
+#+END_SRC
+
+**** yaml-mode
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package yaml-mode
+  :commands yaml-mode
+  :mode "\\.yml\\'")
 
 #+END_SRC
 *** Linting
@@ -835,8 +940,5 @@ Replace annoying bell with visible-bell
 ;;; sod.org ends here
 
 #+END_SRC
-
-
-
 
 

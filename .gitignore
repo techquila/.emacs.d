@@ -10,5 +10,8 @@ erc-config.org
 projectile-bookmarks.eld
 projectile-cache
 sod.el
+recentf
+tramp
+network-security.data
 %backup%~
 .#*

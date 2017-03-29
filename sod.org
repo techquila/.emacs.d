@@ -814,10 +814,12 @@ Capture lets you quickly store notes with little interruption of your work flow.
 #+BEGIN_SRC emacs-lisp :tangle yes
 
   (setq org-capture-templates
-   '(("i" "Idea" entry (file+datetree "~/Dropbox/org/ideas.org" "Ideas")
-          "* %?\nHad this idea on %U\n  %i\n %a")
+   '(("d" "Documentation" entry (file+headline "~/Dropbox/org/docs.org" "Documentation")
+          " %?\n %i\n &a")
      ("e" "Expense" entry (file+datetree "~/Dropbox/org/ledger.org" "Expenses")
           "* %?\nIncurred on %U\n %i\n %a")
+     ("i" "Idea" entry (file+datetree "~/Dropbox/org/ideas.org" "Ideas")
+          "* %?\nHad this idea on %U\n  %i\n %a")
      ("J" "Joke" entry (file+headline "~/Dropbox/org/jokes.org" "Jokes"))
      ("j" "Journal" entry (file+datetree "~/Dropbox/org/journal.org")
           "* %?\nEntered on %U\n  %i\n  %a")

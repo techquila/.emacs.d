@@ -1,0 +1,5 @@
+(use-package jsx-mode
+  :commands jsx-mode
+  :init
+  (progn
+    (add-to-list 'auto-mode-alist '("\\.jsx$" . jsx-mode))))

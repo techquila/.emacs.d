@@ -692,6 +692,34 @@ Public License instead of this License.  But first, please read
 * Dependencies
 * Installation
 * Code
+** Interpreter Directive
+  #+BEGIN_SRC python :tangle yes
+  #!/usr/bin/env python3
+  #+END_SRC
+** Script Header Definitions 
+#+BEGIN_SRC python :tangle yes
+#####################################################################
+#
+# NAME:        
+#
+# DESCRIPTION: 
+#              
+#
+# VERSION:     0.1
+#
+# MAINTAINER:  @sodoscarfono
+#
+# LICENCE:     GPLv3 License which should be shipped with this script
+#
+#####################################################################
+#+END_SRC
+
+** Import Directives 
+#+BEGIN_SRC python :tangle yes
+
+
+#+END_SRC
+  
 * Usage
 * Troubleshooting
 * Known Issues

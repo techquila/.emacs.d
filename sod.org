@@ -1,3 +1,4 @@
+
 #+TITLE: sod.org
 #+AUTHOR: @sodoscarfono
 
@@ -319,6 +320,21 @@ rainbow-mode is a minor mode for Emacs which highlights text representing color 
 (use-package rainbow-mode)
 
 #+END_SRC
+
+**** [[http://ledger-cli.org/3.0/doc/ledger-mode.html][ledger-mode]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+;; ledger
+(use-package ledger-mode
+  :mode "\\.ledger\\'"
+  :config
+  (define-key ledger-mode-map (kbd "C-c t") 'ledger-mode-clean-buffer)
+  (setq ledger-post-amount-alignment-at :decimal
+        ledger-post-amount-alignment-column 49
+        ledger-clear-whole-transactions t)
+(use-package flycheck-ledger))
+
+#+END_SRC
 **** Remote File Access with [[https://www.emacswiki.org/emacs/TrampMode][TRAMP]]
 TRAMP (Transparent Remote Access, Multiple Protocols) is a package for
 editing remote files, similar to AngeFtp or efs. Whereas the others
@@ -497,6 +513,8 @@ YASnippet is a template system for Emacs. It allows you to type an abbreviation 
 ;; yasnippet messes with terminal mode tab completion so let's leave it off for that
     (add-hook 'term-mode-hook (lambda()(yas-minor-mode -1)))))
 
+(use-package react-snippets)
+
 #+END_SRC
 
 *** Email and Contact management with [[https://www.emacswiki.org/emacs/GnusTutorial][GNU's]] and  [[http://bbdb.sourceforge.net/bbdb.html][BBDB]]
@@ -598,6 +616,14 @@ Helm support using [[https://github.com/bbatsov/helm-projectile][helm-projectile
 
 #+END_SRC
 
+**** crontab-mode
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package crontab-mode
+:mode "\\.cron\\(tab\\)?\\'")
+
+#+END_SRC
+
 **** [[https://www.emacswiki.org/emacs/Js2Mode][js2-mode]]
 This JavaScript editing mode supports:
 
@@ -623,8 +649,28 @@ This JavaScript editing mode supports:
   :init
   (progn
     (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-    (setq-default js2-basic-offset 2)
+  (use-package js2-mode
+  :defer 1
+  :mode "\\.js$"
+  :config
+  (progn
+    (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
+
+    (add-hook 'js2-mode-hook #'tern-mode)
+
+    ;; Don't indent multi-line declarations (var, let, const) in any special way.
+    (advice-add 'js--multi-line-declaration-indentation :around (lambda (orig-fun &rest args) nil))
+
+    (setq js2-basic-offset 2
+          js2-bounce-indent-p t
+          js2-strict-missing-semi-warning nil
+          js2-concat-multiline-strings nil
+          js2-include-node-externs t
+          js2-skip-preprocessor-directives t
+          js2-strict-inconsistent-return-warning nil)))
+
     (add-to-list 'interpreter-mode-alist (cons "node" 'js2-mode)))
+
   :config
   (progn
     (js2-imenu-extras-setup)
@@ -636,6 +682,20 @@ This JavaScript editing mode supports:
     (bind-key "C-c w" 'my/copy-javascript-region-or-buffer js2-mode-map)))
 
  #+END_SRC
+
+**** rjsx-mode
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package rjsx-mode
+  :commands rjsx-mode
+  :init
+  (progn
+    (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
+    (setq js2-basic-offset 2)))
+    
+
+#+END_SRC
  
 **** [[https://github.com/emacsmirror/ldap-mode][ldap-mode]]
 major modes for editing LDAP schema and LDIF files
@@ -646,7 +706,6 @@ major modes for editing LDAP schema and LDIF files
   :commands ldap-mode)
 
 #+END_SRC
-
 **** [[http://orgmode.org/][org-mode]]
 Org is a mode for keeping notes, maintaining TODO lists, and
 project planning with a fast and effective plain-text system. It also
@@ -747,6 +806,8 @@ with the setting:
 ***** [[http://orgmode.org/manual/Agenda-Views.html][org-agenda]]
 #+BEGIN_SRC emacs-lisp :tangle yes
 
+  (org-agenda nil "a") ;; present org-agenda on emacs startup
+ 
   (define-key global-map "\C-ca" 'org-agenda)
 
   (setq org-agenda-custom-commands
@@ -867,14 +928,25 @@ Invoke [[https://www.emacswiki.org/emacs/ArtistMode][artist-mode]] within the or
 
 #+END_SRC
 
-**** yaml-mode
+**** ssh-mode
+#+BEGIN_SRC emacs-lisp :tangle yes
 
+(use-package ssh-config-mode
+  :mode ((".ssh/config\\'"       . ssh-config-mode)
+         ("sshd?_config\\'"      . ssh-config-mode)
+         ("known_hosts\\'"       . ssh-known-hosts-mode)
+         ("authorized_keys2?\\'" . ssh-authorized-keys-mode)))
+
+#+END_SRC
+
+**** yaml-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package yaml-mode
   :commands yaml-mode
   :mode "\\.yml\\'")
 
 #+END_SRC
+
 *** Linting
 **** Flycheck
 

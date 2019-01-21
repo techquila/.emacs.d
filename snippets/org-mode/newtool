@@ -12,7 +12,7 @@
 * Name
 * Description
 * License
-#+BEGIN_SRC license.txt
+#+begin_src license.txt
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
@@ -150,7 +150,7 @@ produce the work, or an object code interpreter used to run it.
 the source code needed to generate, install, and (for an executable
 work) run the object code and to modify the work, including scripts to
 control those activities.  However, it does not include the work's
-System Libraries, or general-purpose tools or generally available free
+nSystem Libraries, or general-purpose tools or generally available free
 programs which are used unmodified in performing those activities but
 which are not part of the work.  For example, Corresponding Source
 includes interface definition files associated with source files for
@@ -687,7 +687,7 @@ may consider it more useful to permit linking proprietary applications with
 the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <http://www.gnu.org/philosophy/why-not-lgpl.html>.
-#+END_SRC
+#+end_src
 * Features
 * Dependencies
 * Installation
@@ -695,7 +695,7 @@ Public License instead of this License.  But first, please read
 ** Init
 ** Build
 *** Install ansible, docker, and docker-compose in VENV
-#+BEGIN_SRC shell :tangle installbase.sh
+#+begin_src shell :tangle installbase.sh
 #!/bin/bash
 
 # This script installs the latest version of Ansible, Docker, Docker-compose, and the OpenStack
@@ -720,7 +720,7 @@ help() {
 ################################################################################
 
 # Set Ansible python virtual environment name
-ANSIBLE_VENV="ansible-venv"
+ANSIBLE_VENV="venv-dev"
 
 # Parse command line arguments
 VERSION="stable"
@@ -910,23 +910,31 @@ fi
 echo
 exit 0
 
-#+END_SRC
+#+end_src
 *** Dockerfile
-#+BEGIN_SRC txt :tangle Dockerfile
+#+begin_src txt :tangle Dockerfile
 FROM python:3
  ENV PYTHONUNBUFFERED 1
  RUN mkdir /code
  WORKDIR /code
  ADD . /code/
  RUN pip install -r requirements.txt
-#+END_SRC
+#+end_src
 *** requirements.txt
-#+BEGIN_SRC txt :tangle requirements.txt
-django==2.02
+#+begin_src txt :tangle requirements.txt
+# CORE
+django
+wagtail
+wagtailmodeladmin
+# DATABASE: POSTGRESQL
 psycopg2
-#+END_SRC
+# SEARCH
+elasticsearch
+# DEVEL
+django-debug-toolbar
+#+end_src
 *** docker-compose.yml
-#+BEGIN_SRC yaml :tangle docker-compose.yml
+#+begin_src yaml :tangle docker-compose.yml
 version: '3'
 
 services:
@@ -941,8 +949,7 @@ services:
       - "8000:8000"
     depends_on:
       - db
-
-#+END_SRC
+#+end_src
 
 * Usage
 * Troubleshooting

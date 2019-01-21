@@ -40,13 +40,13 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(initial-frame-alist (quote ((fullscreen . maximized))))
  '(package-selected-packages
    (quote
-    (yasnippet yaml-mode use-package undo-tree smartparens scss-mode rainbow-mode ox-reveal ox-mediawiki org-bullets multi-term melancholy-theme js2-mode helm-projectile flycheck emmet-mode company ansible ace-jump-mode))))
+    (flycheck yaml-mode ssh-config-mode scss-mode org-fstree ox-mediawiki org-bullets rjsx-mode js2-mode crontab-mode ansible helm-projectile projectile react-snippets yasnippet emmet-mode helm company undo-tree smartparens ledger-mode rainbow-mode multi-term melancholy-theme ace-jump-mode diminish use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-(put 'upcase-region 'disabled nil)

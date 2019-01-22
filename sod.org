@@ -652,7 +652,7 @@ Capture lets you quickly store notes with little interruption of your work flow.
 #+end_src
 **** org-babel
 ***** use ob-shell version from orgmode.org
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (load-file "~/elisp/org-mode/lisp/ob-shell.el")
 #+end_src
 ***** use org-install
@@ -694,6 +694,26 @@ Invoke [[https://www.emacswiki.org/emacs/ArtistMode][artist-mode]] within the or
 #+begin_src emacs-lisp :tangle yes
 (add-to-list 'load-path "~/src/ESS/lisp")
 (require 'ess-site)
+#+end_src
+**** org-mind-map
+#+begin_src emacs-lisp :tangle yes
+;; This is an Emacs package that creates graphviz directed graphs from
+;; the headings of an org file
+(use-package org-mind-map
+  :init
+  (require 'ox-org)
+  :ensure t
+  ;; Uncomment the below if 'ensure-system-packages` is installed
+  ;;:ensure-system-package (gvgen . graphviz)
+  :config
+  (setq org-mind-map-engine "dot")       ; Default. Directed Graph
+  ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
+  ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
+  ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
+  ;; (setq org-mind-map-engine "sfdp")   ; Multiscale version of fdp for the layout of large graphs
+  ;; (setq org-mind-map-engine "twopi")  ; Radial layouts
+  ;; (setq org-mind-map-engine "circo")  ; Circular Layout
+)
 #+end_src
 *** Calendar
 From within Calendar, these functions enable to me to count days within a given region, excluding weekends, and public holidays.

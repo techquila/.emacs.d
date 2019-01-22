@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: propertyreport
+# key: propertyreport
+# --
+* Overview
+* Lease Payments
+* Matters Arising
+* Maintenance Required
+* Maintenance Approved
+* Maintenance Scheduled
+* Maintenance Completed
+* Purchases Required
+* Purchases Approved
+* Purchases Scheduled
+* Purchases Completed
+* Next Inspection Date
+

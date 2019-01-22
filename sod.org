@@ -1020,7 +1020,7 @@ This JavaScript editing mode supports:
  - code browsing using the `imenu' package
  - many customization options
    
- #+begin_src emacs-lisp :tangle no
+ #+begin_src emacs-lisp :tangle yes
 
 (use-package js2-mode
   :ensure t

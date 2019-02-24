@@ -5,6 +5,8 @@
 Org file to better manage my emacs configuration using Babel and literate programming techniques.
 
 * Credits:
+Standing on the shoulders of giants...
+
 These wonderful people have shared tools, tips, and configs that have helped me have such an amazing emacs experience.
 
 ** [[https://github.com/jwiegley/dot-emacs/blob/master/init.el][John Wiegly]]
@@ -325,7 +327,9 @@ rainbow-mode is a minor mode for Emacs which highlights text representing color 
 
 #+begin_src emacs-lisp :tangle yes
 
-(use-package rainbow-mode)
+(use-package rainbow-mode
+  :diminish rainbow-mode
+  :init (rainbow-mode))
 
 #+end_src
 
@@ -480,7 +484,7 @@ name is. See also the variable org-insert-mode-line-in-empty-file.
 
 ***** require org-tempo for source block expansion
  
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (require 'org-tempo)
 #+end_src
 **** fstree
@@ -1151,6 +1155,17 @@ The js2-refactor mode should start with C-c . and then a two-letter mnemonic sho
 
 #+end_src
 
+***** vue-mode
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package vue-mode
+:config (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode)))
+
+#+END_SRC
+
+***** vue-html-mode
+#+BEGIN_SRC emacs-lisp :tangle no
+(use-package vue-html-mode)
+#+END_SRC
 **** skewer-mode
 #+begin_src emacs-lisp :tangle yes
 (use-package skewer-mode

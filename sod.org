@@ -61,8 +61,7 @@ Emacs is highly extensible and using packages is a great way to enhance our expe
     #+begin_src emacs-lisp :tangle yes
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                         ("marmalade" . "https://marmalade-repo.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")))
+                           ("melpa" . "https://melpa.org/packages/")))
 
     #+end_src
 
@@ -130,8 +129,9 @@ to solve that problem.
 
 *** start fullscreen
 #+begin_src emacs-lisp :tangle yes
-(custom-set-variables
- '(initial-frame-alist (quote ((fullscreen . maximized)))))
+
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
 #+end_src
    
 *** Menu bar
@@ -184,11 +184,11 @@ configurations.
 ** [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Basic-Windows.html#Basic-Windows][Window Management]]
 
 *** Line numbers
-I like to see the line numbers generally
+I like to see the line numbers when coding
 
 #+begin_src emacs-lisp :tangle yes
 
-(global-linum-mode 0)
+(global-linum-mode 1)
 
 #+end_src
 
@@ -222,14 +222,14 @@ the character/word/line almost directly.
 #+end_src
 
 *** [[https://github.com/techquila/melancholy-theme.el][melancholy-theme]]
-This is a theme I'm working on which I think looks ok.
+WIP theme.
 
 #+begin_src emacs-lisp :tangle yes
 (use-package melancholy-theme)
+
 (load-theme 'melancholy t)
 
 #+end_src
-
 ** Encoding
 
 #+begin_src emacs-lisp :tangle yes
@@ -487,10 +487,6 @@ name is. See also the variable org-insert-mode-line-in-empty-file.
 #+begin_src emacs-lisp :tangle no
 (require 'org-tempo)
 #+end_src
-**** fstree
-#+begin_src emacs-lisp :tangle yes
-(use-package org-fstree) 
-#+end_src
 
 **** TODO's
 
@@ -693,12 +689,6 @@ Invoke [[https://www.emacswiki.org/emacs/ArtistMode][artist-mode]] within the or
 
 ***** sass
 
-***** R 
-****** ESS - Emacs Speaks Statistics
-#+begin_src emacs-lisp :tangle yes
-(add-to-list 'load-path "~/src/ESS/lisp")
-(require 'ess-site)
-#+end_src
 **** org-mind-map
 #+begin_src emacs-lisp :tangle yes
 ;; This is an Emacs package that creates graphviz directed graphs from
@@ -1084,7 +1074,7 @@ This JavaScript editing mode supports:
 
 ***** tern
 The Tern project is a JavaScript analyzer that can be used to improve the JavaScript integration with editors like Emacs.
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (use-package tern
    :ensure t
    :init (add-hook 'js2-mode-hook (lambda () (tern-mode t)))

@@ -1,10 +1,36 @@
 #+TITLE: sod.org
 #+AUTHOR: @sodoscarfono
 
-* Description:
-Org file to better manage my emacs configuration using Babel and literate programming techniques.
+* Info
+#+BEGIN_SRC emacs-lisp :tangle yes
+;;; sod.el --- emacs configuration  -*- lexical-binding: t; -*-
+;; URL: https://github.com/techquila/nz-holidays
+;; Version: 0.0.4
+;; Keywords: calendar
 
-* Credits:
+#+END_SRC
+* Copyright
+#+BEGIN_SRC emacs-lisp :tangle yes
+;; Copyright (C) 2019 Sod Oscarfono
+
+;; Author: Sod Oscarfono <sod@oscarfono.com>
+
+;; This file is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 3, or (at your option)
+;; any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; For a full copy of the GNU General Public License
+;; see <http://www.gnu.org/licenses/>.
+
+
+#+END_SRC
+* Credits
 Standing on the shoulders of giants...
 
 These wonderful people have shared tools, tips, and configs that have helped me have such an amazing emacs experience.
@@ -19,6 +45,15 @@ These wonderful people have shared tools, tips, and configs that have helped me 
 
 ** [[http://pragmaticemacs.com/emacs/org-mode-basics-vii-a-todo-list-with-schedules-and-deadlines/][Dr Ben Maughan]]
 
+* Description
+Org file to better manage my emacs configuration using Babel and literate programming techniques.
+#+BEGIN_SRC emacs-lisp :tangle yes
+;;; Commentary:
+;; ========================================
+;; Emacs configuration generated from org file using babel.
+
+
+#+END_SRC
 * Aims
 ** Automate as much as I can get away with
 ** Increase my overall productivity by integrating more of the powerful tools that org-mode offers, such as org-capture templates etc
@@ -27,7 +62,11 @@ These wonderful people have shared tools, tips, and configs that have helped me 
 ** Provide sufficient meaningful documentation in order that the next time i am inspired to play with my configuration I know whats up
 
 * Source
-  
+  #+BEGIN_SRC emacs-lisp :tangle yes
+  ;;; Code:
+  ;; ========================================
+  #+END_SRC
+
 ** Personalisation
 
  #+begin_src emacs-lisp :tangle yes
@@ -315,12 +354,12 @@ Load configuration and authentication info from an external source.
 *** Calendar
 
 **** set location for calendar
-#+BEGIN_SRC emacs-lisp :tangle true
+#+BEGIN_SRC emacs-lisp :tangle yes
 (setq calendar-latitude -40.550620)
 (setq calendar-longitude 175.199720)
 #+END_SRC
 **** Don't display calendars i don't need
-#+BEGIN_SRC emacs-lisp :tangle true
+#+BEGIN_SRC emacs-lisp :tangle yes
 (setq holiday-general-holidays nil)
 (setq holiday-christian-holidays nil)
 (setq holiday-hebrew-holidays nil)
@@ -329,11 +368,11 @@ Load configuration and authentication info from an external source.
 (setq holiday-oriental-holidays nil)
 #+END_SRC
 **** set NZ Public Holidays
-#+BEGIN_SRC emacs-lisp :tangle true
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 ;; Use package nz-holidays to pull in New Zealands Public Holidays to calendar.
-(use-package nz-holidays)
-(setq calendar-holidays (append calendar-holidays holiday-nz-holidays))
+;;(use-package nz-holidays)
+;;(setq calendar-holidays (append calendar-holidays holiday-nz-holidays))
 #+END_SRC
 **** Count days in given region
 From within Calendar, these functions enable to me to count days within a given region, excluding weekends, and public holidays.

@@ -8,12 +8,16 @@
 auto-save-list
 tramp
 .\#*
+.last*
 
 # NO NO NO
 backups/
 secrets/
 bookmarks
 recentf
+
+# auto-generated from org file
+sod.el
 
 # Org-mode
 .org-id-locations
@@ -43,8 +47,20 @@ erc-config.org
 .cask/
 dist/
 
+# directory configuration
+.dir-locals.el
+
 # Flycheck
 flycheck_*.el
+
+
+# network security
+/network-security.data
+
+# projectiles files
+.projectile
+projectile-bookmarks.eld
+projectile-cache
 
 # server auth directory
 /server/
@@ -52,17 +68,9 @@ flycheck_*.el
 # sessions
 session*
 
-# projectiles files
-.projectile
-projectile-bookmarks.eld
-projectile-cache
+# transient
+transient/
+true
 
 
-# directory configuration
-.dir-locals.el
 
-# network security
-/network-security.data
-
-# this is generated from sod.org anyways
-sod.el

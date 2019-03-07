@@ -54,9 +54,17 @@ Emacs is highly extensible and using packages is a great way to enhance our expe
 
 #+begin_src emacs-lisp :tangle yes
 
-(add-to-list 'load-path "~/elisp")
+(add-to-list 'load-path "~/bin/elisp")
 
 #+end_src
+
+
+We source our packages from the following repositories:
+
+**** [[https://elpa.gnu.org/packages][gnu]]
+
+**** [[https://melpa.org/packages][melpa]]
+
 
     #+begin_src emacs-lisp :tangle yes
 
@@ -64,14 +72,6 @@ Emacs is highly extensible and using packages is a great way to enhance our expe
                            ("melpa" . "https://melpa.org/packages/")))
 
     #+end_src
-
-We source our packages from the following repositories:
-
-**** [[https://elpa.gnu.org/packages][gnu]]
-
-**** [[https://marmalade-repo.org/packages][marmalade]]
-
-**** [[https://melpa.org/packages][melpa]]
 
 *** Fetch available packages
 
@@ -104,6 +104,14 @@ Ensure that [[https://github.com/jwiegley/use-package/blob/master/README.md][use
 
 #+end_src
 
+*** Keep packages updated automatically
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package auto-package-update
+  :config
+  (setq auto-package-update-delete-old-versions t)
+  (setq auto-package-update-hide-results t)
+  (auto-package-update-maybe))
+#+END_SRC
 *** [[https://github.com/myrjola/diminish.el][diminish]]
 This package implements hiding or abbreviation of the mode line displays (lighters) of minor-modes.
 
@@ -255,28 +263,6 @@ Multiple concurrent terminal buffers
 
 
 #+end_src
-
-** Authentication
-*** Auth source
-I have a non-world readable file named /.authoinfo/ within my home
-directory where I store my authentication details for the various
-services I need to authenticate to.  ERC and Org2Blog need these credentials to operate.
-
-#+begin_src emacs-lisp :tangle yes
-
-(require 'auth-source)
-(add-to-list 'auth-sources "~/.authinfo")
-
-#+end_src
-
-*** IRC
-Load configuration and authentication info from an external source.
-
-#+begin_src emacs-lisp :tangle no
-
-(load "~/.emacs.d/secrets/erc-config.el")
-
-#+end_src
 ** Encryption
 
 *** GPG Agent
@@ -303,7 +289,108 @@ Add the following line to the top of the document to be encrypted and save the f
 (epa-file-enable)
 
 #+end_src
+
+** Authentication
+*** Auth source
+I have a non-world readable file named /.authoinfo/ within my home
+directory where I store my authentication details for the various
+services I need to authenticate to.  ERC and Org2Blog need these credentials to operate.
+
+#+begin_src emacs-lisp :tangle yes
+
+(require 'auth-source)
+(add-to-list 'auth-sources "~/.authinfo")
+
+#+end_src
+
+*** IRC
+Load configuration and authentication info from an external source.
+
+#+begin_src emacs-lisp :tangle no
+
+(load "~/.emacs.d/secrets/erc-config.el")
+
+#+end_src
 ** Productivity Management
+*** Calendar
+
+**** set location for calendar
+#+BEGIN_SRC emacs-lisp :tangle true
+(setq calendar-latitude -40.550620)
+(setq calendar-longitude 175.199720)
+#+END_SRC
+**** Don't display calendars i don't need
+#+BEGIN_SRC emacs-lisp :tangle true
+(setq holiday-general-holidays nil)
+(setq holiday-christian-holidays nil)
+(setq holiday-hebrew-holidays nil)
+(setq holiday-islamic-holidays nil)
+(setq holiday-bahai-holidays nil)
+(setq holiday-oriental-holidays nil)
+#+END_SRC
+**** set NZ Public Holidays
+#+BEGIN_SRC emacs-lisp :tangle true
+
+;; Use package nz-holidays to pull in New Zealands Public Holidays to calendar.
+(use-package nz-holidays)
+(setq calendar-holidays (append calendar-holidays holiday-nz-holidays))
+#+END_SRC
+**** Count days in given region
+From within Calendar, these functions enable to me to count days within a given region, excluding weekends, and public holidays.
+
+Taken from here: 
+[[https://stackoverflow.com/questions/23566000/how-to-count-days-excluding-weekends-and-holidays-in-emacs-calendar][https://stackoverflow.com/questions/23566000/how-to-count-days-excluding-weekends-and-holidays-in-emacs-calendar]]
+
+#+begin_src emacs-lisp :tangle yes
+  ;; (defun calendar-count-days-region-excluding-weekends-and-holidays ()
+  ;;  "Count the number of days (inclusive) between point and the mark, 
+  ;;   excluding weekends and public holidays."
+  ;;   (interactive)
+  ;;   (let* ((days (- (calendar-absolute-from-gregorian
+  ;;                    (calendar-cursor-to-date t))
+  ;;                   (calendar-absolute-from-gregorian
+  ;;                    (or (car calendar-mark-ring)
+  ;;                        (error "No mark set in this buffer")))))
+  ;;          (days (1+ (if (> days 0) days (- days)))))
+  ;;     (message "Region has %d day%s (inclusive)"
+  ;;              days (if (> days 1) "s" ""))))
+
+  (defun my-calendar-count-days(d1 d2)
+    (let* ((days (- (calendar-absolute-from-gregorian d1)
+                    (calendar-absolute-from-gregorian d2)))
+           (days (1+ (if (> days 0) days (- days)))))
+      days))
+
+  (defun my-calendar-count-weekend-days(date1 date2)
+    (let* ((tmp-date (if (< date1 date2) date1 date2))
+           (end-date (if (> date1 date2) date1 date2))
+           (weekend-days 0))
+      (while (<= tmp-date end-date)
+        (let ((day-of-week (calendar-day-of-week
+                            (calendar-gregorian-from-absolute tmp-date))))
+          (if (or (= day-of-week 0)
+                  (= day-of-week 6))
+              (incf weekend-days ))
+          (incf tmp-date)))
+      weekend-days))
+
+  (defun calendar-count-days-region2 ()
+    "Count the number of days (inclusive) between point and the mark 
+    excluding weekends and holidays."
+    (interactive)
+    (let* ((d1 (calendar-cursor-to-date t))
+           (d2 (car calendar-mark-ring))
+           (date1 (calendar-absolute-from-gregorian d1))
+           (date2 (calendar-absolute-from-gregorian d2))
+           (start-date (if (<  date1 date2) date1 date2))
+           (end-date (if (> date1 date2) date1 date2))
+           (days (- (my-calendar-count-days d1 d2)
+                    (+ (my-calendar-count-weekend-days start-date end-date)
+                       (my-calendar-count-holidays-on-weekdays-in-range
+                        start-date end-date)))))
+      (message "Region has %d workday%s (inclusive)"
+               days (if (> days 1) "s" ""))))
+#+end_src
 *** Conveniences
 **** [[https://www.emacswiki.org/emacs/ElDoc][Eldoc]]
 A very simple but effective thing, eldoc-mode is a MinorMode which shows you, in the echo area, the argument list of the function call you are currently writing. Very handy. By NoahFriedman. Part of Emacs.
@@ -381,8 +468,8 @@ that it “listens” for external edit requests and acts accordingly.
 #+begin_src emacs-lisp :tangle no
 
 (require 'server)
-(setq server-auth-dir "~/.emacs.d/server")  ;;Server file location
-(setq server-name "emacs_server0")                             ;;Server mutex file name
+(setq server-auth-dir "~/.emacs.d/server") ;;Server file location
+(setq server-name "emacs_server0")         ;;Server mutex file name
 (server-start)
 
 #+end_src
@@ -444,6 +531,16 @@ go down different branches.
 (fset 'yes-or-no-p 'y-or-n-p)
 
 #+end_src
+**** magit
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package magit
+  :ensure t)
+
+;; magit keybindings
+(global-set-key (kbd "C-x g") 'magit-status)
+
+
+#+END_SRC
 *** [[http://orgmode.org/][org-mode]]
 Org is a mode for keeping notes, maintaining TODO lists, and
 project planning with a fast and effective plain-text system. It also
@@ -469,7 +566,6 @@ name is. See also the variable org-insert-mode-line-in-empty-file.
 #+begin_src emacs-lisp :tangle yes
 
 (setq org-directory "~/Dropbox/org")
-
 
 #+end_src
 
@@ -499,12 +595,12 @@ name is. See also the variable org-insert-mode-line-in-empty-file.
 ;;set priority range from A to C with default A
 (setq org-highest-priority ?A)
 (setq org-lowest-priority ?C)
-(setq org-default-priority ?A)
+(setq org-default-priority ?C)
 
 ;;set colours for priorities
 (setq org-priority-faces '((?A . (:foreground "#f92672" :weight bold))
-                           (?B . (:foreground "#00dfff"))
-                           (?C . (:foreground "Yellow"))))
+                           (?B . (:foreground "#00b7ff"))
+                           (?C . (:foreground "#ffb728"))))
 
 #+end_src
 
@@ -555,8 +651,6 @@ with the setting:
  
   (define-key global-map "\C-ca" 'org-agenda)
 
-  (setq org-agenda-custom-commands
-             '(("f" occur-tree "FIXME")))
   ;; Emacs contains the calendar and diary by Edward M. Reingold.  The
   ;; calendar displays a three-month calendar with holidays from
   ;; different countries and cultures. The diary allows you to keep
@@ -709,62 +803,7 @@ Invoke [[https://www.emacswiki.org/emacs/ArtistMode][artist-mode]] within the or
   ;; (setq org-mind-map-engine "circo")  ; Circular Layout
 )
 #+end_src
-*** Calendar
-From within Calendar, these functions enable to me to count days within a given region, excluding weekends, and public holidays.
 
-Taken from here: 
-[[https://stackoverflow.com/questions/23566000/how-to-count-days-excluding-weekends-and-holidays-in-emacs-calendar][https://stackoverflow.com/questions/23566000/how-to-count-days-excluding-weekends-and-holidays-in-emacs-calendar]]
-
-#+begin_src emacs-lisp :tangle yes
-  ;; (defun calendar-count-days-region-excluding-weekends-and-holidays ()
-  ;;  "Count the number of days (inclusive) between point and the mark, 
-  ;;   excluding weekends and public holidays."
-  ;;   (interactive)
-  ;;   (let* ((days (- (calendar-absolute-from-gregorian
-  ;;                    (calendar-cursor-to-date t))
-  ;;                   (calendar-absolute-from-gregorian
-  ;;                    (or (car calendar-mark-ring)
-  ;;                        (error "No mark set in this buffer")))))
-  ;;          (days (1+ (if (> days 0) days (- days)))))
-  ;;     (message "Region has %d day%s (inclusive)"
-  ;;              days (if (> days 1) "s" ""))))
-
-  (defun my-calendar-count-days(d1 d2)
-    (let* ((days (- (calendar-absolute-from-gregorian d1)
-                    (calendar-absolute-from-gregorian d2)))
-           (days (1+ (if (> days 0) days (- days)))))
-      days))
-
-  (defun my-calendar-count-weekend-days(date1 date2)
-    (let* ((tmp-date (if (< date1 date2) date1 date2))
-           (end-date (if (> date1 date2) date1 date2))
-           (weekend-days 0))
-      (while (<= tmp-date end-date)
-        (let ((day-of-week (calendar-day-of-week
-                            (calendar-gregorian-from-absolute tmp-date))))
-          (if (or (= day-of-week 0)
-                  (= day-of-week 6))
-              (incf weekend-days ))
-          (incf tmp-date)))
-      weekend-days))
-
-  (defun calendar-count-days-region2 ()
-    "Count the number of days (inclusive) between point and the mark 
-    excluding weekends and holidays."
-    (interactive)
-    (let* ((d1 (calendar-cursor-to-date t))
-           (d2 (car calendar-mark-ring))
-           (date1 (calendar-absolute-from-gregorian d1))
-           (date2 (calendar-absolute-from-gregorian d2))
-           (start-date (if (<  date1 date2) date1 date2))
-           (end-date (if (> date1 date2) date1 date2))
-           (days (- (my-calendar-count-days d1 d2)
-                    (+ (my-calendar-count-weekend-days start-date end-date)
-                       (my-calendar-count-holidays-on-weekdays-in-range
-                        start-date end-date)))))
-      (message "Region has %d workday%s (inclusive)"
-               days (if (> days 1) "s" ""))))
-#+end_src
 *** Autocompletion and Snippets
 **** [[http://company-mode.github.io/][company-mode]]
 Company is a text completion framework for Emacs. The name stands for "complete anything". It uses pluggable back-ends and front-ends to retrieve and display completion candidates.
@@ -1074,7 +1113,7 @@ This JavaScript editing mode supports:
 
 ***** tern
 The Tern project is a JavaScript analyzer that can be used to improve the JavaScript integration with editors like Emacs.
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
 (use-package tern
    :ensure t
    :init (add-hook 'js2-mode-hook (lambda () (tern-mode t)))

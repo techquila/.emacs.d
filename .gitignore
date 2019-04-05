@@ -26,16 +26,19 @@ sod.el
 # flymake-mode
 *_flymake.*
 
-# eshell files
-/eshell/history
-/eshell/lastdir
-
 # elpa packages
 /elpa/
+
+# emacs server
+server/*
 
 # erc
 erc-config.el
 erc-config.org
+
+# eshell files
+/eshell/history
+/eshell/lastdir
 
 # reftex files
 *.rel

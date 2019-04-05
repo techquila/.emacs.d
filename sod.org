@@ -4,10 +4,9 @@
 * Info
 #+BEGIN_SRC emacs-lisp :tangle yes
 ;;; sod.el --- emacs configuration  -*- lexical-binding: t; -*-
-;; URL: https://github.com/techquila/nz-holidays
-;; Version: 0.0.4
-;; Keywords: calendar
-
+;; URL: https://github.com/techquila/.emacs.d/
+;; Version: 1.04
+;; Keywords: emacs
 #+END_SRC
 * Copyright
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -45,6 +44,7 @@ These wonderful people have shared tools, tips, and configs that have helped me 
 
 ** [[http://pragmaticemacs.com/emacs/org-mode-basics-vii-a-todo-list-with-schedules-and-deadlines/][Dr Ben Maughan]]
 
+** [[https://github.com/purcell][Steve Purcell]]
 * Description
 Org file to better manage my emacs configuration using Babel and literate programming techniques.
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -77,8 +77,6 @@ Org file to better manage my emacs configuration using Babel and literate progra
  #+end_src
 
 ** [[https://www.emacswiki.org/emacs/ELPA][Package Management]]
-Emacs is highly extensible and using packages is a great way to enhance our experience.
-
 *** Package Initialistion
     Activate all the packages, (in particular autoloads), and set load path.
 
@@ -91,9 +89,9 @@ Emacs is highly extensible and using packages is a great way to enhance our expe
 
 *** Package sources
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 
-(add-to-list 'load-path "~/bin/elisp")
+(add-to-list 'load-path "~/code/elisp")
 
 #+end_src
 
@@ -108,7 +106,7 @@ We source our packages from the following repositories:
     #+begin_src emacs-lisp :tangle yes
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                           ("melpa" . "https://melpa.org/packages/")))
+                          ("melpa" . "https://melpa.org/packages/")))
 
     #+end_src
 
@@ -135,7 +133,7 @@ Ensure [[https://github.com/jwiegley/use-package/blob/master/README.md][use-pack
 
 #+end_src
 
-Ensure that [[https://github.com/jwiegley/use-package/blob/master/README.md][use-package]] downloads and installs packages that are not found locally. This requires [[http://wikemacs.org/wiki/Package.el][package.el]]
+Ensure that [[https://github.com/jwiegley/use-package/blob/master/README.md][use-package]] downloads and installs packages that are not found locally. /(This requires [[http://wikemacs.org/wiki/Package.el][package.el]])/
 
 #+begin_src emacs-lisp :tangle yes
 
@@ -182,7 +180,6 @@ to solve that problem.
 #+end_src
    
 *** Menu bar
-Hide the menu bar so we get that space back.
 
 #+begin_src emacs-lisp :tangle yes
 
@@ -248,7 +245,7 @@ I like to see the line numbers when coding
 #+end_src
 
 *** Faster navigation with [[https://www.emacswiki.org/emacs/AceJump][ace-jump]]
-ace-jump-mode is an fast/direct cursor location minor mode. It will
+ace-jump-mode is a fast/direct cursor location minor mode. It will
 create the N-Branch search tree internal and marks all the possible
 position with predefined keys in current view. Allowing you to move to
 the character/word/line almost directly.
@@ -256,7 +253,8 @@ the character/word/line almost directly.
 #+begin_src emacs-lisp :tangle yes
 
 (use-package ace-jump-mode
-  :commands ace-jump-mode)
+  :commands ace-jump-mode
+  :config (define-key global-map (kbd "C-c SPC") 'ace-jump-mode))
 
 #+end_src
 ** Theme
@@ -370,9 +368,12 @@ Load configuration and authentication info from an external source.
 **** set NZ Public Holidays
 #+BEGIN_SRC emacs-lisp :tangle yes
 
-;; Use package nz-holidays to pull in New Zealands Public Holidays to calendar.
-;;(use-package nz-holidays)
-;;(setq calendar-holidays (append calendar-holidays holiday-nz-holidays))
+  ;; Use package nz-holidays to pull in New Zealands Public Holidays for calendar.
+  (use-package nz-holidays)
+
+  ;; append it to empty variable holiday-local-holidays
+  (setq calendar-holidays (append holiday-local-holidays holiday-nz-holidays))
+
 #+END_SRC
 **** Count days in given region
 From within Calendar, these functions enable to me to count days within a given region, excluding weekends, and public holidays.
@@ -470,18 +471,10 @@ rainbow-mode is a minor mode for Emacs which highlights text representing color 
   (setq ledger-post-amount-alignment-at :decimal
         ledger-post-amount-alignment-column 49
         ledger-clear-whole-transactions t)
-(use-package flycheck-ledger))
+        (use-package flycheck-ledger))
 
 #+end_src
 **** Remote File Access with [[https://www.emacswiki.org/emacs/TrampMode][TRAMP]]
-TRAMP (Transparent Remote Access, Multiple Protocols) is a package for
-editing remote files, similar to AngeFtp or efs. Whereas the others
-use FTP to connect to the remote host and to transfer the files, TRAMP
-uses a remote shell connection (rlogin, telnet, ssh). It can transfer
-the files using rcp or a similar program, or it can encode the file
-contents (using uuencode or base64) and transfer them right through
-the shell connection.
-
 #+begin_src emacs-lisp :tangle yes
 
 (setq tramp-default-user "sod")
@@ -581,24 +574,6 @@ go down different branches.
 
 #+END_SRC
 *** [[http://orgmode.org/][org-mode]]
-Org is a mode for keeping notes, maintaining TODO lists, and
-project planning with a fast and effective plain-text system. It also
-is an authoring system with unique support for literate programming
-and reproducible research.
-
-It is invoked automatically for files with the *.org* extension.  To
-turn on Org mode in a file that does not have the extension .org, make
-the first line of a file look like this:
-
-#+BEGIN_EXAMPLE
-
-     MY PROJECTS    -*- mode: org; -*-
-
-#+END_EXAMPLE
-
-which will select Org mode for this buffer no matter what the file's
-name is. See also the variable org-insert-mode-line-in-empty-file.
-
 **** global settings:
 
 ***** set default directory and files
@@ -1270,6 +1245,11 @@ Activate syntax highlighting globally
 
 #+end_src
 
+*** Linting
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package package-lint)
+#+END_SRC
+
 ** Links
 Use [[https://www.mozilla.org/en-US/firefox/new/][Firefox]] to open urls
 
@@ -1279,7 +1259,6 @@ Use [[https://www.mozilla.org/en-US/firefox/new/][Firefox]] to open urls
 (setq browse-url-generic-program "firefox")
 
 #+end_src
-
 ** Notifications
 Replace annoying bell with visible-bell
 

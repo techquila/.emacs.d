@@ -55,11 +55,11 @@ Org file to better manage my emacs configuration using Babel and literate progra
 
 #+END_SRC
 * Aims
-** Automate as much as I can get away with
-** Increase my overall productivity by integrating more of the powerful tools that org-mode offers, such as org-capture templates etc
-** Enhance my knowledge by learning new ways of yeilding productivity gains through emacs, and seeing how others achieve results
-** Provide some sort of meaningful structure to my configuration
-** Provide sufficient meaningful documentation in order that the next time i am inspired to play with my configuration I know whats up
+- Automate as much as I can get away with
+- Increase my overall productivity by integrating more of the powerful tools that org-mode offers, such as org-capture templates
+- Enhance my knowledge by learning new ways of yeilding productivity gains through emacs, and seeing how others achieve
+- Provide some sort of meaningful structure to my configuration
+- Provide sufficient meaningful documentation in order that the next time i am inspired to play with my configuration I know whats up
 
 * Source
   #+BEGIN_SRC emacs-lisp :tangle yes
@@ -432,6 +432,12 @@ Taken from here:
                days (if (> days 1) "s" ""))))
 #+end_src
 *** Conveniences
+**** delete-selection-mode
+allows me to delete highlighted region.  Not standard behaviour in emacs.
+#+BEGIN_SRC emacs-lisp :tangle yes
+(delete-selection-mode 1)
+#+END_SRC
+
 **** [[https://www.emacswiki.org/emacs/ElDoc][Eldoc]]
 A very simple but effective thing, eldoc-mode is a MinorMode which shows you, in the echo area, the argument list of the function call you are currently writing. Very handy. By NoahFriedman. Part of Emacs.
 

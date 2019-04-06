@@ -62,10 +62,10 @@ Org file to better manage my emacs configuration using Babel and literate progra
 - Provide sufficient meaningful documentation in order that the next time i am inspired to play with my configuration I know whats up
 
 * Source
-  #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;;; Code:
   ;; ========================================
-  #+END_SRC
+#+END_SRC
 
 ** Encoding
 
@@ -81,14 +81,14 @@ Org file to better manage my emacs configuration using Babel and literate progra
 #+end_src
 ** [[https://www.emacswiki.org/emacs/ELPA][Package Management]]
 *** Package Initialistion
-    Activate all the packages, (in particular autoloads), and set load path.
+Activate all the packages, (in particular autoloads), and set load path.
 
-    #+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes
 
 (require 'package)
 (package-initialize)
 
-    #+end_src
+#+end_src
 
 *** Package sources
 
@@ -106,26 +106,26 @@ We source our packages from the following repositories:
 **** [[https://melpa.org/packages][melpa]]
 
 
-    #+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                           ("melpa" . "https://melpa.org/packages/")))
 
-    #+end_src
+#+end_src
 
 *** Fetch available packages
 
-    #+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes
 
 (unless package-archive-contents
   (package-refresh-contents))
 
-    #+end_src
+#+end_src
 
 *** Package Activation
 Ensure [[https://github.com/jwiegley/use-package/blob/master/README.md][use-package]] is present, else install it.
 
-    #+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes
 
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
@@ -257,18 +257,18 @@ the character/word/line almost directly.
 
 (use-package ace-jump-mode
   :commands ace-jump-mode
-  :config (define-key global-map (kbd "C-c SPC") 'ace-jump-mode))
+  :bind ("C-c SPC" . ace-jump-mode))
 
 #+end_src
 
 ** Personalisation
 
- #+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes
 
 (setq user-full-name "Sod Oscarfono"
       user-mail-address "sod@oscarfono.com")
 
- #+end_src
+#+end_src
 ** Theme
 *** Inhibit startup screen.
 
@@ -510,13 +510,21 @@ that it “listens” for external edit requests and acts accordingly.
 (setq server-name "emacs_server0")         ;; Server mutex file name
 (server-start)
 
+(add-hook 'server-done-hook ((lambda nil (kill-buffer nil)) delete-frame))
+(add-hook 'server-switch-hook 
+  (lambda nil 
+    (let (server-buf) 
+    (setq server-buf (current-buffer)) 
+    (bury-buffer)
+    (switch-to-buffer-other-frame server-buf))))
+
 #+end_src
 
 **** [[https://github.com/Fuco1/smartparens/wiki][smartparens]]
 Smartparens is minor mode for Emacs that deals with parens pairs and
 tries to be smart about it. 
 
-    #+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes
 
 (use-package smartparens-config
     :ensure smartparens
@@ -527,7 +535,7 @@ tries to be smart about it.
 (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
 (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 
-    #+end_src
+#+end_src
 
 **** subwords
 subword-mode changes all cursor movement/edit commands to stop in between the “camelCase” words.
@@ -544,8 +552,8 @@ To see whether you have subword-mode on, call describe-variable then type “sub
 
 #+end_src
 **** undo-tree
- People often struggle with the Emacs undo model, where there's really
- no concept of "redo" - you simply undo the undo.
+People often struggle with the Emacs undo model, where there's really
+no concept of "redo" - you simply undo the undo.
 
 This lets you use C-x u (undo-tree-visualize) to visually walk through
 the changes you've made, undo back to a certain point (or redo), and
@@ -572,11 +580,7 @@ go down different branches.
 **** magit
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package magit
-  :ensure t)
-
-;; magit keybindings
-(global-set-key (kbd "C-x g") 'magit-status)
-
+  :bind ("C-x g" . magit-status))
 
 #+END_SRC
 *** [[http://orgmode.org/][org-mode]]
@@ -810,7 +814,6 @@ Invoke [[https://www.emacswiki.org/emacs/ArtistMode][artist-mode]] within the or
 (use-package org-mind-map
   :init
   (require 'ox-org)
-  :ensure t
   ;; Uncomment the below if 'ensure-system-packages` is installed
   ;;:ensure-system-package (gvgen . graphviz)
   :config
@@ -828,13 +831,13 @@ Invoke [[https://www.emacswiki.org/emacs/ArtistMode][artist-mode]] within the or
 **** [[http://company-mode.github.io/][company-mode]]
 Company is a text completion framework for Emacs. The name stands for "complete anything". It uses pluggable back-ends and front-ends to retrieve and display completion candidates.
 
-     #+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes
 
 (use-package company
   :config
     (add-hook 'prog-mode-hook 'company-mode))
 
-     #+end_src
+#+end_src
 
 **** [[https://github.com/emacs-helm/helm][helm]]
 Helm is an Emacs framework for incremental completions and narrowing selections. It helps to rapidly complete file names, buffer names, or any other Emacs interactions requiring selecting an item from a list of possible choices.
@@ -1078,51 +1081,49 @@ major modes for editing LDAP schema and LDIF files
 ***** [[https://www.emacswiki.org/emacs/Js2Mode][js2-mode]]
 This JavaScript editing mode supports:
 
- - strict recognition of the Ecma-262 language standard
- - support for most Rhino and SpiderMonkey extensions from 1.5 and up
- - parsing support for ECMAScript for XML (E4X, ECMA-357)
- - accurate syntax highlighting using a recursive-descent parser
- - on-the-fly reporting of syntax errors and strict-mode warnings
- - undeclared-variable warnings using a configurable externs framework
- - "bouncing" line indentation to choose among alternate indentation points
- - smart line-wrapping within comments and strings
- - code folding:
-   - show some or all function bodies as {...}
-   - show some or all block comments as /*...*/
- - context-sensitive menu bar and popup menus
- - code browsing using the `imenu' package
- - many customization options
-   
- #+begin_src emacs-lisp :tangle yes
+  - strict recognition of the Ecma-262 language standard
+  - support for most Rhino and SpiderMonkey extensions from 1.5 and up
+  - parsing support for ECMAScript for XML (E4X, ECMA-357)
+  - accurate syntax highlighting using a recursive-descent parser
+  - on-the-fly reporting of syntax errors and strict-mode warnings
+  - undeclared-variable warnings using a configurable externs framework
+  - "bouncing" line indentation to choose among alternate indentation points
+  - smart line-wrapping within comments and strings
+  - code folding:
+    - show some or all function bodies as {...}
+    - show some or all block comments as /*...*/
+  - context-sensitive menu bar and popup menus
+  - code browsing using the `imenu' package
+  - many customization options
 
-(use-package js2-mode
-  :ensure t
-  :init
-  (setq js-basic-indent 2)
-  (setq-default js2-basic-indent 2
-                js2-basic-offset 2
-                js2-auto-indent-p t
-                js2-cleanup-whitespace t
-                js2-enter-indents-newline t
-                js2-indent-on-enter-key t
-                js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$"))
+    #+begin_src emacs-lisp :tangle yes
 
-  (add-hook 'js2-mode-hook
-            (lambda ()
-              (push '("function" . ?ƒ) prettify-symbols-alist)))
+  (use-package js2-mode
+    :init
+      (setq js-basic-indent 2)
+      (setq-default js2-basic-indent 2
+                  js2-basic-offset 2
+                  js2-auto-indent-p t
+                  js2-cleanup-whitespace t
+                  js2-enter-indents-newline t
+                  js2-indent-on-enter-key t
+                  js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$"))
 
-  (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
+    (add-hook 'js2-mode-hook
+              (lambda ()
+                (push '("function" . ?ƒ) prettify-symbols-alist)))
 
- #+end_src
+    (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
+
+    #+end_src
 
 ****** Color defined variables with color-identifiers-mode:
 
- #+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes
 (use-package color-identifiers-mode
-    :ensure t
     :init
       (add-hook 'js2-mode-hook 'color-identifiers-mode))
- #+end_src
+#+end_src
 
 ******  While editing JavaScript is baked into Emacs, it is quite important to have flycheck validate the source based on jshint, and eslint. Let’s prefer eslint:
 
@@ -1135,26 +1136,24 @@ This JavaScript editing mode supports:
 The Tern project is a JavaScript analyzer that can be used to improve the JavaScript integration with editors like Emacs.
 #+begin_src emacs-lisp :tangle yes
 (use-package tern
-   :ensure t
    :init (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
    :config
      (use-package company-tern
-        :ensure t
         :init (add-to-list 'company-backends 'company-tern)))
 #+end_src
 
 The following additional keys are bound:
 
 M-.
-    Jump to the definition of the thing under the cursor.
+Jump to the definition of the thing under the cursor.
 M-,
-    Brings you back to last place you were when you pressed M-..
+Brings you back to last place you were when you pressed M-..
 C-c C-r
-    Rename the variable under the cursor.
+Rename the variable under the cursor.
 C-c C-c
-    Find the type of the thing under the cursor.
+Find the type of the thing under the cursor.
 C-c C-d
-    Find docs of the thing under the cursor. Press again to open the associated URL (if any). 
+Find docs of the thing under the cursor. Press again to open the associated URL (if any). 
 
 ***** js2-refactor
 
@@ -1171,7 +1170,7 @@ The js2-refactor mode should start with C-c . and then a two-letter mnemonic sho
 - ea is expand-array: Converts a one line array to multiline.
 - ca is contract-array: Converts a multiline array to one line.
 - wi is wrap-buffer-in-iife: Wraps the entire buffer in an immediately invoked function expression
- ig is inject-global-in-iife: Creates a shortcut for a marked global by injecting it in the wrapping immediately invoked function expression
+  ig is inject-global-in-iife: Creates a shortcut for a marked global by injecting it in the wrapping immediately invoked function expression
 - ag is add-to-globals-annotation: Creates a /*global */ annotation if it is missing, and adds the var at point to it.
 - ev is extract-var: Takes a marked expression and replaces it with a var.
 - iv is inline-var: Replaces all instances of a variable with its initial value.
@@ -1185,7 +1184,6 @@ The js2-refactor mode should start with C-c . and then a two-letter mnemonic sho
 
 #+begin_src emacs-lisp :tangle yes
 (use-package js2-refactor
-  :ensure t
   :init   (add-hook 'js2-mode-hook 'js2-refactor-mode)
   :config (js2r-add-keybindings-with-prefix "C-c ."))
 #+end_src
@@ -1218,17 +1216,16 @@ The js2-refactor mode should start with C-c . and then a two-letter mnemonic sho
 **** skewer-mode
 #+begin_src emacs-lisp :tangle yes
 (use-package skewer-mode
-   :ensure t
    :init (add-hook 'js2-mode-hook 'skewer-mode))
 #+end_src
 Kick things off with run-skewer, and then:
 
 C-x C-e
-    `skewer-eval-last-expression’
+`skewer-eval-last-expression’
 C-M-x
-    `skewer-eval-defun’
+`skewer-eval-defun’
 C-c C-k
-    `skewer-load-buffer’ 
+`skewer-load-buffer’ 
 
 **** go
 ***** go-mode

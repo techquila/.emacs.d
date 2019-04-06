@@ -67,15 +67,18 @@ Org file to better manage my emacs configuration using Babel and literate progra
   ;; ========================================
   #+END_SRC
 
-** Personalisation
+** Encoding
 
- #+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes
 
-(setq user-full-name "Sod Oscarfono"
-      user-mail-address "sod@oscarfono.com")
+(prefer-coding-system 'utf-8)
+(set-language-environment 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
 
- #+end_src
-
+#+end_src
 ** [[https://www.emacswiki.org/emacs/ELPA][Package Management]]
 *** Package Initialistion
     Activate all the packages, (in particular autoloads), and set load path.
@@ -257,6 +260,15 @@ the character/word/line almost directly.
   :config (define-key global-map (kbd "C-c SPC") 'ace-jump-mode))
 
 #+end_src
+
+** Personalisation
+
+ #+begin_src emacs-lisp :tangle yes
+
+(setq user-full-name "Sod Oscarfono"
+      user-mail-address "sod@oscarfono.com")
+
+ #+end_src
 ** Theme
 *** Inhibit startup screen.
 
@@ -273,18 +285,6 @@ WIP theme.
 (use-package melancholy-theme)
 
 (load-theme 'melancholy t)
-
-#+end_src
-** Encoding
-
-#+begin_src emacs-lisp :tangle yes
-
-(prefer-coding-system 'utf-8)
-(set-language-environment 'utf-8)
-(set-default-coding-systems 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-selection-coding-system 'utf-8)
 
 #+end_src
 
@@ -506,8 +506,8 @@ that it “listens” for external edit requests and acts accordingly.
 #+begin_src emacs-lisp :tangle no
 
 (require 'server)
-(setq server-auth-dir "~/.emacs.d/server") ;;Server file location
-(setq server-name "emacs_server0")         ;;Server mutex file name
+(setq server-auth-dir "~/.emacs.d/server") ;; Server file location
+(setq server-name "emacs_server0")         ;; Server mutex file name
 (server-start)
 
 #+end_src

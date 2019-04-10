@@ -613,7 +613,7 @@ I don't want the default start up screen displayed on start up.  That logo is hi
       #+begin_src emacs-lisp :tangle yes
 
 (setq org-todo-keywords
-  '((sequence "☛ TODO(t)" "★ NEXT(n/)" "⚑ WAIT(w@/!)" "|" "✘ CANCELLED(c!)" "😈 DELEGATED(D@/!)" "✔ DONE(d!)")))
+  '((sequence "☛ TODO(t)" "★ NEXT(n/)" "🕟 WAIT(w@/!)" "|" "✘ CANCELLED(c!)" "😈 DELEGATED(D@/!)" "✔ DONE(d!)")))
 
       #+end_src
 

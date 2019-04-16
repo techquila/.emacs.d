@@ -156,8 +156,8 @@ We source our packages from the following repositories only:
 #+begin_src emacs-lisp :tangle yes
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                          ("melpa" . "https://melpa.org/packages/")))
-
+                          ("melpa" . "https://melpa.org/packages/")
+                          ("org" . "http://orgmode.org/elpa/")))
 #+end_src
 
 *** Package Initialistion
@@ -530,10 +530,14 @@ To see whether you have subword-mode on, call describe-variable then type “sub
 #+END_SRC
 *** [[http://orgmode.org/][org-mode]]
 **** global settings:
-
+***** use org
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package org
+  :ensure org-plus-contrib)
+#+END_SRC
 ***** set default directory and files
 #+begin_src emacs-lisp :tangle yes
-
+  
 (setq org-directory "~/Dropbox/org")
 
 #+end_src
@@ -554,6 +558,17 @@ To see whether you have subword-mode on, call describe-variable then type “sub
 
 #+end_src
 
+
+***** use org-contacts for contact management
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+(use-package org-contacts
+  :ensure nil
+  :after org
+  :custom (org-contacts-files '("~/Dropbox/capture/contacts.org")))
+
+#+END_SRC
 ***** skeleton setup for org files
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -563,7 +578,7 @@ To see whether you have subword-mode on, call describe-variable then type “sub
   "Title: "
   "#+TITLE: " str " \n"
   "#+AUTHOR: Sod Oscarfono \n"
-  "#+email: sod@oscarfono.com\n"
+  "#+EMAIL: sod@oscarfono.com\n"
   "#+INFOJS_OPT: \n"
   "#+BABEL: :session *R* :cache yes :results output graphics :exports both :tangle yes \n"
   "-----"
@@ -613,7 +628,7 @@ with the setting:
 #+begin_src emacs-lisp :tangle yes
 
 (setq org-todo-keywords
-  '((sequence "★ TODO(t)" "☛ NEXT(n/)" "🕟 WAIT(w@/!)" "|" "✘ CANCELLED(c!)" "😈 DELEGATED(D@/!)" "✔ DONE(d!)")))
+  '((sequence "★ TODO(t)" "☛ NEXT(n/)" "🕟 WAIT(w@/!)" "|" "✔ DONE(d!)" "✘ KILL(k!)" "😈 PASS(p@/!)" )))
 
 #+end_src
 
@@ -698,8 +713,22 @@ Capture lets you quickly store notes with little interruption of your work flow.
 **** [[http://orgmode.org/manual/Capture-templates.html#Capture-templates][org-capture-templates]]
 
 #+begin_src emacs-lisp :tangle yes
-;; 
-(setq org-capture-templates
+(use-package org-capture
+  :ensure nil
+  :after org
+  :preface
+  (defvar my/org-contacts-template "* %(org-contacts-template-name)
+:PROPERTIES:
+:ADDRESS: %^{289 Cleveland St. Brooklyn, 11206 NY, USA}
+:BIRTHDAY: %^{yyyy-mm-dd}
+:EMAIL: %(org-contacts-template-email)
+:NOTE: %^{NOTE}
+:END:" "Template for org-contacts.")
+  :custom
+  (org-capture-templates
+   `(("c" "Contact" entry (file+headline "~/Dropbox/capture/contacts.org" "Friends"),
+      my/org-contacts-template
+      :empty-lines 1)
    '(("d" "Documentation" entry (file+headline "~/Dropbox/capture/docs.org" "Documentation")
           "** %^{Subject} 
           %^g 
@@ -790,10 +819,16 @@ Capture lets you quickly store notes with little interruption of your work flow.
 Company is a text completion framework for Emacs. The name stands for "*COMP*lete *ANY*thing". It uses pluggable back-ends and front-ends to retrieve and display completion candidates.
 
 #+begin_src emacs-lisp :tangle yes
-
 (use-package company
-  :config
-    (add-hook 'prog-mode-hook 'company-mode))
+  :defer 0.5
+  :delight
+  :custom
+  (company-begin-commands '(self-insert-command))
+  (company-idle-delay .1)
+  (company-minimum-prefix-length 2)
+  (company-show-numbers t)
+  (company-tooltip-align-annotations 't)
+  (global-company-mode t))
 
 #+end_src
 
@@ -870,7 +905,7 @@ YASnippet is a template system for Emacs. It allows you to type an abbreviation 
 
 #+end_src
 
-*** Email and Contact management with [[https://www.emacswiki.org/emacs/GnusTutorial][GNU's]] and  [[http://bbdb.sourceforge.net/bbdb.html][BBDB]]
+*** Email with [[https://www.emacswiki.org/emacs/GnusTutorial][GNU's]] ]]
 
 **** [[https://www.emacswiki.org/emacs/GnusTutorial#toc2][GNU's]]
 Gnus, an Emacs package for reading e-mail and Usenet news (and many
@@ -880,29 +915,6 @@ lack. It is highly customizable and extensible.
 #+begin_src emacs-lisp :tangle yes
 
 (require 'gnus)
-
-#+end_src
-**** TODO BBDB
-BBDB is a rolodex-like database program for GNU Emacs. BBDB stands for Insidious Big Brother Database.
-
-It provides the following features:
-
-***** Integration with mail and news readers, with little or no interaction by the user:
-****** easy (or automatic) display of the record corresponding to the sender of the current message;
-****** automatic creation of records based on the contents of the current message;
-****** automatic addition of data to arbitrary fields of the record corresponding to the sender of the current message.
-***** Listing all records which match a regular expression;
-
-***** Listing all records which match a regular expression in a particular field (`company' or `notes,' for example);
-
-#+begin_src emacs-lisp :tangle yes
-(use-package bbdb
-  :defer t
-  :config
-  (bbdb-insinuate-gnus)
-  (bbdb-insinuate-message))
-
-
 
 #+end_src
 

@@ -9,6 +9,7 @@ auto-save-list
 tramp
 .\#*
 .last*
+url/
 
 # NO NO NO
 backups/
@@ -63,7 +64,7 @@ flycheck_*.el
 # projectiles files
 .projectile
 projectile-bookmarks.eld
-projectile-cache
+projectile.cache
 
 # server auth directory
 /server/

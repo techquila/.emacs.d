@@ -158,6 +158,7 @@ We source our packages from the following repositories only:
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                           ("melpa" . "https://melpa.org/packages/")
                           ("org" . "http://orgmode.org/elpa/")))
+
 #+end_src
 
 *** Package Initialistion
@@ -569,6 +570,7 @@ To see whether you have subword-mode on, call describe-variable then type “sub
   :custom (org-contacts-files '("~/Dropbox/capture/contacts.org")))
 
 #+END_SRC
+
 ***** skeleton setup for org files
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -586,6 +588,7 @@ To see whether you have subword-mode on, call describe-variable then type “sub
 (global-set-key [C-S-f4] 'org-skeleton)
 
 #+END_SRC
+
 **** TODO's
 
 ***** set TODO file and priorities
@@ -628,7 +631,7 @@ with the setting:
 #+begin_src emacs-lisp :tangle yes
 
 (setq org-todo-keywords
-  '((sequence "★ TODO(t)" "☛ NEXT(n/)" "🕟 WAIT(w@/!)" "|" "✔ DONE(d!)" "✘ KILL(k!)" "😈 PASS(p@/!)" )))
+  '((sequence "★ TODO(t)" "📌 NEXT(n/)" "⚠ WAIT(w@/!)" "|" "✔ DONE(d!)" "✘ KILL(k!)" "➰ PASS(p@/!)" )))
 
 #+end_src
 
@@ -717,45 +720,47 @@ Capture lets you quickly store notes with little interruption of your work flow.
   :ensure nil
   :after org
   :preface
-  (defvar my/org-contacts-template "* %(org-contacts-template-name)
-:PROPERTIES:
-:ADDRESS: %^{289 Cleveland St. Brooklyn, 11206 NY, USA}
-:BIRTHDAY: %^{yyyy-mm-dd}
-:EMAIL: %(org-contacts-template-email)
-:NOTE: %^{NOTE}
-:END:" "Template for org-contacts.")
-  :custom
+    (defvar my/org-contacts-template "* %(org-contacts-template-name)
+      :PROPERTIES:
+        :ADDRESS: %^{street name. city, postcode NZ}
+        :BIRTHDAY: %^{yyyy-mm-dd}
+        :EMAIL: %(org-contacts-template-email)
+        :NOTE: %^{NOTE}
+      :END:" "Template for org-contacts."
+    )
+    (defvar my/org-greatquotes-template "* %^{quote title}
+      :PROPERTIES:
+        :QUOTE: %^{input quotation here}
+        :ATTRIBUTED_TO: %^{who is the quote attributed to?}
+        :NOTE: %^{any other notes about quote?}
+      :END:" "Template to capture great quotes"
+    )
+ :custom
   (org-capture-templates
    `(("c" "Contact" entry (file+headline "~/Dropbox/capture/contacts.org" "Friends"),
       my/org-contacts-template
       :empty-lines 1)
-   '(("d" "Documentation" entry (file+headline "~/Dropbox/capture/docs.org" "Documentation")
+     ("d" "Documentation" entry (file+headline "~/Dropbox/capture/docs.org" "Documentation")
           "** %^{Subject} 
           %^g 
           %?\n 
           %i\n
           Added %U")
-     ("e" "Expense" entry (file+datetree "~/Dropbox/capture/ledger.org" "Expenses")
-          "* %?\nIncurred on %U\n %i\n %a")
-     ("i" "Idea" entry (file+datetree "~/Dropbox/capture/ideas.org" "Ideas")
-          "💡 %?\nHad this idea on %U\n  %i\n %a")
-     ("J" "Joke" entry (file+headline "~/Dropbox/capture/jokes.org" "Jokes"))
-     ("j" "Journal" entry (file+datetree "~/Dropbox/capture/journal.org")
-          "* %?\nEntered on %U\n  %i\n  %a")
-     ("k" "Keybinding" entry (file+headline "~/Dropbox/capture/ultimateguide.org"
-          "Emacs" "Keybindings"))
+     ("e" "Expense" entry (file+datetree "~/Dropbox/capture/ledger.org" "Expenses") "* %?\n Incurred on %U\n %i\n %a")
+     ("i" "Idea" entry (file+datetree "~/Dropbox/capture/ideas.org" "Ideas") "💡 %?\nHad this idea on %U\n  %i\n %a")
+     ("J" "Joke" entry (headline "~/Dropbox/capture/jokes.org" "Jokes"))
+     ("j" "Journal" entry (file+datetree "~/Dropbox/capture/journal.org") "* %?\nEntered on %U\n  %i\n  %a")
      ("l" "Link" entry (file+headline "~/Dropbox/capture/links.org" "Links")
           "%a %^{Link URL} 
           %^{Link Description}
           Added %U")
-     ("L" "Lyric" entry (file+headline "~/Dropbox/capture/lyrics.org" 
-         "Lyrical Ideas"))
-     ("Q" "Quote" entry (file+headline "~/Dropbox/capture/quotes.org" "Quotes"))
+     ("L" "Lyric" entry (file+headline "~/Dropbox/capture/lyrics.org" "Lyrical Ideas"))
+     ("Q" "Quote" entry (file+headline "~/Dropbox/capture/quotes.org" "Quotes"), my/org-greatquotes-template :empty-lines 1)
      ("r" "Read" entry (file+headline "~/Dropbox/capture/read.org" "Read" "title:%i author:%?"))
      ("R" "Recipe" entry (file+headline "~/Dropbox/capture/recipes.org" "Recipes"))
-     ("t" "Todo" entry (file+headline "~/Dropbox/capture/todo.org" "Inbox")
-         "★ TODO %?\n  %i\n  %a")))
-  
+     ("t" "Todo" entry (file+headline "~/Dropbox/capture/todo.org" "Tasks") "** ★ TODO %?\n %i\n %a")
+)))
+   
 #+end_src
 
 **** org-exports
@@ -772,11 +777,15 @@ Capture lets you quickly store notes with little interruption of your work flow.
 **** org-babel
 ***** use ob-shell version from orgmode.org
 #+begin_src emacs-lisp :tangle no
+
 (load-file "~/elisp/org-mode/lisp/ob-shell.el")
+
 #+end_src
 ***** use org-install
 #+begin_src emacs-lisp :tangle yes
+
 (require 'org-install)
+
 #+end_src
 ***** load these language dictionaries for source blocks
 #+begin_src emacs-lisp :tangle yes
@@ -976,7 +985,6 @@ Helm support using [[https://github.com/bbatsov/helm-projectile][helm-projectile
 #+end_src
 
 *** Language assist
-**** general
 
 **** linting
 ***** flycheck
@@ -988,7 +996,7 @@ Helm support using [[https://github.com/bbatsov/helm-projectile][helm-projectile
     (global-flycheck-mode))
 
 #+end_src
-**** bash
+
 **** configuration
 ***** ansible-mode
 #+begin_src emacs-lisp :tangle yes

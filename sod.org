@@ -933,42 +933,6 @@ lack. It is highly customizable and extensible.
 
 #+end_src
 
-*** Blogging
-
-**** [[https://github.com/punchagan/org2blog][org2blog]]
-I've been wanting to get into blogging for a little while now.  with [[https://github.com/punchagan/org2blog][org2blog]] I can write using my preferred tools and easily publish to my Wordpress installations.
-
-#+begin_src emacs-lisp :tangle no
-
-(use-package org2blog
-  :config
-
-    (let (wp-credentials)
-     ;; only required if your auth file is not already in the list of auth-sources
-      
-      (setq wp-credentials (auth-source-user-and-password "bake-n-chill"))
-      (setq org2blog/wp-blog-alist
-        `(("sod-blog"
-            :url "http://sod.oscarfono.com/xmlrpc.php"
-            :username ,(car wp-credentials)
-            :password ,(cadr wp-credentials))
-          ("bake-n-chill"
-            :url "http://www.bake-n-chill.com/xmlrpc.php"
-            :username ,(car wp-credentials)
-            :password ,(cadr wp-credentials))))))
-
-(setq org2blog/wp-buffer-template
-"-----------------------
-#+TITLE: %s
-#+DATE: %s
------------------------\n")
-(defun my-format-function (format-string)
-   (format format-string
-   org2blog/wp-default-title
-   (format-time-string "%d-%m-%Y" (current-time))))
-(setq org2blog/wp-buffer-format-function 'my-format-function)
-
-#+end_src
 *** Project managment with [[https://github.com/bbatsov/projectile][projectile]]
 Helm support using [[https://github.com/bbatsov/helm-projectile][helm-projectile]]
 

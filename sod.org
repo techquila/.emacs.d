@@ -137,7 +137,8 @@ I like to see the line numbers when coding and just set them globally until i ca
 
 #+begin_src emacs-lisp :tangle yes
 
-(global-linum-mode 1)
+(when (version<= "26.0.50" emacs-version )
+  (global-display-line-numbers-mode))
 
 #+end_src
 
@@ -148,7 +149,6 @@ I like to see the line numbers when coding and just set them globally until i ca
 (column-number-mode 1)
 
 #+end_src
-
 
 ** [[https://www.emacswiki.org/emacs/ELPA][Package Management]]
 We source our packages from the following repositories only:
@@ -202,6 +202,7 @@ Ensure that [[https://github.com/jwiegley/use-package/blob/master/README.md][use
     (setq auto-package-update-hide-results t)
     (auto-package-update-maybe))
 #+END_SRC
+
 ** [[https://github.com/myrjola/diminish.el][diminish]]
 This package implements hiding or abbreviation of the mode line displays (lighters) of minor-modes.
 
@@ -262,6 +263,7 @@ Multiple concurrent terminal buffers are the only way to roll.  To start one jus
 
 
 #+end_src
+
 ** Encryption
 
 *** GPG Agent
@@ -310,6 +312,7 @@ Load configuration and authentication info from an external source.
 (load "~/.emacs.d/secrets/erc-config.el")
 
 #+end_src
+
 ** Productivity Management
 *** Calendar
 
@@ -318,6 +321,7 @@ Load configuration and authentication info from an external source.
 (setq calendar-latitude -40.550620)
 (setq calendar-longitude 175.199720)
 #+END_SRC
+
 **** Don't display calendars i don't need
 #+BEGIN_SRC emacs-lisp :tangle yes
 (setq holiday-general-holidays nil)
@@ -327,6 +331,7 @@ Load configuration and authentication info from an external source.
 (setq holiday-bahai-holidays nil)
 (setq holiday-oriental-holidays nil)
 #+END_SRC
+
 **** set NZ Public Holidays
 #+BEGIN_SRC emacs-lisp :tangle yes
 
@@ -337,6 +342,7 @@ Load configuration and authentication info from an external source.
   (setq calendar-holidays (append holiday-local-holidays holiday-nz-holidays))
 
 #+END_SRC
+
 **** Count days in given region
 From within Calendar, these functions enable to me to count days within a given region, excluding weekends, and public holidays.
 
@@ -393,7 +399,9 @@ Taken from here:
       (message "Region has %d workday%s (inclusive)"
                days (if (> days 1) "s" ""))))
 #+end_src
+
 *** Conveniences
+
 **** delete-selection-mode
 allows me to delete highlighted region.  Not standard behaviour in emacs.
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -536,6 +544,8 @@ To see whether you have subword-mode on, call describe-variable then type “sub
 
 #+END_SRC
 
+**** engine-search
+
 *** [[http://orgmode.org/][org-mode]]
 **** global settings:
 ***** use org
@@ -557,14 +567,6 @@ To see whether you have subword-mode on, call describe-variable then type “sub
 (define-key global-map "\C-cl" 'org-store-link)
 
 #+end_src
-
-***** require org-tempo for source block expansion
-#+begin_src emacs-lisp :tangle no
-
-(require 'org-tempo)
-
-#+end_src
-
 
 ***** use org-contacts for contact management
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -592,6 +594,13 @@ To see whether you have subword-mode on, call describe-variable then type “sub
 (global-set-key [C-S-f4] 'org-skeleton)
 
 #+END_SRC
+
+***** org tempo for source block expansion
+#+begin_src emacs-lisp :tangle yes
+
+(require 'org-tempo)
+
+#+end_src
 
 **** TODO's
 
@@ -728,6 +737,7 @@ Capture lets you quickly store notes with little interruption of your work flow.
         :ADDRESS: %^{street name. city, postcode NZ}
         :BIRTHDAY: %^{yyyy-mm-dd}
         :EMAIL: %(org-contacts-template-email)
+        :PHONE: %^{022 222 222}
         :NOTE: %^{NOTE}
       :END:" "Template for org-contacts."
     )
@@ -738,6 +748,14 @@ Capture lets you quickly store notes with little interruption of your work flow.
         :NOTE: %^{any other notes about quote?}
       :END:" "Template to capture great quotes"
     )
+(defvar my/org-expenses-template "* %^{expense}
+  :PROPERTIES:
+    :DATE: %U
+    :AMOUNT: %^{$0.00}
+    :PAID_TO: %^{company}
+    :PAYMENT_TYPE: %^{eftpos|cash|effort}
+  :END:" "Template to capture expenses"
+)
  :custom
   (org-capture-templates
    `(("c" "Contact" entry (file+headline "~/Dropbox/capture/contacts.org" "Friends"),
@@ -749,7 +767,7 @@ Capture lets you quickly store notes with little interruption of your work flow.
           %?\n 
           %i\n
           Added %U")
-     ("e" "Expense" entry (file+datetree "~/Dropbox/capture/ledger.org" "Expenses") "* %?\n Incurred on %U\n %i\n %a")
+     ("e" "Expense" entry (file+datetree "~/Dropbox/capture/expenses.org" "Expenses"), my/org-expenses-template :empty-lines 1)
      ("i" "Idea" entry (file+datetree "~/Dropbox/capture/ideas.org" "Ideas") "💡 %?\nHad this idea on %U\n  %i\n %a")
      ("J" "Joke" entry (headline "~/Dropbox/capture/jokes.org" "Jokes"))
      ("j" "Journal" entry (file+datetree "~/Dropbox/capture/journal.org") "* %?\nEntered on %U\n  %i\n  %a")
@@ -778,13 +796,6 @@ Capture lets you quickly store notes with little interruption of your work flow.
 #+end_src
 
 **** org-babel
-
-***** use ob-shell version from orgmode.org
-#+begin_src emacs-lisp :tangle no
-
-(load-file "~/elisp/org-mode/lisp/ob-shell.el")
-
-#+end_src
 
 ***** use org-install
 #+begin_src emacs-lisp :tangle yes
@@ -994,6 +1005,7 @@ major modes for editing LDAP schema and LDIF files
 
 #+end_src
 **** lisp
+**** PDF
 **** python
 **** html
 ***** emacs-htmlize
@@ -1027,6 +1039,7 @@ major modes for editing LDAP schema and LDIF files
 (use-package yaml-mode
   :commands yaml-mode
   :mode "\\.yml\\'")
+  :delight 
 
 #+end_src
 **** javascript
@@ -1157,7 +1170,7 @@ The js2-refactor mode should start with C-c . and then a two-letter mnemonic sho
 ***** vue-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package vue-mode
-:config (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode)))
+  :config (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode)))
 
 #+END_SRC
 
@@ -1165,11 +1178,13 @@ The js2-refactor mode should start with C-c . and then a two-letter mnemonic sho
 #+BEGIN_SRC emacs-lisp :tangle no
 (use-package vue-html-mode)
 #+END_SRC
+
 **** skewer-mode
 #+begin_src emacs-lisp :tangle yes
 (use-package skewer-mode
    :init (add-hook 'js2-mode-hook 'skewer-mode))
 #+end_src
+
 Kick things off with run-skewer, and then:
 
 C-x C-e
@@ -1183,14 +1198,12 @@ C-c C-k
 ***** go-mode
 #+begin_src emacs-lisp :tangle yes
 (use-package go-mode
- :commands go-mode
-  :init
-  (progn
-    (add-to-list 'auto-mode-alist '("\\.go$" . go-mode)))
   :defer 1
+  :commands go-mode
   :mode "\\.go$")
  
 #+end_src
+
 *** Syntax Highlighting
 Activate syntax highlighting globally
 

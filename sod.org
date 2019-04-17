@@ -291,14 +291,14 @@ Add the following line to the top of the document to be encrypted and save the f
 
 ** Authentication
 *** Auth source
-I have a non-world readable file named /.authoinfo/ within my home
+I have a non-world readable file named /.authoinfo.gpg / within my home
 directory where I store my authentication details for the various
 services I need to authenticate to.  ERC and Org2Blog need these credentials to operate.
 
 #+begin_src emacs-lisp :tangle yes
 
 (require 'auth-source)
-(add-to-list 'auth-sources "~/.authinfo")
+(add-to-list 'auth-sources "~/.authinfo.gpg")
 
 #+end_src
 
@@ -397,7 +397,9 @@ Taken from here:
 **** delete-selection-mode
 allows me to delete highlighted region.  Not standard behaviour in emacs.
 #+BEGIN_SRC emacs-lisp :tangle yes
+
 (delete-selection-mode 1)
+
 #+END_SRC
 
 **** [[https://www.emacswiki.org/emacs/ElDoc][Eldoc]]
@@ -442,6 +444,7 @@ rainbow-mode is a minor mode for Emacs which highlights text representing color 
         (use-package flycheck-ledger))
 
 #+end_src
+
 **** Remote File Access with [[https://www.emacswiki.org/emacs/TrampMode][TRAMP]]
 #+begin_src emacs-lisp :tangle yes
 
@@ -450,6 +453,7 @@ rainbow-mode is a minor mode for Emacs which highlights text representing color 
 ;;(set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
 
 #+end_src
+
 **** Run emacs-server
 Various programs can invoke your choice of editor to edit a particular
 piece of text. For instance, version control programs invoke an editor
@@ -516,6 +520,7 @@ To see whether you have subword-mode on, call describe-variable then type “sub
 (subword-mode 1)
 
 #+end_src
+
 **** yes/no becomes y/n
 
 #+begin_src emacs-lisp :tangle yes
@@ -523,12 +528,14 @@ To see whether you have subword-mode on, call describe-variable then type “sub
 (fset 'yes-or-no-p 'y-or-n-p)
 
 #+end_src
+
 **** magit
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package magit
   :bind ("C-x g" . magit-status))
 
 #+END_SRC
+
 *** [[http://orgmode.org/][org-mode]]
 **** global settings:
 ***** use org
@@ -536,6 +543,7 @@ To see whether you have subword-mode on, call describe-variable then type “sub
 (use-package org
   :ensure org-plus-contrib)
 #+END_SRC
+
 ***** set default directory and files
 #+begin_src emacs-lisp :tangle yes
   
@@ -544,7 +552,6 @@ To see whether you have subword-mode on, call describe-variable then type “sub
 #+end_src
 
 ***** set global key-bindings for org-mode features
-
 #+begin_src emacs-lisp :tangle yes
 
 (define-key global-map "\C-cl" 'org-store-link)
@@ -552,7 +559,6 @@ To see whether you have subword-mode on, call describe-variable then type “sub
 #+end_src
 
 ***** require org-tempo for source block expansion
- 
 #+begin_src emacs-lisp :tangle no
 
 (require 'org-tempo)
@@ -561,7 +567,6 @@ To see whether you have subword-mode on, call describe-variable then type “sub
 
 
 ***** use org-contacts for contact management
-
 #+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package org-contacts
@@ -572,7 +577,6 @@ To see whether you have subword-mode on, call describe-variable then type “sub
 #+END_SRC
 
 ***** skeleton setup for org files
-
 #+BEGIN_SRC emacs-lisp :tangle yes
 
 (define-skeleton org-skeleton
@@ -592,7 +596,6 @@ To see whether you have subword-mode on, call describe-variable then type “sub
 **** TODO's
 
 ***** set TODO file and priorities
-
 #+begin_src emacs-lisp :tangle yes
 
 ;;file to save todo items
@@ -758,8 +761,7 @@ Capture lets you quickly store notes with little interruption of your work flow.
      ("Q" "Quote" entry (file+headline "~/Dropbox/capture/quotes.org" "Quotes"), my/org-greatquotes-template :empty-lines 1)
      ("r" "Read" entry (file+headline "~/Dropbox/capture/read.org" "Read" "title:%i author:%?"))
      ("R" "Recipe" entry (file+headline "~/Dropbox/capture/recipes.org" "Recipes"))
-     ("t" "Todo" entry (file+headline "~/Dropbox/capture/todo.org" "Tasks") "** ★ TODO %?\n %i\n %a")
-)))
+     ("t" "Todo" entry (file+headline "~/Dropbox/capture/todo.org" "Tasks") "** ★ TODO %?\n %i\n %a"))))
    
 #+end_src
 
@@ -774,19 +776,23 @@ Capture lets you quickly store notes with little interruption of your work flow.
 (setq org-export-backends '(ascii html hugo icalendar latex md mediawiki minutes))
 
 #+end_src
+
 **** org-babel
+
 ***** use ob-shell version from orgmode.org
 #+begin_src emacs-lisp :tangle no
 
 (load-file "~/elisp/org-mode/lisp/ob-shell.el")
 
 #+end_src
+
 ***** use org-install
 #+begin_src emacs-lisp :tangle yes
 
 (require 'org-install)
 
 #+end_src
+
 ***** load these language dictionaries for source blocks
 #+begin_src emacs-lisp :tangle yes
 

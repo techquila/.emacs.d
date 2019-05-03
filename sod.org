@@ -130,6 +130,7 @@ Display full path of file on mode line
                               (cdr mode-line-buffer-identification)))))
 
 #+end_src
+
 ** [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Basic-Windows.html#Basic-Windows][Window Management]]
 
 *** Line numbers
@@ -232,6 +233,8 @@ to solve that problem.
       user-mail-address "sod@oscarfono.com")
 
 #+end_src
+
+
 ** Theme
 *** Inhibit startup screen.
 I don't want the default start up screen displayed on start up.  That logo is hideous!
@@ -245,9 +248,35 @@ I don't want the default start up screen displayed on start up.  That logo is hi
 The custom theme I'm working on.  Ongoing development. WIP.
 
 #+begin_src emacs-lisp :tangle yes
+
 (use-package melancholy-theme)
 
 (load-theme 'melancholy t)
+
+#+end_src
+
+*** [[https://github.com/domtronn/all-the-icons.el#installation][icons]]
+Some sweet icons to enhance the ui.  
+
+In order for the icons to work it is very important that you install the Resource Fonts included in this package, they are available in the fonts directory. You can also install the latest fonts for this package in the (guessed?) based on the OS by calling the following function:
+
+#+begin_example
+M-x all-the-icons-install-fonts
+#+end_example
+
+#+begin_src emacs-lisp :tangle yes
+
+(use-package all-the-icons)
+
+#+end_src
+
+** Modeline
+*** [[https://github.com/seagle0128/doom-modeline][doom-modeline]]
+This was a much better option than what I was doing previously.
+#+begin_src emacs-lisp :tangle yes
+
+(use-package doom-modeline
+  :hook (after-init . doom-modeline-mode))
 
 #+end_src
 
@@ -514,6 +543,13 @@ tries to be smart about it.
 
 #+end_src
 
+**** multiple cursors
+#+begin_src emacs-lisp :tangle yes
+
+(use-package multiple-cursors)
+
+#+end_src
+
 **** subwords
 subword-mode changes all cursor movement/edit commands to stop in between the “camelCase” words.
 
@@ -735,51 +771,45 @@ Capture lets you quickly store notes with little interruption of your work flow.
     (defvar my/org-contacts-template "* %(org-contacts-template-name)
       :PROPERTIES:
         :ADDRESS: %^{street name. city, postcode NZ}
-        :BIRTHDAY: %^{yyyy-mm-dd}
+        :BIRTHDAY: %^{yyyy-mm-dd}t
         :EMAIL: %(org-contacts-template-email)
         :PHONE: %^{022 222 222}
         :NOTE: %^{NOTE}
-      :END:" "Template for org-contacts."
-    )
-    (defvar my/org-greatquotes-template "* %^{quote title}
+      :END:" "Template for org-contacts.")
+    (defvar my/org-expenses-template "* %^{expense}
       :PROPERTIES:
-        :QUOTE: %^{input quotation here}
-        :ATTRIBUTED_TO: %^{who is the quote attributed to?}
-        :NOTE: %^{any other notes about quote?}
-      :END:" "Template to capture great quotes"
-    )
-(defvar my/org-expenses-template "* %^{expense}
-  :PROPERTIES:
-    :DATE: %U
-    :AMOUNT: %^{$0.00}
-    :PAID_TO: %^{company}
-    :PAYMENT_TYPE: %^{eftpos|cash|effort}
-  :END:" "Template to capture expenses"
-)
+        :DATE: %U
+        :AMOUNT: %^{$0.00}
+        :PAID_TO: %^{company}
+        :PAYMENT_TYPE: %^{eftpos|cash|effort}
+      :END:" "Template to capture expenses")
+    (defvar my/org-greatquotes-template "* %^{great quote here}
+     :PROPERTIES:
+       :ATTRIBUTION: /n %?
+     :END" "Template to capture great quotes when i learn of them")    
+    (defvar my/org-recipe-template "** %^{recipe-name}
+      :PROPERTIES:
+        :PREPTIME: 
+        :COOKTIME:
+        :EATTIME:
+        :INGREDIENTS: %?
+        :METHOD:
+        :SHOPLIST:
+      :END:" "Template to capture recipe information")
  :custom
-  (org-capture-templates
-   `(("c" "Contact" entry (file+headline "~/Dropbox/capture/contacts.org" "Friends"),
-      my/org-contacts-template
-      :empty-lines 1)
-     ("d" "Documentation" entry (file+headline "~/Dropbox/capture/docs.org" "Documentation")
-          "** %^{Subject} 
-          %^g 
-          %?\n 
-          %i\n
-          Added %U")
-     ("e" "Expense" entry (file+datetree "~/Dropbox/capture/expenses.org" "Expenses"), my/org-expenses-template :empty-lines 1)
-     ("i" "Idea" entry (file+datetree "~/Dropbox/capture/ideas.org" "Ideas") "💡 %?\nHad this idea on %U\n  %i\n %a")
-     ("J" "Joke" entry (headline "~/Dropbox/capture/jokes.org" "Jokes"))
-     ("j" "Journal" entry (file+datetree "~/Dropbox/capture/journal.org") "* %?\nEntered on %U\n  %i\n  %a")
-     ("l" "Link" entry (file+headline "~/Dropbox/capture/links.org" "Links")
-          "%a %^{Link URL} 
-          %^{Link Description}
-          Added %U")
-     ("L" "Lyric" entry (file+headline "~/Dropbox/capture/lyrics.org" "Lyrical Ideas"))
-     ("Q" "Quote" entry (file+headline "~/Dropbox/capture/quotes.org" "Quotes"), my/org-greatquotes-template :empty-lines 1)
-     ("r" "Read" entry (file+headline "~/Dropbox/capture/read.org" "Read" "title:%i author:%?"))
-     ("R" "Recipe" entry (file+headline "~/Dropbox/capture/recipes.org" "Recipes"))
-     ("t" "Todo" entry (file+headline "~/Dropbox/capture/todo.org" "Tasks") "** ★ TODO %?\n %i\n %a"))))
+ (org-capture-templates
+   `(("c" "Contact" entry (file+headline "~/Dropbox/capture/contacts.org" "Friends"), my/org-contacts-template :empty-lines 1)
+     ("d" "Documentation" entry (file+headline "~/Dropbox/capture/docs.org" "Documentation") "** %^{Subject}\n %^g\n %?\n %i\n Added %U")
+     ("e" "Expense" entry (file+datetree "~/Dropbox/capture/expenses.org"), my/org-expenses-template :empty-lines 1)
+     ("i" "Idea" entry (file+datetree "~/Dropbox/capture/ideas.org" "Ideas") "** 💡 %?\n I had this idea on %U\n %a" :empty-lines 1)
+     ("j" "Journal" entry (file+datetree "~/Dropbox/capture/journal.org") "* %?\n Entered on %U\n" :empty-lines 1)
+     ("L" "Lyric" entry (file+headline "~/Dropbox/capture/lyrics.org" "Lyrical Ideas Capture") "** %^{working-title}\n %^{verse}\n %^{hook}\n")
+     ("gq" "Quote" entry (file+headline "~/Dropbox/capture/quotes.org"), my/org-greatquotes-template :empty-lines 1)
+     ("r" "Read" entry (file+headline "~/Dropbox/capture/someday.org" "Read") "** %^{title}\n %^{author}" :empty-lines 1)
+     ("R" "Recipe" entry (file+headline "~/Dropbox/capture/recipes.org" "Recipes"), my/org-recipe-template :empty-lines 1)
+     ("t" "Todo" entry (file+headline "~/Dropbox/capture/todo.org" "Tasks") "** ★ TODO %?\n %i\n %a" :empty-lines 1)
+     ("W" "Wishlist" entry (file+headline "~/Dropbox/capture/someday.org" "Wishlist") "** %^{thing}" :empty-lines 1) 
+     ("w" "Watch" entry (file+headline "~/Dropbox/capture/someday.org" "Watch") "** ★  %^{movie title}\n %a" :empty-lines 1))))
    
 #+end_src
 
@@ -838,6 +868,16 @@ Capture lets you quickly store notes with little interruption of your work flow.
   ;; (setq org-mind-map-engine "twopi")  ; Radial layouts
   ;; (setq org-mind-map-engine "circo")  ; Circular Layout
 )
+#+end_src
+
+**** org-plot
+Graphs with gnuplot
+
+#+begin_src emacs-lisp :tangle yes
+(use-package gnuplot
+  :commands gnuplot-mode
+  :defer t
+  :bind ("C-M-g" . gnuplot))
 #+end_src
 
 *** Autocompletion and Snippets
@@ -1004,6 +1044,13 @@ major modes for editing LDAP schema and LDIF files
   :commands ldap-mode)
 
 #+end_src
+
+**** latex
+#+begin_src emacs-lisp :tangle yes
+(use-package tex
+  :ensure auctex)
+#+end_src
+
 **** lisp
 **** PDF
 **** python

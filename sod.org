@@ -69,10 +69,12 @@ Org file to better manage my emacs configuration using Babel and literate progra
 #+END_SRC
 
 ** Errors
+
 #+BEGIN_SRC emacs-lisp :tangle yes
 ;; backtrace on error
 (setq debug-on-error t)
 #+END_SRC
+
 ** Encoding
 
 #+begin_src emacs-lisp :tangle yes
@@ -174,11 +176,13 @@ Activate all the packages, (in particular autoloads), and set load path.
 
 
 *** use-package
-install [[https://github.com/jwiegley/use-package/blob/master/README.md][use-package]], unless present. 
+
+**** Install [[https://github.com/jwiegley/use-package/blob/master/README.md][use-package]], unless present. 
 
 #+begin_src emacs-lisp :tangle yes
 
 (unless (package-installed-p 'use-package)
+  (package-refresh-contents)
   (package-install 'use-package))
 
 (setq use-package-verbose t)
@@ -187,6 +191,7 @@ install [[https://github.com/jwiegley/use-package/blob/master/README.md][use-pac
 
 #+end_src
 
+**** Download packages not installed
 Ensure that [[https://github.com/jwiegley/use-package/blob/master/README.md][use-package]] downloads and installs packages that are not found locally. /(This requires [[http://wikemacs.org/wiki/Package.el][package.el]])/
 
 #+begin_src emacs-lisp :tangle yes
@@ -195,7 +200,7 @@ Ensure that [[https://github.com/jwiegley/use-package/blob/master/README.md][use
 
 #+end_src
 
-*** Keep packages updated automatically
+**** Keep packages updated automatically
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package auto-package-update
   :config
@@ -204,12 +209,30 @@ Ensure that [[https://github.com/jwiegley/use-package/blob/master/README.md][use
     (auto-package-update-maybe))
 #+END_SRC
 
-** [[https://github.com/myrjola/diminish.el][diminish]]
-This package implements hiding or abbreviation of the mode line displays (lighters) of minor-modes.
+**** Ensure required system packages are installed
+#+begin_src emacs-lisp :tangle yes
+
+(use-package use-package-ensure-system-package)
+
+#+end_src
+
+**** Diminishing and delighting minor modes
+
+***** Diminish
+"diminish is invoked with the :diminish keyword, which is passed either a minor mode symbol, a cons of the symbol and its replacement string, or just a replacement string, in which case the minor mode symbol is guessed to be the package name with "-mode" appended at the end:"
 
 #+begin_src emacs-lisp :tangle yes
 
 (use-package diminish)
+
+#+end_src
+
+***** Delight
+"delight is invoked with the :delight keyword, which is passed a minor mode symbol, a replacement string or quoted mode-line data (in which case the minor mode symbol is guessed to be the package name with "-mode" appended at the end), both of these, or several lists of both. If no arguments are provided, the default mode name is hidden completely."
+
+#+begin_src emacs-lisp :tangle yes
+
+(use-package delight)
 
 #+end_src
 

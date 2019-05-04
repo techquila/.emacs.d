@@ -106,10 +106,10 @@ I like the menu bar to be present so i can find things i've forgotten about
 #+end_src
 
 *** Scroll bars
-I like to see scrollbars for visual reference
+I like to see scrollbars for visual reference usually but am trialling without for now.
 #+begin_src emacs-lisp :tangle yes
 
-(scroll-bar-mode 1)
+(scroll-bar-mode 0)
 
 #+end_src
 

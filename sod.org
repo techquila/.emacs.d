@@ -71,13 +71,16 @@ Org file to better manage my emacs configuration using Babel and literate progra
 ** Errors
 
 #+BEGIN_SRC emacs-lisp :tangle yes
+
 ;; backtrace on error
 (setq debug-on-error t)
+
 #+END_SRC
 
 ** Encoding
 
 #+begin_src emacs-lisp :tangle yes
+
 ;; all about the 'utf-8 yo
 (prefer-coding-system 'utf-8)
 (set-language-environment 'utf-8)
@@ -236,6 +239,37 @@ Ensure that [[https://github.com/jwiegley/use-package/blob/master/README.md][use
 
 #+end_src
 
+** Better File Management with XDG
+
+To keep the user's home and the =~/.emacs.d= folder as clean as possible, I
+follow the [[https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html][XDG base directory specification]].
+
+Be careful that GNU Emacs will not create the appropriate folders if they do not
+exist. Therefore, it is necessary to create them yourself:
+
+#+begin_src bash
+  mkdir ~/.cache/emacs ~/.local/share/emacs/
+#+end_src
+
+*NOTE:* you can find out more by going to my [[https://github.com/techquila/dotfiles][dotfiles]].
+
+#+begin_src emacs-lisp :tangle yes
+  (defvar xdg-bin (getenv "XDG_BIN_HOME")
+    "The XDG bin base directory.")
+
+  (defvar xdg-cache (getenv "XDG_CACHE_HOME")
+    "The XDG cache base directory.")
+
+  (defvar xdg-config (getenv "XDG_CONFIG_HOME")
+    "The XDG config base directory.")
+
+  (defvar xdg-data (getenv "XDG_DATA_HOME")
+    "The XDG data base directory.")
+
+  (defvar xdg-lib (getenv "XDG_LIB_HOME")
+    "The XDG lib base directory.")
+#+end_src
+
 ** [[https://github.com/jwiegley/use-package/blob/master/bind-key.el][bind-key]]
 If you have lots of keybindings set in your .emacs file, it can be
 hard to know which ones you haven't set yet, and which may now be
@@ -253,7 +287,7 @@ to solve that problem.
 #+begin_src emacs-lisp :tangle yes
 
 (setq user-full-name "Sod Oscarfono"
-      user-mail-address "sod@oscarfono.com")
+       user-mail-address "sod@oscarfono.com")
 
 #+end_src
 
@@ -330,11 +364,11 @@ Use an agent to manage GPG between shell sessions.
 *** [[https://www.emacswiki.org/emacs/EasyPG][EasyPG]] to encrypt/decrypt files with a .gpg extension
 Add the following line to the top of the document to be encrypted and save the file with a .gpg extension.
 
-#+begin_src emacs-lisp :tangle no
+#+begin_example
 
 # -*- mode:org; epa-file-encrypt-to: ("sod@oscarfono.com") -*-
 
-#+end_src
+#+end_example
 
 #+begin_src emacs-lisp :tangle yes
 
@@ -362,6 +396,34 @@ Load configuration and authentication info from an external source.
 #+begin_src emacs-lisp :tangle no
 
 (load "~/.emacs.d/secrets/erc-config.el")
+
+#+end_src
+
+** Docker
+integrate docker functionality into emacs
+#+begin_src emacs-lisp :tangle yes
+
+;; dockerfile-mode: An emacs mode for handling Dockerfiles
+;; https://github.com/spotify/dockerfile-mode
+(use-package dockerfile-mode
+  :mode ("Dockerfile\\'" . dockerfile-mode))
+
+;; docker: manager docker from emacs
+;; https://github.com/Silex/docker.el
+(use-package docker
+  :defer t
+  :ensure-system-package docker
+  :bind ("C-c d" . docker))
+
+;; docker-compose-mode: Major mode for editing docker-compose files
+;; https://github.com/meqif/docker-compose-mode
+(use-package docker-compose-mode
+  :defer t)
+
+;; docker-tramp: TRAMP integration for docker containers
+;; https://github.com/emacs-pe/docker-tramp.el
+(use-package docker-tramp
+  :defer t)
 
 #+end_src
 
@@ -875,22 +937,22 @@ Capture lets you quickly store notes with little interruption of your work flow.
 
 **** org-mind-map
 #+begin_src emacs-lisp :tangle yes
-;; This is an Emacs package that creates graphviz directed graphs from
-;; the headings of an org file
-(use-package org-mind-map
-  :init
-  (require 'ox-org)
-  ;; Uncomment the below if 'ensure-system-packages` is installed
-  ;;:ensure-system-package (gvgen . graphviz)
-  :config
-  (setq org-mind-map-engine "dot")       ; Default. Directed Graph
-  ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
-  ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
-  ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
-  ;; (setq org-mind-map-engine "sfdp")   ; Multiscale version of fdp for the layout of large graphs
-  ;; (setq org-mind-map-engine "twopi")  ; Radial layouts
-  ;; (setq org-mind-map-engine "circo")  ; Circular Layout
-)
+  ;; This is an Emacs package that creates graphviz directed graphs from
+  ;; the headings of an org file
+  (use-package org-mind-map
+    :init
+    (require 'ox-org)
+    ;; Uncomment the below if 'ensure-system-packages` is installed
+    ;;  :ensure-system-package (gvgen .graphviz) 
+    :config
+    (setq org-mind-map-engine "dot")       ; Default. Directed Graph
+    ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
+    ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
+    ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
+    ;; (setq org-mind-map-engine "sfdp")   ; Multiscale version of fdp for the layout of large graphs
+    ;; (setq org-mind-map-engine "twopi")  ; Radial layouts
+    ;; (setq org-mind-map-engine "circo")  ; Circular Layout
+  )
 #+end_src
 
 **** org-plot

@@ -1090,6 +1090,17 @@ Helm support using [[https://github.com/bbatsov/helm-projectile][helm-projectile
 
 #+end_src
 
+*** LaTeX
+#+begin_src emacs-lisp :tangle yes
+(use-package auctex
+  :defer t)
+#+end_src
+
+*** PDF
+#+begin_src emacs-lisp :tangle yes
+(use-package pdf-tools
+  :defer t)
+#+end_src
 *** Language assist
 
 **** linting

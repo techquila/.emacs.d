@@ -116,6 +116,12 @@ I like to see scrollbars for visual reference usually but am trialling without f
 
 #+end_src
 
+Smoother scrolling experience
+#+begin_src emacs-lisp :tangle yes
+(setq scroll-step           1
+       scroll-conservatively 10000)
+#+end_src
+
 *** Tool bar
 I don't like to see the tool bar taking up my valuable screen real estate
 #+begin_src emacs-lisp :tangle yes
@@ -290,7 +296,6 @@ to solve that problem.
        user-mail-address "sod@oscarfono.com")
 
 #+end_src
-
 
 ** Theme
 *** Inhibit startup screen.
@@ -892,6 +897,7 @@ Capture lets you quickly store notes with little interruption of your work flow.
      ("gq" "Quote" entry (file+headline "~/Dropbox/capture/quotes.org"), my/org-greatquotes-template :empty-lines 1)
      ("r" "Read" entry (file+headline "~/Dropbox/capture/someday.org" "Read") "** %^{title}\n %^{author}" :empty-lines 1)
      ("R" "Recipe" entry (file+headline "~/Dropbox/capture/recipes.org" "Recipes"), my/org-recipe-template :empty-lines 1)
+     ("s" "Subject" entry (file+headline "~/Dropbox/capture/someday.org" "Write"), "** %^{subject}\n" :empty-lines 1)
      ("t" "Todo" entry (file+headline "~/Dropbox/capture/todo.org" "Tasks") "** ★ TODO %?\n %i\n %a" :empty-lines 1)
      ("W" "Wishlist" entry (file+headline "~/Dropbox/capture/someday.org" "Wishlist") "** %^{thing}" :empty-lines 1) 
      ("w" "Watch" entry (file+headline "~/Dropbox/capture/someday.org" "Watch") "** ★  %^{movie title}\n %a" :empty-lines 1))))
@@ -966,6 +972,14 @@ Graphs with gnuplot
 #+end_src
 
 *** Autocompletion and Snippets
+
+**** auto-complete mode
+#+begin_src emacs-lisp :tangle yes
+
+(use-package auto-complete)
+
+#+end_src
+
 **** [[http://company-mode.github.io/][company-mode]]
 Company is a text completion framework for Emacs. The name stands for "*COMP*lete *ANY*thing". It uses pluggable back-ends and front-ends to retrieve and display completion candidates.
 
@@ -1243,8 +1257,10 @@ This JavaScript editing mode supports:
 ***** tern
 The Tern project is a JavaScript analyzer that can be used to improve the JavaScript integration with editors like Emacs.
 #+begin_src emacs-lisp :tangle yes
-(use-package tern
-   :init (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+(add-to-list 'load-path "~/code/src/github.com/ternjs/tern/emacs/")(
+autoload 'tern-mode "tern.el" nil t)
+
+(use-package tern-auto-complete
    :config
      (use-package company-tern
         :init (add-to-list 'company-backends 'company-tern)))
@@ -1380,26 +1396,53 @@ Replace annoying bell with visible-bell
 #+end_src
 
 ** Backups
+bastardised from [[https://stackoverflow.com/questions/151945/how-do-i-control-how-emacs-makes-backup-files][this stackoverflow post]]
 
-*** Set backup directory so working backups are not saved in pwd
-
-#+begin_src emacs-lisp :tangle yes
-
-(setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
-
-#+end_src
-
-*** Add versioning
+*** Set backup directory and sane defaults.
 
 #+begin_src emacs-lisp :tangle yes
 
-(setq delete-old-versions -1)
-(setq version-control t)
-(setq vc-make-backup-files t)
-(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
-
+(defvar --backup-directory (concat user-emacs-directory "backups"))
+(if (not (file-exists-p --backup-directory))
+        (make-directory --backup-directory t))
+(setq backup-directory-alist `(("." . ,--backup-directory)))
+(setq make-backup-files t               ; backup of a file the first time it is saved.
+      backup-by-copying t               ; don't clobber symlinks
+      version-control t                 ; version numbers for backup files 
+      vc-make-backup-files t            ; backup versioned files, which Emacs does not do by default (you don't commit on every save, right?)
+      delete-old-versions t             ; delete excess backup files silently
+      delete-by-moving-to-trash t
+      kept-old-versions 2               ; oldest versions to keep when a new numbered backup is made (default: 2)
+      kept-new-versions 10              ; newest versions to keep when a new numbered backup is made (default: 2)
+      auto-save-default t               ; auto-save every buffer that visits a file
+      auto-save-timeout 20              ; number of seconds idle time before auto-save (default: 30)
+      auto-save-interval 200            ; number of keystrokes between auto-saves (default: 300)
+      auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
 #+end_src
 
+*** per save and per session backups
+#+begin_src emacs-lisp :tangle yes
+
+;; Default and per-save backups go here:
+(setq backup-directory-alist '(("" . "~/.emacs.d/backups/per-save")))
+
+(defun force-backup-of-buffer ()
+  ;; Make a special "per session" backup at the first save of each
+  ;; emacs session.
+  (when (not buffer-backed-up)
+    ;; Override the default parameters for per-session backups.
+    (let ((backup-directory-alist '(("" . "~/.emacs.d/backups/per-session")))
+          (kept-new-versions 3))
+      (backup-buffer)))
+  ;; Make a "per save" backup on each save.  The first save results in
+  ;; both a per-session and a per-save backup, to keep the numbering
+  ;; of per-save backups consistent.
+  (let ((buffer-backed-up nil))
+    (backup-buffer)))
+
+(add-hook 'before-save-hook  'force-backup-of-buffer)
+
+#+end_src
 ** End INIT
 
 #+begin_src emacs-lisp :tangle yes

@@ -3,14 +3,14 @@
 #+EMAIL: sod@oscarfono.com
 
 * Info
-#+BEGIN_SRC emacs-lisp :tangle yes
+  #+BEGIN_SRC emacs-lisp :tangle yes
 ;;; sod.el --- emacs configuration  -*- lexical-binding: t; -*-
 ;; URL: https://github.com/techquila/.emacs.d/
 ;; Version: 1.04
 ;; Keywords: emacs
-#+END_SRC
+  #+END_SRC
 * Copyright
-#+BEGIN_SRC emacs-lisp :tangle yes
+  #+BEGIN_SRC emacs-lisp :tangle yes
 ;; Copyright (C) 2019 Sod Oscarfono
 
 ;; Author: Sod Oscarfono <sod@oscarfono.com>
@@ -29,11 +29,11 @@
 ;; see <http://www.gnu.org/licenses/>.
 
 
-#+END_SRC
+  #+END_SRC
 * Credits
-Standing on the shoulders of giants...
+  Standing on the shoulders of giants...
 
-These wonderful people have shared tools, tips, and configs that have helped me have such an amazing emacs experience.
+  These wonderful people have shared tools, tips, and configs that have helped me have such an amazing emacs experience.
 
 ** [[https://github.com/jwiegley/dot-emacs/blob/master/init.el][John Wiegly]]
 ** [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua]]
@@ -47,39 +47,39 @@ These wonderful people have shared tools, tips, and configs that have helped me 
 
 ** [[https://github.com/purcell][Steve Purcell]]
 * Description
-Org file to better manage my emacs configuration using Babel and literate programming techniques.
-#+BEGIN_SRC emacs-lisp :tangle yes
+  Org file to better manage my emacs configuration using Babel and literate programming techniques.
+  #+BEGIN_SRC emacs-lisp :tangle yes
 ;;; Commentary:
 ;; ========================================
 ;; Emacs configuration generated from org file using babel.
 
 
-#+END_SRC
+  #+END_SRC
 * Aims
-- Automate as much as I can get away with
-- Increase my overall productivity by integrating more of the powerful tools that org-mode offers, such as org-capture templates
-- Enhance my knowledge by learning new ways of yeilding productivity gains through emacs, and seeing how others achieve
-- Provide some sort of meaningful structure to my configuration
-- Provide sufficient meaningful documentation in order that the next time i am inspired to play with my configuration I know whats up
+  - Automate as much as I can get away with
+  - Increase my overall productivity by integrating more of the powerful tools that org-mode offers, such as org-capture templates
+  - Enhance my knowledge by learning new ways of yeilding productivity gains through emacs, and seeing how others achieve
+  - Provide some sort of meaningful structure to my configuration
+  - Provide sufficient meaningful documentation in order that the next time i am inspired to play with my configuration I know whats up
 
 * Source
-#+BEGIN_SRC emacs-lisp :tangle yes
+  #+BEGIN_SRC emacs-lisp :tangle yes
   ;;; Code:
   ;; ========================================
-#+END_SRC
+  #+END_SRC
 
 ** Errors
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
 
 ;; backtrace on error
 (setq debug-on-error t)
 
-#+END_SRC
+   #+END_SRC
 
 ** Encoding
 
-#+begin_src emacs-lisp :tangle yes
+   #+begin_src emacs-lisp :tangle yes
 
 ;; all about the 'utf-8 yo
 (prefer-coding-system 'utf-8)
@@ -89,106 +89,110 @@ Org file to better manage my emacs configuration using Babel and literate progra
 (set-terminal-coding-system 'utf-8)
 (set-selection-coding-system 'utf-8)
 
-#+end_src
+   #+end_src
 
 ** [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Windows-and-Frames.html#Windows-and-Frames][Frames]]
 
 *** start fullscreen
-#+begin_src emacs-lisp :tangle yes
+    #+begin_src emacs-lisp :tangle yes
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-#+end_src
+    #+end_src
    
 *** Menu bar
-I like the menu bar to be present so i can find things i've forgotten about
-#+begin_src emacs-lisp :tangle yes
+    I like the menu bar to be present so i can find things i've forgotten about
+    #+begin_src emacs-lisp :tangle yes
 
 (menu-bar-mode 1)
 
-#+end_src
+    #+end_src
 
 *** Scroll bars
-I like to see scrollbars for visual reference usually but am trialling without for now.
-#+begin_src emacs-lisp :tangle yes
+    I like to see scrollbars for visual reference usually but am trialling without for now.
+    #+begin_src emacs-lisp :tangle yes
 
 (scroll-bar-mode 0)
 
-#+end_src
+    #+end_src
 
-Smoother scrolling experience
-#+begin_src emacs-lisp :tangle yes
+    Smoother scrolling experience
+    #+begin_src emacs-lisp :tangle yes
 (setq scroll-step           1
        scroll-conservatively 10000)
-#+end_src
+    #+end_src
 
 *** Tool bar
-I don't like to see the tool bar taking up my valuable screen real estate
-#+begin_src emacs-lisp :tangle yes
+    I don't like to see the tool bar taking up my valuable screen real estate
+    #+begin_src emacs-lisp :tangle yes
 
 (tool-bar-mode 0)
 
-#+end_src
+    #+end_src
 
 *** Mode line
-Display full path of file on mode line
+    Display full path of file on mode line
 
-#+begin_src emacs-lisp :tangle yes
+    #+begin_src emacs-lisp :tangle yes
 
 (setq-default mode-line-buffer-identification
               (let ((orig  (car mode-line-buffer-identification)))
                 `(:eval (cons (concat ,orig (abbreviate-file-name default-directory))
                               (cdr mode-line-buffer-identification)))))
 
-#+end_src
+    #+end_src
 
 ** [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Basic-Windows.html#Basic-Windows][Window Management]]
 
 *** Line numbers
-I like to see the line numbers when coding and just set them globally until i can be bothered working out where they're necessary and where they're not.
+    I like to see the line numbers when coding and just set them globally until i can be bothered working out where they're necessary and where they're not.
 
-#+begin_src emacs-lisp :tangle yes
+    #+begin_src emacs-lisp :tangle yes
 
 (when (version<= "26.0.50" emacs-version )
   (global-display-line-numbers-mode))
 
-#+end_src
+    #+end_src
 
 *** Column numbers
 
-#+begin_src emacs-lisp :tangle yes
+    #+begin_src emacs-lisp :tangle yes
 
 (column-number-mode 1)
 
-#+end_src
+    #+end_src
 
 ** [[https://www.emacswiki.org/emacs/ELPA][Package Management]]
-We source our packages from the following repositories only:
-
+First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this bug]]
 #+begin_src emacs-lisp :tangle yes
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+#+end_src
+   We source our packages from the following repositories only:
+
+   #+begin_src emacs-lisp :tangle yes
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                           ("melpa" . "https://melpa.org/packages/")
-                          ("org" . "http://orgmode.org/elpa/")))
+                          ("org" . "https://orgmode.org/elpa/")))
 
-#+end_src
+   #+end_src
 
 *** Package Initialistion
-Activate all the packages, (in particular autoloads), and set load path.
+    Activate all the packages, (in particular autoloads), and set load path.
 
-#+begin_src emacs-lisp :tangle yes
+    #+begin_src emacs-lisp :tangle yes
 (require 'package)
 (package-initialize)
 (package-refresh-contents)
 
-#+end_src
+    #+end_src
 
 
 *** use-package
 
 **** Install [[https://github.com/jwiegley/use-package/blob/master/README.md][use-package]], unless present. 
 
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -198,68 +202,68 @@ Activate all the packages, (in particular autoloads), and set load path.
 
 (require 'use-package)
 
-#+end_src
+     #+end_src
 
 **** Download packages not installed
-Ensure that [[https://github.com/jwiegley/use-package/blob/master/README.md][use-package]] downloads and installs packages that are not found locally. /(This requires [[http://wikemacs.org/wiki/Package.el][package.el]])/
+     Ensure that [[https://github.com/jwiegley/use-package/blob/master/README.md][use-package]] downloads and installs packages that are not found locally. /(This requires [[http://wikemacs.org/wiki/Package.el][package.el]])/
 
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 
 (setq use-package-always-ensure t)
 
-#+end_src
+     #+end_src
 
 **** Keep packages updated automatically
-#+BEGIN_SRC emacs-lisp :tangle yes
+     #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package auto-package-update
   :config
     (setq auto-package-update-delete-old-versions t)
     (setq auto-package-update-hide-results t)
     (auto-package-update-maybe))
-#+END_SRC
+     #+END_SRC
 
 **** Ensure required system packages are installed
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 
 (use-package use-package-ensure-system-package)
 
-#+end_src
+     #+end_src
 
 **** Diminishing and delighting minor modes
 
 ***** Diminish
-"diminish is invoked with the :diminish keyword, which is passed either a minor mode symbol, a cons of the symbol and its replacement string, or just a replacement string, in which case the minor mode symbol is guessed to be the package name with "-mode" appended at the end:"
+      "diminish is invoked with the :diminish keyword, which is passed either a minor mode symbol, a cons of the symbol and its replacement string, or just a replacement string, in which case the minor mode symbol is guessed to be the package name with "-mode" appended at the end:"
 
-#+begin_src emacs-lisp :tangle yes
+      #+begin_src emacs-lisp :tangle yes
 
 (use-package diminish)
 
-#+end_src
+      #+end_src
 
 ***** Delight
-"delight is invoked with the :delight keyword, which is passed a minor mode symbol, a replacement string or quoted mode-line data (in which case the minor mode symbol is guessed to be the package name with "-mode" appended at the end), both of these, or several lists of both. If no arguments are provided, the default mode name is hidden completely."
+      "delight is invoked with the :delight keyword, which is passed a minor mode symbol, a replacement string or quoted mode-line data (in which case the minor mode symbol is guessed to be the package name with "-mode" appended at the end), both of these, or several lists of both. If no arguments are provided, the default mode name is hidden completely."
 
-#+begin_src emacs-lisp :tangle yes
+      #+begin_src emacs-lisp :tangle yes
 
 (use-package delight)
 
-#+end_src
+      #+end_src
 
 ** Better File Management with XDG
 
-To keep the user's home and the =~/.emacs.d= folder as clean as possible, I
-follow the [[https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html][XDG base directory specification]].
+   To keep the user's home and the =~/.emacs.d= folder as clean as possible, I
+   follow the [[https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html][XDG base directory specification]].
 
-Be careful that GNU Emacs will not create the appropriate folders if they do not
-exist. Therefore, it is necessary to create them yourself:
+   Be careful that GNU Emacs will not create the appropriate folders if they do not
+   exist. Therefore, it is necessary to create them yourself:
 
-#+begin_src bash
+   #+begin_src bash
   mkdir ~/.cache/emacs ~/.local/share/emacs/
-#+end_src
+   #+end_src
 
-*NOTE:* you can find out more by going to my [[https://github.com/techquila/dotfiles][dotfiles]].
+   *NOTE:* you can find out more by going to my [[https://github.com/techquila/dotfiles][dotfiles]].
 
-#+begin_src emacs-lisp :tangle yes
+   #+begin_src emacs-lisp :tangle yes
   (defvar xdg-bin (getenv "XDG_BIN_HOME")
     "The XDG bin base directory.")
 
@@ -274,139 +278,139 @@ exist. Therefore, it is necessary to create them yourself:
 
   (defvar xdg-lib (getenv "XDG_LIB_HOME")
     "The XDG lib base directory.")
-#+end_src
+   #+end_src
 
 ** [[https://github.com/jwiegley/use-package/blob/master/bind-key.el][bind-key]]
-If you have lots of keybindings set in your .emacs file, it can be
-hard to know which ones you haven't set yet, and which may now be
-overriding some new default in a new emacs version.  This module aims
-to solve that problem.
+   If you have lots of keybindings set in your .emacs file, it can be
+   hard to know which ones you haven't set yet, and which may now be
+   overriding some new default in a new emacs version.  This module aims
+   to solve that problem.
 
-#+begin_src emacs-lisp :tangle yes
+   #+begin_src emacs-lisp :tangle yes
 
 (use-package bind-key)
 
-#+end_src
+   #+end_src
 
 ** Personalisation
 
-#+begin_src emacs-lisp :tangle yes
+   #+begin_src emacs-lisp :tangle yes
 
 (setq user-full-name "Sod Oscarfono"
        user-mail-address "sod@oscarfono.com")
 
-#+end_src
+   #+end_src
 
 ** Theme
 *** Inhibit startup screen.
-I don't want the default start up screen displayed on start up.  That logo is hideous!
-#+begin_src emacs-lisp :tangle yes
+    I don't want the default start up screen displayed on start up.  That logo is hideous!
+    #+begin_src emacs-lisp :tangle yes
 
 (setq inhibit-startup-message t)
 
-#+end_src
+    #+end_src
 
 *** [[https://github.com/techquila/melancholy-theme.el][melancholy-theme]]
-The custom theme I'm working on.  Ongoing development. WIP.
+    The custom theme I'm working on.  Ongoing development. WIP.
 
-#+begin_src emacs-lisp :tangle yes
+    #+begin_src emacs-lisp :tangle yes
 
 (use-package melancholy-theme)
 
 (load-theme 'melancholy t)
 
-#+end_src
+    #+end_src
 
 *** [[https://github.com/domtronn/all-the-icons.el#installation][icons]]
-Some sweet icons to enhance the ui.  
+    Some sweet icons to enhance the ui.  
 
-In order for the icons to work it is very important that you install the Resource Fonts included in this package, they are available in the fonts directory. You can also install the latest fonts for this package in the (guessed?) based on the OS by calling the following function:
+    In order for the icons to work it is very important that you install the Resource Fonts included in this package, they are available in the fonts directory. You can also install the latest fonts for this package in the (guessed?) based on the OS by calling the following function:
 
-#+begin_example
-M-x all-the-icons-install-fonts
-#+end_example
+    #+begin_example
+    M-x all-the-icons-install-fonts
+    #+end_example
 
-#+begin_src emacs-lisp :tangle yes
+    #+begin_src emacs-lisp :tangle yes
 
 (use-package all-the-icons)
 
-#+end_src
+    #+end_src
 
 ** Modeline
 *** [[https://github.com/seagle0128/doom-modeline][doom-modeline]]
-This was a much better option than what I was doing previously.
-#+begin_src emacs-lisp :tangle yes
+    This was a much better option than what I was doing previously.
+    #+begin_src emacs-lisp :tangle yes
 
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode))
 
-#+end_src
+    #+end_src
 
 ** Shell
    
 *** Terminal Emulation with [[https://www.emacswiki.org/emacs/MultiTerm][multi-term]]
-Multiple concurrent terminal buffers are the only way to roll.  To start one just simply 'Control-Meta-SPACEBAR'.
+    Multiple concurrent terminal buffers are the only way to roll.  To start one just simply 'Control-Meta-SPACEBAR'.
 
-#+begin_src emacs-lisp :tangle yes
+    #+begin_src emacs-lisp :tangle yes
 
 (use-package multi-term
   :bind ("C-M-SPC" . multi-term))
 
 
-#+end_src
+    #+end_src
 
 ** Encryption
 
 *** GPG Agent
-Use an agent to manage GPG between shell sessions.
+    Use an agent to manage GPG between shell sessions.
 
-#+begin_src emacs-lisp :tangle yes
+    #+begin_src emacs-lisp :tangle yes
 
 (setq epg-gpg-program "/usr/bin/gpg")
 
-#+end_src
+    #+end_src
 
 *** [[https://www.emacswiki.org/emacs/EasyPG][EasyPG]] to encrypt/decrypt files with a .gpg extension
-Add the following line to the top of the document to be encrypted and save the file with a .gpg extension.
+    Add the following line to the top of the document to be encrypted and save the file with a .gpg extension.
 
-#+begin_example
+    #+begin_example
 
-# -*- mode:org; epa-file-encrypt-to: ("sod@oscarfono.com") -*-
+    # -*- mode:org; epa-file-encrypt-to: ("sod@oscarfono.com") -*-
 
-#+end_example
+    #+end_example
 
-#+begin_src emacs-lisp :tangle yes
+    #+begin_src emacs-lisp :tangle yes
 
 (require 'epa-file)
 (epa-file-enable)
 
-#+end_src
+    #+end_src
 
 ** Authentication
 *** Auth source
-I have a non-world readable file named /.authoinfo.gpg / within my home
-directory where I store my authentication details for the various
-services I need to authenticate to.  ERC and Org2Blog need these credentials to operate.
+    I have a non-world readable file named /.authoinfo.gpg / within my home
+    directory where I store my authentication details for the various
+    services I need to authenticate to.  ERC and Org2Blog need these credentials to operate.
 
-#+begin_src emacs-lisp :tangle yes
+    #+begin_src emacs-lisp :tangle yes
 
 (require 'auth-source)
 (add-to-list 'auth-sources "~/.authinfo.gpg")
 
-#+end_src
+    #+end_src
 
 *** IRC
-Load configuration and authentication info from an external source.
+    Load configuration and authentication info from an external source.
 
-#+begin_src emacs-lisp :tangle no
+    #+begin_src emacs-lisp :tangle no
 
 (load "~/.emacs.d/secrets/erc-config.el")
 
-#+end_src
+    #+end_src
 
 ** Docker
-integrate docker functionality into emacs
-#+begin_src emacs-lisp :tangle yes
+   integrate docker functionality into emacs
+   #+begin_src emacs-lisp :tangle yes
 
 ;; dockerfile-mode: An emacs mode for handling Dockerfiles
 ;; https://github.com/spotify/dockerfile-mode
@@ -430,29 +434,29 @@ integrate docker functionality into emacs
 (use-package docker-tramp
   :defer t)
 
-#+end_src
+   #+end_src
 
 ** Productivity Management
 *** Calendar
 
 **** set location for calendar
-#+BEGIN_SRC emacs-lisp :tangle yes
+     #+BEGIN_SRC emacs-lisp :tangle yes
 (setq calendar-latitude -40.550620)
 (setq calendar-longitude 175.199720)
-#+END_SRC
+     #+END_SRC
 
 **** Don't display calendars i don't need
-#+BEGIN_SRC emacs-lisp :tangle yes
+     #+BEGIN_SRC emacs-lisp :tangle yes
 (setq holiday-general-holidays nil)
 (setq holiday-christian-holidays nil)
 (setq holiday-hebrew-holidays nil)
 (setq holiday-islamic-holidays nil)
 (setq holiday-bahai-holidays nil)
 (setq holiday-oriental-holidays nil)
-#+END_SRC
+     #+END_SRC
 
 **** set NZ Public Holidays
-#+BEGIN_SRC emacs-lisp :tangle yes
+     #+BEGIN_SRC emacs-lisp :tangle yes
 
   ;; Use package nz-holidays to pull in New Zealands Public Holidays for calendar.
   (use-package nz-holidays)
@@ -460,15 +464,15 @@ integrate docker functionality into emacs
   ;; append it to empty variable holiday-local-holidays
   (setq calendar-holidays (append holiday-local-holidays holiday-nz-holidays))
 
-#+END_SRC
+     #+END_SRC
 
 **** Count days in given region
-From within Calendar, these functions enable to me to count days within a given region, excluding weekends, and public holidays.
+     From within Calendar, these functions enable to me to count days within a given region, excluding weekends, and public holidays.
 
-Taken from here: 
-[[https://stackoverflow.com/questions/23566000/how-to-count-days-excluding-weekends-and-holidays-in-emacs-calendar][https://stackoverflow.com/questions/23566000/how-to-count-days-excluding-weekends-and-holidays-in-emacs-calendar]]
+     Taken from here: 
+     [[https://stackoverflow.com/questions/23566000/how-to-count-days-excluding-weekends-and-holidays-in-emacs-calendar][https://stackoverflow.com/questions/23566000/how-to-count-days-excluding-weekends-and-holidays-in-emacs-calendar]]
 
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
   ;; (defun calendar-count-days-region-excluding-weekends-and-holidays ()
   ;;  "Count the number of days (inclusive) between point and the mark, 
   ;;   excluding weekends and public holidays."
@@ -517,22 +521,22 @@ Taken from here:
                         start-date end-date)))))
       (message "Region has %d workday%s (inclusive)"
                days (if (> days 1) "s" ""))))
-#+end_src
+     #+end_src
 
 *** Conveniences
 
 **** delete-selection-mode
-allows me to delete highlighted region.  Not standard behaviour in emacs.
-#+BEGIN_SRC emacs-lisp :tangle yes
+     allows me to delete highlighted region.  Not standard behaviour in emacs.
+     #+BEGIN_SRC emacs-lisp :tangle yes
 
 (delete-selection-mode 1)
 
-#+END_SRC
+     #+END_SRC
 
 **** [[https://www.emacswiki.org/emacs/ElDoc][Eldoc]]
-A very simple but effective thing, eldoc-mode is a MinorMode which shows you, in the echo area, the argument list of the function call you are currently writing. Very handy. By NoahFriedman. Part of Emacs.
+     A very simple but effective thing, eldoc-mode is a MinorMode which shows you, in the echo area, the argument list of the function call you are currently writing. Very handy. By NoahFriedman. Part of Emacs.
 
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 
 (use-package "eldoc"
   :diminish eldoc-mode
@@ -544,21 +548,21 @@ A very simple but effective thing, eldoc-mode is a MinorMode which shows you, in
   (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)))
 
-#+end_src
+     #+end_src
 
 **** [[https://julien.danjou.info/projects/emacs-packages][rainbow-mode]] 
-rainbow-mode is a minor mode for Emacs which highlights text representing color codes in various forms by setting the background color of the text accordingly.
+     rainbow-mode is a minor mode for Emacs which highlights text representing color codes in various forms by setting the background color of the text accordingly.
 
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 
 (use-package rainbow-mode
   :diminish rainbow-mode
   :init (rainbow-mode))
 
-#+end_src
+     #+end_src
 
 **** [[http://ledger-cli.org/3.0/doc/ledger-mode.html][ledger-mode]]
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 
 ;; ledger
 (use-package ledger-mode
@@ -570,33 +574,45 @@ rainbow-mode is a minor mode for Emacs which highlights text representing color 
         ledger-clear-whole-transactions t)
         (use-package flycheck-ledger))
 
+     #+end_src
+
+**** Regex 
+***** Re-Builder (M-x re-builder)
+#+begin_src emacs-lisp :tangle no
+(require 're-builder)
+(setq reb-re-syntax 'string)
+#+end_src
+***** xr
+converts Emacs regular expressions to the structured rx form thus being and inverse of rx.
+#+begin_src emacs-lisp :tangle no
+(use-package xr)
 #+end_src
 
 **** Remote File Access with [[https://www.emacswiki.org/emacs/TrampMode][TRAMP]]
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 
 (setq tramp-default-user "sod")
 (setq tramp-default-method "ssh")
 ;;(set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
 
-#+end_src
+     #+end_src
 
 **** Run emacs-server
-Various programs can invoke your choice of editor to edit a particular
-piece of text. For instance, version control programs invoke an editor
-to enter version control logs, and the Unix mail
-utility invokes an editor to enter a message to send. By convention,
-your choice of editor is specified by the environment variable
-EDITOR. If you set EDITOR to ‘emacs’, Emacs would be invoked, but in
-an inconvenient way—by starting a new Emacs process. This is
-inconvenient because the new Emacs process doesn’t share buffers, a
-command history, or other kinds of information with any existing Emacs
-process.
+     Various programs can invoke your choice of editor to edit a particular
+     piece of text. For instance, version control programs invoke an editor
+     to enter version control logs, and the Unix mail
+     utility invokes an editor to enter a message to send. By convention,
+     your choice of editor is specified by the environment variable
+     EDITOR. If you set EDITOR to ‘emacs’, Emacs would be invoked, but in
+     an inconvenient way—by starting a new Emacs process. This is
+     inconvenient because the new Emacs process doesn’t share buffers, a
+     command history, or other kinds of information with any existing Emacs
+     process.
 
-You can solve this problem by setting up Emacs as an edit server, so
-that it “listens” for external edit requests and acts accordingly.
+     You can solve this problem by setting up Emacs as an edit server, so
+     that it “listens” for external edit requests and acts accordingly.
 
-#+begin_src emacs-lisp :tangle no
+     #+begin_src emacs-lisp :tangle no
 (add-hook 'after-init-hook
   (lambda ()
     (require 'server)
@@ -614,13 +630,13 @@ that it “listens” for external edit requests and acts accordingly.
     (bury-buffer)
     (switch-to-buffer-other-frame server-buf))))
 
-#+end_src
+     #+end_src
 
 **** [[https://github.com/Fuco1/smartparens/wiki][smartparens]]
-Smartparens is minor mode for Emacs that deals with parens pairs and
-tries to be smart about it. 
+     Smartparens is minor mode for Emacs that deals with parens pairs and
+     tries to be smart about it. 
 
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 
 (use-package smartparens-config
     :ensure smartparens
@@ -631,81 +647,81 @@ tries to be smart about it.
 (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
 (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 
-#+end_src
+     #+end_src
 
 **** multiple cursors
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 
 (use-package multiple-cursors)
 
-#+end_src
+     #+end_src
 
 **** subwords
-subword-mode changes all cursor movement/edit commands to stop in between the “camelCase” words.
+     subword-mode changes all cursor movement/edit commands to stop in between the “camelCase” words.
 
-superword-mode  is similar.  It treats text like “x_y” as one word.  Useful for “snake_case”.
+     superword-mode  is similar.  It treats text like “x_y” as one word.  Useful for “snake_case”.
 
-subword-mode ＆ superword-mode are mutally exclusive.  Turning one on turns off the other.
+     subword-mode ＆ superword-mode are mutally exclusive.  Turning one on turns off the other.
 
-To see whether you have subword-mode on, call describe-variable then type “subword-mode”.  Same for superword-mode.
+     To see whether you have subword-mode on, call describe-variable then type “subword-mode”.  Same for superword-mode.
 
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 
 (subword-mode 1)
 
-#+end_src
+     #+end_src
 
 **** yes/no becomes y/n
 
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
-#+end_src
+     #+end_src
 
 **** magit
-#+BEGIN_SRC emacs-lisp :tangle yes
+     #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package magit
   :bind ("C-x g" . magit-status))
 
-#+END_SRC
+     #+END_SRC
 
 **** engine-search
 
 *** [[http://orgmode.org/][org-mode]]
 **** global settings:
 ***** use org
-#+BEGIN_SRC emacs-lisp :tangle yes
+      #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package org
   :ensure org-plus-contrib)
-#+END_SRC
+      #+END_SRC
 
 ***** set default directory and files
-#+begin_src emacs-lisp :tangle yes
+      #+begin_src emacs-lisp :tangle yes
   
 (setq org-directory "~/Dropbox/org")
 
-#+end_src
+      #+end_src
 
 ***** set global key-bindings for org-mode features
-#+begin_src emacs-lisp :tangle yes
+      #+begin_src emacs-lisp :tangle yes
 
 (define-key global-map "\C-cl" 'org-store-link)
 
-#+end_src
+      #+end_src
 
 ***** use org-contacts for contact management
-#+BEGIN_SRC emacs-lisp :tangle yes
+      #+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package org-contacts
   :ensure nil
   :after org
   :custom (org-contacts-files '("~/Dropbox/capture/contacts.org")))
 
-#+END_SRC
+      #+END_SRC
 
 ***** skeleton setup for org files
-#+BEGIN_SRC emacs-lisp :tangle yes
+      #+BEGIN_SRC emacs-lisp :tangle yes
 
 (define-skeleton org-skeleton
   "Header info for a emacs-org file."
@@ -713,25 +729,29 @@ To see whether you have subword-mode on, call describe-variable then type “sub
   "#+TITLE: " str " \n"
   "#+AUTHOR: Sod Oscarfono \n"
   "#+EMAIL: sod@oscarfono.com\n"
-  "#+INFOJS_OPT: \n"
   "#+BABEL: :session *R* :cache yes :results output graphics :exports both :tangle yes \n"
   "-----"
  )
 (global-set-key [C-S-f4] 'org-skeleton)
 
-#+END_SRC
+      #+END_SRC
 
 ***** org tempo for source block expansion
-#+begin_src emacs-lisp :tangle yes
+      #+begin_src emacs-lisp :tangle yes
 
 (require 'org-tempo)
 
-#+end_src
+      #+end_src
 
+***** clock-in
+#+begin_src emacs-lisp :tangle yes
+(setq org-clock-persist 'history)
+(org-clock-persistence-insinuate)
+#+end_src
 **** TODO's
 
-***** set TODO file and priorities
-#+begin_src emacs-lisp :tangle yes
+***** set file and priorities
+      #+begin_src emacs-lisp :tangle yes
 
 ;;file to save todo items
 (setq org-agenda-files (quote ("~/Dropbox/capture/todo.org")))
@@ -746,50 +766,50 @@ To see whether you have subword-mode on, call describe-variable then type “sub
                            (?B . (:foreground "#00b7ff"))
                            (?C . (:foreground "#ffb728"))))
 
-#+end_src
+      #+end_src
 
 ***** set *TODO* sequence
-When TODO keywords are used as workflow states, you might want to keep
-track of when a state change occurred and maybe take a note about this
-change. You can either record just a timestamp, or a time-stamped note
-for a change. These records will be inserted after the headline as an
-itemized list, newest first1. When taking a lot of notes, you might
-want to get the notes out of the way into a drawer (see
-Drawers). Customize org-log-into-drawer to get this behavior—the
-recommended drawer for this is called LOGBOOK2. You can also overrule
-the setting of this variable for a subtree by setting a
-LOG_INTO_DRAWER property.
+      When TODO keywords are used as workflow states, you might want to keep
+      track of when a state change occurred and maybe take a note about this
+      change. You can either record just a timestamp, or a time-stamped note
+      for a change. These records will be inserted after the headline as an
+      itemized list, newest first1. When taking a lot of notes, you might
+      want to get the notes out of the way into a drawer (see
+      Drawers). Customize org-log-into-drawer to get this behavior—the
+      recommended drawer for this is called LOGBOOK2. You can also overrule
+      the setting of this variable for a subtree by setting a
+      LOG_INTO_DRAWER property.
 
-Since it is normally too much to record a note for every state, Orgm
-ode expects configuration on a per-keyword basis for this. This is
-achieved by adding special markers ‘!’ (for a timestamp) or ‘@’ (for a
-note with timestamp) in parentheses after each keyword. For example,
-with the setting:
+      Since it is normally too much to record a note for every state, Orgm
+      ode expects configuration on a per-keyword basis for this. This is
+      achieved by adding special markers ‘!’ (for a timestamp) or ‘@’ (for a
+      note with timestamp) in parentheses after each keyword. For example,
+      with the setting:
 
-#+begin_src emacs-lisp :tangle yes
+      #+begin_src emacs-lisp :tangle yes
 
 (setq org-todo-keywords
   '((sequence "★ TODO(t)" "📌 NEXT(n/)" "⚠ WAIT(w@/!)" "|" "✔ DONE(d!)" "✘ KILL(k!)" "➰ PASS(p@/!)" )))
 
-#+end_src
+      #+end_src
 
 ***** Log *TODO* done time
-#+begin_src emacs-lisp :tangle yes
+      #+begin_src emacs-lisp :tangle yes
 
 (setq org-log-done 'time)
 
-#+end_src
+      #+end_src
 
 ***** Set line wrap
-#+begin_src emacs-lisp :tangle yes
+      #+begin_src emacs-lisp :tangle yes
 
 (setq org-startup-indented t) 
 (setq org-startup-truncated nil)
 
-#+end_src
+      #+end_src
 
 **** [[http://orgmode.org/manual/Agenda-Views.html][org-agenda]]
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 
   (org-agenda nil "a") ;; present org-agenda on emacs startup
  
@@ -830,30 +850,30 @@ with the setting:
       (tags priority-down category-keep)
       (search category-keep))))
 
-#+end_src
+     #+end_src
 
 **** [[https://github.com/sabof/org-bullets][org-bullets]]
-Show org-mode bullets as UTF-8 characters.
+     Show org-mode bullets as UTF-8 characters.
 
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 
 (use-package org-bullets
   :config (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
-#+end_src
+     #+end_src
 
 **** [[http://orgmode.org/manual/Capture.html#Capture][org-capture]]
-Capture lets you quickly store notes with little interruption of your work flow.  
+     Capture lets you quickly store notes with little interruption of your work flow.  
 
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 
 (define-key global-map "\C-cc" 'org-capture)
 
-#+end_src
+     #+end_src
 
 **** [[http://orgmode.org/manual/Capture-templates.html#Capture-templates][org-capture-templates]]
 
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 (use-package org-capture
   :ensure nil
   :after org
@@ -902,31 +922,32 @@ Capture lets you quickly store notes with little interruption of your work flow.
      ("W" "Wishlist" entry (file+headline "~/Dropbox/capture/someday.org" "Wishlist") "** %^{thing}" :empty-lines 1) 
      ("w" "Watch" entry (file+headline "~/Dropbox/capture/someday.org" "Watch") "** ★  %^{movie title}\n %a" :empty-lines 1))))
    
-#+end_src
+     #+end_src
 
 **** org-exports
 
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 
 (use-package ox-hugo)
 (use-package ox-mediawiki)
 (use-package ox-minutes)
+(use-package ox-slimhtml)
 
-(setq org-export-backends '(ascii html hugo icalendar latex md mediawiki minutes))
+(setq org-export-backends '(ascii html hugo icalendar latex md mediawiki minutes slimhtml))
 
-#+end_src
+     #+end_src
 
 **** org-babel
 
 ***** use org-install
-#+begin_src emacs-lisp :tangle yes
+      #+begin_src emacs-lisp :tangle yes
 
 (require 'org-install)
 
-#+end_src
+      #+end_src
 
 ***** load these language dictionaries for source blocks
-#+begin_src emacs-lisp :tangle yes
+      #+begin_src emacs-lisp :tangle yes
 
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -939,10 +960,15 @@ Capture lets you quickly store notes with little interruption of your work flow.
    (sass . t)
    (shell . t)))
 
+      #+end_src
+
+**** org-babel-async
+#+begin_src emacs-lisp :tangle yes
+(use-package ob-async)
 #+end_src
 
 **** org-mind-map
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
   ;; This is an Emacs package that creates graphviz directed graphs from
   ;; the headings of an org file
   (use-package org-mind-map
@@ -959,31 +985,196 @@ Capture lets you quickly store notes with little interruption of your work flow.
     ;; (setq org-mind-map-engine "twopi")  ; Radial layouts
     ;; (setq org-mind-map-engine "circo")  ; Circular Layout
   )
-#+end_src
+     #+end_src
 
 **** org-plot
-Graphs with gnuplot
+     Graphs with gnuplot
 
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 (use-package gnuplot
   :commands gnuplot-mode
   :defer t
   :bind ("C-M-g" . gnuplot))
+     #+end_src
+
+**** org-publish 
+
+#+begin_src emacs-lisp :tangle no
+(add-to-list 'load-path "~/code/src/github.com/techquila/my-blog-publisher/")
+(load "my-blog-publisher") 
 #+end_src
+
+     #+begin_src emacs-lisp :tangle yes
+(require 'ox-publish)
+(require 'seq)
+#+end_src
+
+     #+begin_src emacs-lisp :tangle yes
+(setq my-blog/repo "~/code/src/github.com/techquila/sod.oscarfono.com/blog/")
+     #+end_src
+
+     #+begin_src emacs-lisp :tangle yes
+(setq org-publish-use-timestamps-flag t
+      org-publish-timestamp-directory (concat my-blog/repo "cache/"))
+     #+end_src
+
+     #+begin_src emacs-lisp :tangle yes
+(setq org-html-html5-fancy t)     
+     #+end_src
+
+     #+begin_src emacs-lisp :tangle yes
+     (setq org-export-global-macros
+       '(("begin-article" . "@@html:<article>@@")
+         ("end-article" . "@@html:</article>@@")
+         ("begin-section" . "@@html:<section>@@")
+         ("end-section" . "@@html:</section>@@")
+         ("begin-aside" . "@@html:<aside>@@")
+         ("end-aside" . "@@html:</aside>@@")
+         ("begin-header" . "@@html:<header>@@")
+         ("end-header" . "@@html:</header>@@")
+         ("begin-footer" . "@@html:<footer>@@")
+         ("end-footer" . "@@html:</footer>@@"))) 
+
+     #+end_src
+
+     #+begin_src emacs-lisp :tangle yes
+(defun my-blog/get-preview (filename)
+    "Returns a list: '(<needs-more> <preview-string>) where
+  <needs-more> is t or nil, indicating whether a \"Read More...\"
+  link is needed."
+    (with-temp-buffer
+      (insert-file-contents (concat my-blog/repo "posts/" filename))
+      (goto-char (point-min))
+      (let ((content-start (or
+			    ;; Look for the first non-keyword line
+			    (and (re-search-forward "^[^#]" nil t)
+				 (match-beginning 0))
+			    ;; Failing that, assume we're malformed and
+			    ;; have no content
+			    (buffer-size)))
+	    (marker (or
+		     (and (re-search-forward "^#\\+BEGIN_more$" nil t)
+			  (match-beginning 0))
+		     (buffer-size))))
+	;; ;; Return a pair of '(needs-more preview-string)
+	(list (not (= marker (buffer-size)))
+	      (buffer-substring content-start marker)))))
+     #+end_src
+
+     #+begin_src emacs-lisp :tangle yes
+(defun my-blog/sitemap (title list)
+  "Generate the sitemap (Blog Main Page)"
+  (concat "#+TITLE: " title "\n" "--------\n"
+          (string-join (mapcar #'car (cdr list)) "\n\n")))
+
+     #+end_src
+
+     #+begin_src emacs-lisp :tangle yes
+(defun my-blog/sitemap-entry (entry style project)
+  "Sitemap (Blog Main Page) Entry Formatter"
+  (when (not (directory-name-p entry))
+    (format (string-join
+             '("* [[file:%s][%s]]\n"
+               "#+BEGIN_published\n"
+               "%s\n"
+               "#+END_published\n\n"
+               "%s\n"
+               "--------\n"))
+            entry
+            (org-publish-find-title entry project)
+            (format-time-string "%A, %B %_d %Y at %l:%M %p %Z" (org-publish-find-date entry project))
+            (let* ((preview (my-blog/get-preview entry))
+                   (needs-more (car preview))
+                   (preview-text (cadr preview)))
+              (if needs-more
+                  (format
+                   (concat
+                    "%s\n\n"
+                    "#+BEGIN_morelink\n"
+                    "[[file:%s][Read More...]]\n"
+                    "#+END_morelink\n")
+                   preview-text entry)
+                (format "%s" preview-text))))))
+     #+end_src
+
+     #+begin_src emacs-lisp :tangle yes
+       (setq org-publish-project-alist
+         `(("blog"
+             :components ("posts" "templates" "scripts" "styles" "images" "rss"))
+           ("posts"
+             :base-directory ,(concat my-blog/repo "posts/")
+             :base-extension "org"
+             :publishing-directory ,(concat my-blog/repo "public/posts/")
+             :publishing-function ox-slimhtml-publish-to-html
+             :with-author t
+             :with-creator nil
+             :with-date t
+             :with-title t
+             :with-toc nil
+             :html-doctype html5
+             :html-head-include-default-style nil
+             :html-head-include-scripts nil
+             :html-html5-fancy t
+             :html-link-home "/"
+             :html-link-up "articles.html"
+             :auto-sitemap t
+             :sitemap-filename "articles.org"
+             :sitemap-format-entry my-blog/sitemap-entry
+             :sitemap-function my-blog/sitemap
+             :sitemap-title "Published articles"
+             :sitemap-sort-files anti-chronologically)
+           ("templates"
+             :base-directory ,(concat my-blog/repo "templates/")
+             :base-extension "html"
+             :publishing-directory ,(concat my-blog/repo "public/templates")
+             :publishing-function org-publish-attachment
+             :recursive t)
+           ("scripts"
+             :base-directory ,(concat my-blog/repo "templates/")
+             :base-extension "el\\|go\\|js"
+             :publishing-directory ,(concat my-blog/repo "public/templates")
+             :publishing-function org-publish-attachment
+             :recursive t)
+           ("styles"
+             :base-directory ,(concat my-blog/repo "templates/")
+             :base-extension "css"
+             :publishing-directory ,(concat my-blog/repo "public/templates")
+             :publishing-function org-publish-attachment
+             :recursive t)
+           ("images"
+             :base-directory ,(concat my-blog/repo "templates/")
+             :base-extension "jpg\\|gif\\|png\\|svg"
+             :publishing-directory ,(concat my-blog/repo "public/templates")
+             :publishing-function org-publish-attachment
+             :recursive t)
+           ("rss"
+             :base-directory , (concat my-blog/repo "raw/")
+             :base-extension ".org"
+             :publishing-directory ,(concat my-blog/repo "public/raw")
+             :publishing-function org-rss-publish-to-rss
+             :html-link-use-abs-url t
+             :export-with-tags nil
+             :section-numbers nil
+             :with-date t
+             :with-title t
+             :with-toc nil)))
+
+
+     #+end_src
 
 *** Autocompletion and Snippets
 
 **** auto-complete mode
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 
 (use-package auto-complete)
 
-#+end_src
+     #+end_src
 
 **** [[http://company-mode.github.io/][company-mode]]
-Company is a text completion framework for Emacs. The name stands for "*COMP*lete *ANY*thing". It uses pluggable back-ends and front-ends to retrieve and display completion candidates.
+     Company is a text completion framework for Emacs. The name stands for "*COMP*lete *ANY*thing". It uses pluggable back-ends and front-ends to retrieve and display completion candidates.
 
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 (use-package company
   :defer 0.5
   :delight
@@ -995,12 +1186,12 @@ Company is a text completion framework for Emacs. The name stands for "*COMP*let
   (company-tooltip-align-annotations 't)
   (global-company-mode t))
 
-#+end_src
+     #+end_src
 
 **** [[https://github.com/emacs-helm/helm][helm]]
-Helm is an Emacs framework for incremental completions and narrowing selections. It helps to rapidly complete file names, buffer names, or any other Emacs interactions requiring selecting an item from a list of possible choices.
+     Helm is an Emacs framework for incremental completions and narrowing selections. It helps to rapidly complete file names, buffer names, or any other Emacs interactions requiring selecting an item from a list of possible choices.
 
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 
 (use-package helm
   :diminish helm-mode
@@ -1029,24 +1220,24 @@ Helm is an Emacs framework for incremental completions and narrowing selections.
          ("C-x c b" . my/helm-do-grep-book-notes)
          ("C-x c SPC" . helm-all-mark-rings)))
 
-#+end_src
+     #+end_src
 
 **** [[https://github.com/smihica/emmet-mode][emmet-mode]]
-This is a major mode for html and css expansion that i'm trying out.  Forked from as [[https://github.com/rooney/zencoding][zencoding-mode]].
+     This is a major mode for html and css expansion that i'm trying out.  Forked from as [[https://github.com/rooney/zencoding][zencoding-mode]].
 
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 
 (use-package emmet-mode
   :config
     (progn (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
            (add-hook 'css-mode-hook  'emmet-mode)))
 
-#+end_src
+     #+end_src
 
 **** [[https://www.emacswiki.org/emacs/Yasnippet][Yasnippet]]
-YASnippet is a template system for Emacs. It allows you to type an abbreviation and automatically expand it into function templates.
+     YASnippet is a template system for Emacs. It allows you to type an abbreviation and automatically expand it into function templates.
 
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 
 (use-package yasnippet
   :diminish yas-minor-mode
@@ -1068,31 +1259,32 @@ YASnippet is a template system for Emacs. It allows you to type an abbreviation 
 
 (use-package react-snippets)
 
-#+end_src
+     #+end_src
 
 *** Email with [[https://www.emacswiki.org/emacs/GnusTutorial][GNU's]] ]]
 
 **** [[https://www.emacswiki.org/emacs/GnusTutorial#toc2][GNU's]]
-Gnus, an Emacs package for reading e-mail and Usenet news (and many
-other things). It offers features that other news and mail readers
-lack. It is highly customizable and extensible.
+     Gnus, an Emacs package for reading e-mail and Usenet news (and many
+     other things). It offers features that other news and mail readers
+     lack. It is highly customizable and extensible.
 
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 
 (require 'gnus)
 
-#+end_src
+     #+end_src
 
 *** Project managment with [[https://github.com/bbatsov/projectile][projectile]]
-Helm support using [[https://github.com/bbatsov/helm-projectile][helm-projectile]]
+    Helm support using [[https://github.com/bbatsov/helm-projectile][helm-projectile]]
 
-#+begin_src emacs-lisp :tangle yes
+    #+begin_src emacs-lisp :tangle yes
 
 (use-package projectile
   :diminish projectile-mode
   :bind-keymap ("C-c p" . projectile-command-map)
   :config
   (progn
+(setq projectile-project-search-path '("~/code/src/" "~/dev/"))
     (setq projectile-completion-system 'helm)
     (setq projectile-enable-caching t)
     (setq projectile-indexing-method 'alien)
@@ -1102,86 +1294,86 @@ Helm support using [[https://github.com/bbatsov/helm-projectile][helm-projectile
 (use-package helm-projectile
   :config (helm-projectile-on))
 
-#+end_src
+    #+end_src
 
 *** LaTeX
-#+begin_src emacs-lisp :tangle yes
+    #+begin_src emacs-lisp :tangle yes
 (use-package auctex
   :defer t)
-#+end_src
+    #+end_src
 
 *** PDF
-#+begin_src emacs-lisp :tangle yes
+    #+begin_src emacs-lisp :tangle yes
 (use-package pdf-tools
   :defer t)
-#+end_src
+    #+end_src
 *** Language assist
 
 **** linting
 ***** flycheck
 
-#+begin_src emacs-lisp :tangle yes
+      #+begin_src emacs-lisp :tangle yes
 
 (use-package flycheck
   :config
     (global-flycheck-mode))
 
-#+end_src
+      #+end_src
 
 **** configuration
 ***** ansible-mode
-#+begin_src emacs-lisp :tangle yes
+      #+begin_src emacs-lisp :tangle yes
 
 (use-package ansible
   :commands ansible-mode)
 
-#+end_src
+      #+end_src
 
 ***** crontab-mode
-#+begin_src emacs-lisp :tangle yes
+      #+begin_src emacs-lisp :tangle yes
 
 (use-package crontab-mode
 :mode "\\.cron\\(tab\\)?\\'")
 
-#+end_src
+      #+end_src
  
 ***** [[https://github.com/emacsmirror/ldap-mode][ldap-mode]]
-major modes for editing LDAP schema and LDIF files
+      major modes for editing LDAP schema and LDIF files
 
-#+begin_src emacs-lisp :tangle no
+      #+begin_src emacs-lisp :tangle no
 
 (use-package ldap-mode
   :commands ldap-mode)
 
-#+end_src
+      #+end_src
 
 **** latex
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 (use-package tex
   :ensure auctex)
-#+end_src
+     #+end_src
 
 **** lisp
 **** PDF
 **** python
 **** html
 ***** emacs-htmlize
-#+begin_src emacs-lisp :tangle yes
+      #+begin_src emacs-lisp :tangle yes
 (use-package htmlize)
-#+end_src
+      #+end_src
 **** css
 ***** scss-mode
 
-#+begin_src emacs-lisp :tangle yes
+      #+begin_src emacs-lisp :tangle yes
 
 (use-package scss-mode
   :commands scss-mode
   :mode "\\.s{a|c}ss?\\'")
 
-#+end_src
+      #+end_src
 
 ****** ssh-mode
-#+begin_src emacs-lisp :tangle yes
+       #+begin_src emacs-lisp :tangle yes
 
 (use-package ssh-config-mode
   :mode ((".ssh/config\\'"       . ssh-config-mode)
@@ -1189,74 +1381,74 @@ major modes for editing LDAP schema and LDIF files
          ("known_hosts\\'"       . ssh-known-hosts-mode)
          ("authorized_keys2?\\'" . ssh-authorized-keys-mode)))
 
-#+end_src
+       #+end_src
 
 ****** yaml-mode
-#+begin_src emacs-lisp :tangle yes
+       #+begin_src emacs-lisp :tangle yes
 (use-package yaml-mode
   :commands yaml-mode
   :mode "\\.yml\\'")
   :delight 
 
-#+end_src
+       #+end_src
 **** javascript
 ***** [[https://www.emacswiki.org/emacs/Js2Mode][js2-mode]]
-This JavaScript editing mode supports:
+      This JavaScript editing mode supports:
 
-- strict recognition of the Ecma-262 language standard
-- support for most Rhino and SpiderMonkey extensions from 1.5 and up
-- parsing support for ECMAScript for XML (E4X, ECMA-357)
-- accurate syntax highlighting using a recursive-descent parser
-- on-the-fly reporting of syntax errors and strict-mode warnings
-- undeclared-variable warnings using a configurable externs framework
-- "bouncing" line indentation to choose among alternate indentation points
-- smart line-wrapping within comments and strings
-- code folding:
-  - show some or all function bodies as {...}
-  - show some or all block comments as /*...*/
-- context-sensitive menu bar and popup menus
-- code browsing using the `imenu' package
-- many customization options
+      - strict recognition of the Ecma-262 language standard
+      - support for most Rhino and SpiderMonkey extensions from 1.5 and up
+      - parsing support for ECMAScript for XML (E4X, ECMA-357)
+      - accurate syntax highlighting using a recursive-descent parser
+      - on-the-fly reporting of syntax errors and strict-mode warnings
+      - undeclared-variable warnings using a configurable externs framework
+      - "bouncing" line indentation to choose among alternate indentation points
+      - smart line-wrapping within comments and strings
+      - code folding:
+	- show some or all function bodies as {...}
+	- show some or all block comments as /*...*/
+      - context-sensitive menu bar and popup menus
+      - code browsing using the `imenu' package
+      - many customization options
 
-  #+begin_src emacs-lisp :tangle yes
+	#+begin_src emacs-lisp :tangle yes
 
-(use-package js2-mode
-  :init
-    (setq js-basic-indent 2)
-    (setq-default js2-basic-indent 2
-                js2-basic-offset 2
-                js2-auto-indent-p t
-                js2-cleanup-whitespace t
-                js2-enter-indents-newline t
-                js2-indent-on-enter-key t
-                js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$"))
+      (use-package js2-mode
+	:init
+	  (setq js-basic-indent 2)
+	  (setq-default js2-basic-indent 2
+		      js2-basic-offset 2
+		      js2-auto-indent-p t
+		      js2-cleanup-whitespace t
+		      js2-enter-indents-newline t
+		      js2-indent-on-enter-key t
+		      js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$"))
 
-  (add-hook 'js2-mode-hook
-            (lambda ()
-              (push '("function" . ?ƒ) prettify-symbols-alist)))
+	(add-hook 'js2-mode-hook
+		  (lambda ()
+		    (push '("function" . ?ƒ) prettify-symbols-alist)))
 
-  (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
+	(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
 
-  #+end_src
+	#+end_src
 
 ****** Color defined variables with color-identifiers-mode:
 
-#+begin_src emacs-lisp :tangle yes
+       #+begin_src emacs-lisp :tangle yes
 (use-package color-identifiers-mode
     :init
       (add-hook 'js2-mode-hook 'color-identifiers-mode))
-#+end_src
+       #+end_src
 
 ******  While editing JavaScript is baked into Emacs, it is quite important to have flycheck validate the source based on jshint, and eslint. Let’s prefer eslint:
 
-#+begin_src emacs-lisp :tangle yes
+       #+begin_src emacs-lisp :tangle yes
 (add-hook 'js2-mode-hook
           (lambda () (flycheck-select-checker "javascript-eslint")))
-#+end_src
+       #+end_src
 
 ***** tern
-The Tern project is a JavaScript analyzer that can be used to improve the JavaScript integration with editors like Emacs.
-#+begin_src emacs-lisp :tangle yes
+      The Tern project is a JavaScript analyzer that can be used to improve the JavaScript integration with editors like Emacs.
+      #+begin_src emacs-lisp :tangle yes
 (add-to-list 'load-path "~/code/src/github.com/ternjs/tern/emacs/")(
 autoload 'tern-mode "tern.el" nil t)
 
@@ -1264,57 +1456,57 @@ autoload 'tern-mode "tern.el" nil t)
    :config
      (use-package company-tern
         :init (add-to-list 'company-backends 'company-tern)))
-#+end_src
+      #+end_src
 
-The following additional keys are bound:
+      The following additional keys are bound:
 
-M-.
-Jump to the definition of the thing under the cursor.
-M-,
-Brings you back to last place you were when you pressed M-..
-C-c C-r
-Rename the variable under the cursor.
-C-c C-c
-Find the type of the thing under the cursor.
-C-c C-d
-Find docs of the thing under the cursor. Press again to open the associated URL (if any). 
+      M-.
+      Jump to the definition of the thing under the cursor.
+      M-,
+      Brings you back to last place you were when you pressed M-..
+      C-c C-r
+      Rename the variable under the cursor.
+      C-c C-c
+      Find the type of the thing under the cursor.
+      C-c C-d
+      Find docs of the thing under the cursor. Press again to open the associated URL (if any). 
 
 ***** js2-refactor
 
-The js2-refactor mode should start with C-c . and then a two-letter mnemonic shortcut.
+      The js2-refactor mode should start with C-c . and then a two-letter mnemonic shortcut.
 
-- ef is extract-function: Extracts the marked expressions out into a new named function.
-- em is extract-method: Extracts the marked expressions out into a new named method in an object literal.
-- ip is introduce-parameter: Changes the marked expression to a parameter in a local function.
-- lp is localize-parameter: Changes a parameter to a local var in a local function.
-- eo is expand-object: Converts a one line object literal to multiline.
-- co is contract-object: Converts a multiline object literal to one line.
-- eu is expand-function: Converts a one line function to multiline (expecting semicolons as statement delimiters).
-- cu is contract-function: Converts a multiline function to one line (expecting semicolons as statement delimiters).
-- ea is expand-array: Converts a one line array to multiline.
-- ca is contract-array: Converts a multiline array to one line.
-- wi is wrap-buffer-in-iife: Wraps the entire buffer in an immediately invoked function expression
-  ig is inject-global-in-iife: Creates a shortcut for a marked global by injecting it in the wrapping immediately invoked function expression
-- ag is add-to-globals-annotation: Creates a /*global */ annotation if it is missing, and adds the var at point to it.
-- ev is extract-var: Takes a marked expression and replaces it with a var.
-- iv is inline-var: Replaces all instances of a variable with its initial value.
-- rv is rename-var: Renames the variable on point and all occurrences in its lexical scope.
-- vt is var-to-this: Changes local var a to be this.a instead.
-- ao is arguments-to-object: Replaces arguments to a function call with an object literal of named arguments. Requires yasnippets.
-- 3i is ternary-to-if: Converts ternary operator to if-statement.
-- sv is split-var-declaration: Splits a var with multiple vars declared, into several var statements.
-- uw is unwrap: Replaces the parent statement with the selected region.
+      - ef is extract-function: Extracts the marked expressions out into a new named function.
+      - em is extract-method: Extracts the marked expressions out into a new named method in an object literal.
+      - ip is introduce-parameter: Changes the marked expression to a parameter in a local function.
+      - lp is localize-parameter: Changes a parameter to a local var in a local function.
+      - eo is expand-object: Converts a one line object literal to multiline.
+      - co is contract-object: Converts a multiline object literal to one line.
+      - eu is expand-function: Converts a one line function to multiline (expecting semicolons as statement delimiters).
+      - cu is contract-function: Converts a multiline function to one line (expecting semicolons as statement delimiters).
+      - ea is expand-array: Converts a one line array to multiline.
+      - ca is contract-array: Converts a multiline array to one line.
+      - wi is wrap-buffer-in-iife: Wraps the entire buffer in an immediately invoked function expression
+	ig is inject-global-in-iife: Creates a shortcut for a marked global by injecting it in the wrapping immediately invoked function expression
+      - ag is add-to-globals-annotation: Creates a /*global */ annotation if it is missing, and adds the var at point to it.
+      - ev is extract-var: Takes a marked expression and replaces it with a var.
+      - iv is inline-var: Replaces all instances of a variable with its initial value.
+      - rv is rename-var: Renames the variable on point and all occurrences in its lexical scope.
+      - vt is var-to-this: Changes local var a to be this.a instead.
+      - ao is arguments-to-object: Replaces arguments to a function call with an object literal of named arguments. Requires yasnippets.
+      - 3i is ternary-to-if: Converts ternary operator to if-statement.
+      - sv is split-var-declaration: Splits a var with multiple vars declared, into several var statements.
+      - uw is unwrap: Replaces the parent statement with the selected region.
 
 
-#+begin_src emacs-lisp :tangle yes
+      #+begin_src emacs-lisp :tangle yes
 (use-package js2-refactor
   :init   (add-hook 'js2-mode-hook 'js2-refactor-mode)
   :config (js2r-add-keybindings-with-prefix "C-c ."))
-#+end_src
+      #+end_src
 
 ***** rjsx-mode
 
-#+begin_src emacs-lisp :tangle yes
+      #+begin_src emacs-lisp :tangle yes
 
 (use-package rjsx-mode
   :commands rjsx-mode
@@ -1324,83 +1516,83 @@ The js2-refactor mode should start with C-c . and then a two-letter mnemonic sho
     (setq js2-basic-offset 2)))
     
 
-#+end_src
+      #+end_src
 
 ***** vue-mode
-#+BEGIN_SRC emacs-lisp :tangle yes
+      #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package vue-mode
   :config (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode)))
 
-#+END_SRC
+      #+END_SRC
 
 ***** vue-html-mode
-#+BEGIN_SRC emacs-lisp :tangle no
+      #+BEGIN_SRC emacs-lisp :tangle no
 (use-package vue-html-mode)
-#+END_SRC
+      #+END_SRC
 
 **** skewer-mode
-#+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 (use-package skewer-mode
    :init (add-hook 'js2-mode-hook 'skewer-mode))
-#+end_src
+     #+end_src
 
-Kick things off with run-skewer, and then:
+     Kick things off with run-skewer, and then:
 
-C-x C-e
-`skewer-eval-last-expression’
-C-M-x
-`skewer-eval-defun’
-C-c C-k
-`skewer-load-buffer’ 
+     C-x C-e
+     `skewer-eval-last-expression’
+     C-M-x
+     `skewer-eval-defun’
+     C-c C-k
+     `skewer-load-buffer’ 
 
 **** go
 ***** go-mode
-#+begin_src emacs-lisp :tangle yes
+      #+begin_src emacs-lisp :tangle yes
 (use-package go-mode
   :defer 1
   :commands go-mode
   :mode "\\.go$")
  
-#+end_src
+      #+end_src
 
 *** Syntax Highlighting
-Activate syntax highlighting globally
+    Activate syntax highlighting globally
 
-#+begin_src emacs-lisp :tangle yes
+    #+begin_src emacs-lisp :tangle yes
 
 (global-font-lock-mode 1)
 
-#+end_src
+    #+end_src
 
 *** Linting
-#+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package package-lint)
-#+END_SRC
+    #+END_SRC
 
 ** Links
-Use [[https://www.mozilla.org/en-US/firefox/new/][Firefox]] to open urls
+   Use [[https://www.mozilla.org/en-US/firefox/new/][Firefox]] to open urls
 
-#+begin_src emacs-lisp :tangle yes
+   #+begin_src emacs-lisp :tangle yes
 
 (setq browse-url-browser-function 'browse-url-generic)
 (setq browse-url-generic-program "firefox")
 
-#+end_src
+   #+end_src
 ** Notifications
-Replace annoying bell with visible-bell
+   Replace annoying bell with visible-bell
 
-#+begin_src emacs-lisp :tangle yes
+   #+begin_src emacs-lisp :tangle yes
 
 (setq visible-bell t)
 
-#+end_src
+   #+end_src
 
 ** Backups
-bastardised from [[https://stackoverflow.com/questions/151945/how-do-i-control-how-emacs-makes-backup-files][this stackoverflow post]]
+   bastardised from [[https://stackoverflow.com/questions/151945/how-do-i-control-how-emacs-makes-backup-files][this stackoverflow post]]
 
 *** Set backup directory and sane defaults.
 
-#+begin_src emacs-lisp :tangle yes
+    #+begin_src emacs-lisp :tangle yes
 
 (defvar --backup-directory (concat user-emacs-directory "backups"))
 (if (not (file-exists-p --backup-directory))
@@ -1418,10 +1610,10 @@ bastardised from [[https://stackoverflow.com/questions/151945/how-do-i-control-h
       auto-save-timeout 20              ; number of seconds idle time before auto-save (default: 30)
       auto-save-interval 200            ; number of keystrokes between auto-saves (default: 300)
       auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
-#+end_src
+    #+end_src
 
 *** per save and per session backups
-#+begin_src emacs-lisp :tangle yes
+    #+begin_src emacs-lisp :tangle yes
 
 ;; Default and per-save backups go here:
 (setq backup-directory-alist '(("" . "~/.emacs.d/backups/per-save")))
@@ -1442,12 +1634,12 @@ bastardised from [[https://stackoverflow.com/questions/151945/how-do-i-control-h
 
 (add-hook 'before-save-hook  'force-backup-of-buffer)
 
-#+end_src
+    #+end_src
 ** End INIT
 
-#+begin_src emacs-lisp :tangle yes
+   #+begin_src emacs-lisp :tangle yes
 
 (provide 'init)
 ;;; sod.org ends here
 
-#+end_src
+   #+end_src

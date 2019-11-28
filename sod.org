@@ -142,6 +142,74 @@
 
     #+end_src
 
+*** Speed bar
+
+**** Start Speed bar if using a window system
+#+begin_src emacs-lisp :tangle yes
+
+(when window-system          ; start speedbar if we're using a window system
+    (speedbar t))
+
+#+end_src
+
+**** Correct Speed bar focus issue
+Something that might annoy you under certain X window managers (WindowMaker, for example) and in Carbon Emacs when speedbar starts is that it’s window will appear to have focus but keyboard input goes to the original Emacs window. You can make things look right again by defining this mode hook before starting speedbar:
+#+begin_src emacs-lisp :tangle yes
+(setq speedbar-mode-hook '(lambda ()
+    (interactive)
+    (other-frame 0)))
+#+end_src
+
+**** Set frame parameters
+#+begin_src emacs-lisp :tangle yes
+(defcustom speedbar-frame-parameters '((minibuffer . nil)
+				       (width . 10)
+				       (border-width . 7)
+				       (menu-bar-lines . 0)
+				       (tool-bar-lines . 0)
+				       (unsplittable . t)
+				       (left-fringe . 0)
+				       )
+  "Parameters to use when creating the speedbar frame in Emacs.
+Any parameter supported by a frame may be added.  The parameter `height'
+will be initialized to the height of the frame speedbar is
+attached to and added to this list before the new frame is initialized."
+  :group 'speedbar
+  :type '(repeat (cons :format "%v"
+		       (symbol :tag "Parameter")
+		       (sexp :tag "Value"))))
+#+end_src
+**** Reposition to right hand side of attached frame
+#+begin_src emacs-lisp :tangle yes
+(defun speedbar-frame-reposition-smartly ()
+  "Reposition the speedbar frame to be next to the attached frame."
+  (cond ((and (featurep 'xemacs)
+	      (or (member 'right speedbar-frame-plist)
+		  (member 'top speedbar-frame-plist)))
+	 (dframe-reposition-frame
+	  speedbar-frame
+	  (dframe-attached-frame speedbar-frame)
+	  (cons (car (cdr (member 'right speedbar-frame-plist)))
+		(car (cdr (member 'top speedbar-frame-plist)))))
+	 )
+	((and (not (featurep 'xemacs))
+	      (or (assoc 'right speedbar-frame-parameters)
+		  (assoc 'top speedbar-frame-parameters)))
+	 ;; if right/top were specified in the parameters, pass them
+	 ;; down to the reposition function
+	 (dframe-reposition-frame
+	  speedbar-frame
+	  (dframe-attached-frame speedbar-frame)
+	  (cons (cdr (assoc 'right speedbar-frame-parameters))
+		(cdr (assoc 'top  speedbar-frame-parameters))))
+	 )
+	(t
+	 (dframe-reposition-frame speedbar-frame
+				  (dframe-attached-frame speedbar-frame)
+				  speedbar-default-position))))
+
+#+end_src
+
 ** [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Basic-Windows.html#Basic-Windows][Window Management]]
 
 *** Line numbers
@@ -172,8 +240,8 @@ First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this 
    #+begin_src emacs-lisp :tangle yes
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                          ("melpa" . "https://melpa.org/packages/")
-                          ("org" . "https://orgmode.org/elpa/")))
+                         ("melpa" . "https://melpa.org/packages/")
+                         ("org" . "https://orgmode.org/elpa/")))
 
    #+end_src
 
@@ -523,6 +591,7 @@ First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this 
                days (if (> days 1) "s" ""))))
      #+end_src
 
+
 *** Conveniences
 
 **** delete-selection-mode
@@ -730,6 +799,7 @@ converts Emacs regular expressions to the structured rx form thus being and inve
   "#+AUTHOR: Sod Oscarfono \n"
   "#+EMAIL: sod@oscarfono.com\n"
   "#+BABEL: :session *R* :cache yes :results output graphics :exports both :tangle yes \n"
+  "#+STARTUP: align"
   "-----"
  )
 (global-set-key [C-S-f4] 'org-skeleton)
@@ -748,8 +818,8 @@ converts Emacs regular expressions to the structured rx form thus being and inve
 (setq org-clock-persist 'history)
 (org-clock-persistence-insinuate)
 #+end_src
-**** TODO's
 
+**** TODO's
 ***** set file and priorities
       #+begin_src emacs-lisp :tangle yes
 
@@ -801,10 +871,11 @@ converts Emacs regular expressions to the structured rx form thus being and inve
       #+end_src
 
 ***** Set line wrap
-      #+begin_src emacs-lisp :tangle yes
 
-(setq org-startup-indented t) 
-(setq org-startup-truncated nil)
+      #+begin_src emacs-lisp :tangle yes
+(setq org-startup-align-all-tables t)
+;; (setq org-startup-indented t) 
+;; (setq org-startup-truncated nil) ;; Messes with org-mode tables
 
       #+end_src
 
@@ -928,12 +999,31 @@ converts Emacs regular expressions to the structured rx form thus being and inve
 
      #+begin_src emacs-lisp :tangle yes
 
+(require 'ox-latex)
+(unless (boundp 'org-latex-classes)
+  (setq org-latex-classes nil))
+(add-to-list 'org-latex-classes
+             '("article"
+               "\\documentclass{article}"
+               ("\\section{%s}" . "\\section*{%s}")
+               ("\\subsection{%s}" . "\\subsection*{%s}")
+               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+               ("\\paragraph{%s}" . "\\paragraph*{%s}")
+               ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+	      '("book"
+               "\\documentclass{book}"
+               ("\\part{%s}" . "\\part*{%s}")
+               ("\\chapter{%s}" . "\\chapter*{%s}")
+               ("\\section{%s}" . "\\section*{%s}")
+               ("\\subsection{%s}" . "\\subsection*{%s}")
+               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
+
 (use-package ox-hugo)
 (use-package ox-mediawiki)
-(use-package ox-minutes)
 (use-package ox-slimhtml)
 
-(setq org-export-backends '(ascii html hugo icalendar latex md mediawiki minutes slimhtml))
+(setq org-export-backends '(ascii html hugo latex md mediawiki slimhtml))
+
 
      #+end_src
 
@@ -946,6 +1036,19 @@ converts Emacs regular expressions to the structured rx form thus being and inve
 
       #+end_src
 
+***** make results lowercase
+#+begin_src emacs-lisp :tangle yes
+; Make babel results blocks lowercase
+(setq org-babel-results-keyword "results")
+#+end_src
+
+***** ditaa
+requires graphvis system package to be installed
+
+#+begin_src emacs-lisp :tangle yes
+(setq org-ditaa-jar-path "~/code/src/org-mode/contrib/scripts/ditaa.jar")
+#+end_src
+
 ***** load these language dictionaries for source blocks
       #+begin_src emacs-lisp :tangle yes
 
@@ -955,6 +1058,7 @@ converts Emacs regular expressions to the structured rx form thus being and inve
    (css . t)
    (js . t)
    (latex . t)
+   (ledger . t)
    (python . t)
    (R . t)
    (sass . t)
@@ -969,13 +1073,13 @@ converts Emacs regular expressions to the structured rx form thus being and inve
 
 **** org-mind-map
      #+begin_src emacs-lisp :tangle yes
-  ;; This is an Emacs package that creates graphviz directed graphs from
+     ;; This is an Emacs package that creates graphviz directed graphs from
   ;; the headings of an org file
   (use-package org-mind-map
     :init
     (require 'ox-org)
     ;; Uncomment the below if 'ensure-system-packages` is installed
-    ;;  :ensure-system-package (gvgen .graphviz) 
+    ;; ensure-system-package (gvgen .graphviz) 
     :config
     (setq org-mind-map-engine "dot")       ; Default. Directed Graph
     ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
@@ -1261,7 +1365,7 @@ converts Emacs regular expressions to the structured rx form thus being and inve
 
      #+end_src
 
-*** Email with [[https://www.emacswiki.org/emacs/GnusTutorial][GNU's]] ]]
+*** Email with [[https://www.emacswiki.org/emacs/GnusTutorial][GNU's]]
 
 **** [[https://www.emacswiki.org/emacs/GnusTutorial#toc2][GNU's]]
      Gnus, an Emacs package for reading e-mail and Usenet news (and many
@@ -1449,8 +1553,7 @@ converts Emacs regular expressions to the structured rx form thus being and inve
 ***** tern
       The Tern project is a JavaScript analyzer that can be used to improve the JavaScript integration with editors like Emacs.
       #+begin_src emacs-lisp :tangle yes
-(add-to-list 'load-path "~/code/src/github.com/ternjs/tern/emacs/")(
-autoload 'tern-mode "tern.el" nil t)
+(use-package tern)
 
 (use-package tern-auto-complete
    :config
@@ -1635,6 +1738,11 @@ autoload 'tern-mode "tern.el" nil t)
 (add-hook 'before-save-hook  'force-backup-of-buffer)
 
     #+end_src
+
+*** Stop lock files being created
+#+begin_src emacs-lisp :tangle yes
+(setq create-lockfiles nil)
+#+end_src
 ** End INIT
 
    #+begin_src emacs-lisp :tangle yes

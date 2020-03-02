@@ -68,6 +68,20 @@
   ;; ========================================
   #+END_SRC
 
+** Personalisation
+
+*** Default Name and Email
+    #+begin_src emacs-lisp :tangle yes
+
+ (setq user-full-name "Sod Oscarfono"
+	user-mail-address "sod@oscarfono.com")
+
+    #+end_src
+
+*** Default Directory
+    #+begin_src emacs-lisp :tangle yes
+(setq default-directory "~/code/src/github.com/techquila/")
+    #+end_src
 ** Errors
 
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -90,145 +104,6 @@
 (set-selection-coding-system 'utf-8)
 
    #+end_src
-
-** [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Windows-and-Frames.html#Windows-and-Frames][Frames]]
-
-*** start fullscreen
-    #+begin_src emacs-lisp :tangle yes
-
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
-
-    #+end_src
-   
-*** Menu bar
-    I like the menu bar to be present so i can find things i've forgotten about
-    #+begin_src emacs-lisp :tangle yes
-
-(menu-bar-mode 1)
-
-    #+end_src
-
-*** Scroll bars
-    I like to see scrollbars for visual reference usually but am trialling without for now.
-    #+begin_src emacs-lisp :tangle yes
-
-(scroll-bar-mode 0)
-
-    #+end_src
-
-    Smoother scrolling experience
-    #+begin_src emacs-lisp :tangle yes
-(setq scroll-step           1
-       scroll-conservatively 10000)
-    #+end_src
-
-*** Tool bar
-    I don't like to see the tool bar taking up my valuable screen real estate
-    #+begin_src emacs-lisp :tangle yes
-
-(tool-bar-mode 0)
-
-    #+end_src
-
-*** Mode line
-    Display full path of file on mode line
-
-    #+begin_src emacs-lisp :tangle yes
-
-(setq-default mode-line-buffer-identification
-              (let ((orig  (car mode-line-buffer-identification)))
-                `(:eval (cons (concat ,orig (abbreviate-file-name default-directory))
-                              (cdr mode-line-buffer-identification)))))
-
-    #+end_src
-
-*** Speed bar
-
-**** Start Speed bar if using a window system
-#+begin_src emacs-lisp :tangle yes
-
-(when window-system          ; start speedbar if we're using a window system
-    (speedbar t))
-
-#+end_src
-
-**** Correct Speed bar focus issue
-Something that might annoy you under certain X window managers (WindowMaker, for example) and in Carbon Emacs when speedbar starts is that it’s window will appear to have focus but keyboard input goes to the original Emacs window. You can make things look right again by defining this mode hook before starting speedbar:
-#+begin_src emacs-lisp :tangle yes
-(setq speedbar-mode-hook '(lambda ()
-    (interactive)
-    (other-frame 0)))
-#+end_src
-
-**** Set frame parameters
-#+begin_src emacs-lisp :tangle yes
-(defcustom speedbar-frame-parameters '((minibuffer . nil)
-				       (width . 10)
-				       (border-width . 7)
-				       (menu-bar-lines . 0)
-				       (tool-bar-lines . 0)
-				       (unsplittable . t)
-				       (left-fringe . 0)
-				       )
-  "Parameters to use when creating the speedbar frame in Emacs.
-Any parameter supported by a frame may be added.  The parameter `height'
-will be initialized to the height of the frame speedbar is
-attached to and added to this list before the new frame is initialized."
-  :group 'speedbar
-  :type '(repeat (cons :format "%v"
-		       (symbol :tag "Parameter")
-		       (sexp :tag "Value"))))
-#+end_src
-**** Reposition to right hand side of attached frame
-#+begin_src emacs-lisp :tangle yes
-(defun speedbar-frame-reposition-smartly ()
-  "Reposition the speedbar frame to be next to the attached frame."
-  (cond ((and (featurep 'xemacs)
-	      (or (member 'right speedbar-frame-plist)
-		  (member 'top speedbar-frame-plist)))
-	 (dframe-reposition-frame
-	  speedbar-frame
-	  (dframe-attached-frame speedbar-frame)
-	  (cons (car (cdr (member 'right speedbar-frame-plist)))
-		(car (cdr (member 'top speedbar-frame-plist)))))
-	 )
-	((and (not (featurep 'xemacs))
-	      (or (assoc 'right speedbar-frame-parameters)
-		  (assoc 'top speedbar-frame-parameters)))
-	 ;; if right/top were specified in the parameters, pass them
-	 ;; down to the reposition function
-	 (dframe-reposition-frame
-	  speedbar-frame
-	  (dframe-attached-frame speedbar-frame)
-	  (cons (cdr (assoc 'right speedbar-frame-parameters))
-		(cdr (assoc 'top  speedbar-frame-parameters))))
-	 )
-	(t
-	 (dframe-reposition-frame speedbar-frame
-				  (dframe-attached-frame speedbar-frame)
-				  speedbar-default-position))))
-
-#+end_src
-
-** [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Basic-Windows.html#Basic-Windows][Window Management]]
-
-*** Line numbers
-    I like to see the line numbers when coding and just set them globally until i can be bothered working out where they're necessary and where they're not.
-
-    #+begin_src emacs-lisp :tangle yes
-
-(when (version<= "26.0.50" emacs-version )
-  (global-display-line-numbers-mode))
-
-    #+end_src
-
-*** Column numbers
-
-    #+begin_src emacs-lisp :tangle yes
-
-(column-number-mode 1)
-
-    #+end_src
 
 ** [[https://www.emacswiki.org/emacs/ELPA][Package Management]]
 First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this bug]]
@@ -317,6 +192,74 @@ First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this 
 
       #+end_src
 
+** [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Windows-and-Frames.html#Windows-and-Frames][Frames]]
+*** start fullscreen
+    #+begin_src emacs-lisp :tangle yes
+
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+    #+end_src
+   
+*** Menu bar
+    I like the menu bar to be present so i can find things i've forgotten about
+    #+begin_src emacs-lisp :tangle yes
+
+(menu-bar-mode 1)
+
+    #+end_src
+
+*** Scroll bars
+    I like to see scrollbars for visual reference usually but am trialling without for now.
+    #+begin_src emacs-lisp :tangle yes
+
+(scroll-bar-mode 0)
+
+    #+end_src
+
+    Smoother scrolling experience
+    #+begin_src emacs-lisp :tangle yes
+(setq scroll-step           1
+       scroll-conservatively 10000)
+    #+end_src
+
+*** Tool bar
+    I don't like to see the tool bar taking up my valuable screen real estate
+    #+begin_src emacs-lisp :tangle yes
+
+(tool-bar-mode 0)
+
+    #+end_src
+
+*** Mode line
+    Display full path of file on mode line
+
+    #+begin_src emacs-lisp :tangle yes
+
+(setq-default mode-line-buffer-identification
+              (let ((orig  (car mode-line-buffer-identification)))
+                `(:eval (cons (concat ,orig (abbreviate-file-name default-directory))
+                              (cdr mode-line-buffer-identification)))))
+
+    #+end_src
+** [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Basic-Windows.html#Basic-Windows][Window Management]]
+
+*** Line numbers
+    I like to see the line numbers when coding and just set them globally until i can be bothered working out where they're necessary and where they're not.
+
+    #+begin_src emacs-lisp :tangle yes
+
+(when (version<= "26.0.50" emacs-version )
+  (global-display-line-numbers-mode))
+
+    #+end_src
+
+*** Column numbers
+
+    #+begin_src emacs-lisp :tangle yes
+
+(column-number-mode 1)
+
+    #+end_src
 ** Better File Management with XDG
 
    To keep the user's home and the =~/.emacs.d= folder as clean as possible, I
@@ -357,15 +300,6 @@ First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this 
    #+begin_src emacs-lisp :tangle yes
 
 (use-package bind-key)
-
-   #+end_src
-
-** Personalisation
-
-   #+begin_src emacs-lisp :tangle yes
-
-(setq user-full-name "Sod Oscarfono"
-       user-mail-address "sod@oscarfono.com")
 
    #+end_src
 

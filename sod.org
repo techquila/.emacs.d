@@ -3,14 +3,14 @@
 #+EMAIL: sod@oscarfono.com
 
 * Info
-  #+BEGIN_SRC emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 ;;; sod.el --- emacs configuration  -*- lexical-binding: t; -*-
 ;; URL: https://github.com/techquila/.emacs.d/
 ;; Version: 1.04
 ;; Keywords: emacs
-  #+END_SRC
+  #+end_src
 * Copyright
-  #+BEGIN_SRC emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 ;; Copyright (C) 2019 Sod Oscarfono
 
 ;; Author: Sod Oscarfono <sod@oscarfono.com>
@@ -27,9 +27,7 @@
 
 ;; For a full copy of the GNU General Public License
 ;; see <http://www.gnu.org/licenses/>.
-
-
-  #+END_SRC
+  #+end_src
 * Credits
   Standing on the shoulders of giants...
 
@@ -42,19 +40,15 @@
 ** [[https://eschulte.github.io/emacs24-starter-kit/][Eric Schulte]]
 ** [[https://github.com/rdallasgray/graphene][Robert Dallas Gray]]
 ** [[http://ergoemacs.org/emacs/blog.html][Xah Lee]]
-
 ** [[http://pragmaticemacs.com/emacs/org-mode-basics-vii-a-todo-list-with-schedules-and-deadlines/][Dr Ben Maughan]]
-
 ** [[https://github.com/purcell][Steve Purcell]]
 * Description
   Org file to better manage my emacs configuration using Babel and literate programming techniques.
-  #+BEGIN_SRC emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 ;;; Commentary:
 ;; ========================================
 ;; Emacs configuration generated from org file using babel.
-
-
-  #+END_SRC
+  #+end_src
 * Aims
   - Automate as much as I can get away with
   - Increase my overall productivity by integrating more of the powerful tools that org-mode offers, such as org-capture templates
@@ -63,37 +57,44 @@
   - Provide sufficient meaningful documentation in order that the next time i am inspired to play with my configuration I know whats up
 
 * Source
-  #+BEGIN_SRC emacs-lisp :tangle yes
-  ;;; Code:
-  ;; ========================================
-  #+END_SRC
+
+  #+begin_src emacs-lisp :tangle sod.el
+ 
+ ;;; Code:
+ ;; ========================================
+ 
+ #+end_src
 
 ** Personalisation
-
 *** Default Name and Email
-    #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
  (setq user-full-name "Sod Oscarfono"
 	user-mail-address "sod@oscarfono.com")
 
-    #+end_src
+  #+end_src
 
 *** Default Directory
-    #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
+
 (setq default-directory "~/code/src/github.com/techquila/")
-    #+end_src
+
+  #+end_src
+
 ** Errors
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 ;; backtrace on error
 (setq debug-on-error t)
 
-   #+END_SRC
+  #+end_src
 
 ** Encoding
 
-   #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 ;; all about the 'utf-8 yo
 (prefer-coding-system 'utf-8)
@@ -103,39 +104,43 @@
 (set-terminal-coding-system 'utf-8)
 (set-selection-coding-system 'utf-8)
 
-   #+end_src
+  #+end_src
 
 ** [[https://www.emacswiki.org/emacs/ELPA][Package Management]]
+
 First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this bug]]
-#+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
+
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
-#+end_src
+
+  #+end_src
+
    We source our packages from the following repositories only:
 
-   #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")
                          ("org" . "https://orgmode.org/elpa/")))
 
-   #+end_src
+  #+end_src
 
 *** Package Initialistion
     Activate all the packages, (in particular autoloads), and set load path.
 
-    #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
+
 (require 'package)
 (package-initialize)
 (package-refresh-contents)
 
-    #+end_src
-
+  #+end_src
 
 *** use-package
-
 **** Install [[https://github.com/jwiegley/use-package/blob/master/README.md][use-package]], unless present. 
 
-     #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -145,68 +150,73 @@ First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this 
 
 (require 'use-package)
 
-     #+end_src
+  #+end_src
 
 **** Download packages not installed
      Ensure that [[https://github.com/jwiegley/use-package/blob/master/README.md][use-package]] downloads and installs packages that are not found locally. /(This requires [[http://wikemacs.org/wiki/Package.el][package.el]])/
 
-     #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 (setq use-package-always-ensure t)
 
-     #+end_src
+  #+end_src
 
 **** Keep packages updated automatically
-     #+BEGIN_SRC emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
+
 (use-package auto-package-update
   :config
     (setq auto-package-update-delete-old-versions t)
     (setq auto-package-update-hide-results t)
     (auto-package-update-maybe))
-     #+END_SRC
+
+  #+end_src
 
 **** Ensure required system packages are installed
-     #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
 (use-package use-package-ensure-system-package)
 
-     #+end_src
+  #+end_src
 
 **** Diminishing and delighting minor modes
-
 ***** Diminish
       "diminish is invoked with the :diminish keyword, which is passed either a minor mode symbol, a cons of the symbol and its replacement string, or just a replacement string, in which case the minor mode symbol is guessed to be the package name with "-mode" appended at the end:"
 
-      #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 (use-package diminish)
 
-      #+end_src
+  #+end_src
 
 ***** Delight
       "delight is invoked with the :delight keyword, which is passed a minor mode symbol, a replacement string or quoted mode-line data (in which case the minor mode symbol is guessed to be the package name with "-mode" appended at the end), both of these, or several lists of both. If no arguments are provided, the default mode name is hidden completely."
 
-      #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 (use-package delight)
 
-      #+end_src
+  #+end_src
 
-** File Management with XDG
-
+** File Management
    To keep the user's home and the =~/.emacs.d= folder as clean as possible, I
    follow the [[https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html][XDG base directory specification]].
 
    Be careful that GNU Emacs will not create the appropriate folders if they do not
    exist. Therefore, it is necessary to create them yourself:
 
-   #+begin_src bash
+  #+begin_src bash
+
   mkdir ~/.cache/emacs ~/.local/share/emacs/
-   #+end_src
+
+  #+end_src
 
    *NOTE:* you can find out more by going to my [[https://github.com/techquila/dotfiles][dotfiles]].
 
-   #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
+
   (defvar xdg-bin (getenv "XDG_BIN_HOME")
     "The XDG bin base directory.")
 
@@ -221,14 +231,15 @@ First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this 
 
   (defvar xdg-lib (getenv "XDG_LIB_HOME")
     "The XDG lib base directory.")
-   #+end_src
+
+  #+end_src
 
 ** Backups
    bastardised from [[https://stackoverflow.com/questions/151945/how-do-i-control-how-emacs-makes-backup-files][this stackoverflow post]]
 
 *** Set backup directory and sane defaults.
 
-    #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 (defvar --backup-directory (concat user-emacs-directory "backups"))
 (if (not (file-exists-p --backup-directory))
@@ -246,10 +257,12 @@ First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this 
       auto-save-timeout 20              ; number of seconds idle time before auto-save (default: 30)
       auto-save-interval 200            ; number of keystrokes between auto-saves (default: 300)
       auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
-    #+end_src
+
+  #+end_src
 
 *** per save and per session backups
-    #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
 ;; Default and per-save backups go here:
 (setq backup-directory-alist '(("" . "~/.emacs.d/backups/per-save")))
@@ -270,228 +283,261 @@ First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this 
 
 (add-hook 'before-save-hook  'force-backup-of-buffer)
 
-    #+end_src
+  #+end_src
 
 *** Stop lock files being created
-#+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
+
 (setq create-lockfiles nil)
-#+end_src
+
+  #+end_src
+
 ** Authentication
 *** Auth source
     I have a non-world readable file named /.authoinfo.gpg / within my home
     directory where I store my authentication details for the various
     services I need to authenticate to.  ERC and Org2Blog need these credentials to operate.
 
-    #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 (require 'auth-source)
 (add-to-list 'auth-sources "~/.authinfo.gpg")
 
-    #+end_src
+  #+end_src
 
 *** IRC
     Load configuration and authentication info from an external source.
 
-    #+begin_src emacs-lisp :tangle no
+  #+begin_src emacs-lisp :tangle sod.el
 
 (load "~/.emacs.d/secrets/erc-config.el")
 
-    #+end_src
+  #+end_src
+
 ** Encryption
 
 *** GPG Agent
     Use an agent to manage GPG between shell sessions.
 
-    #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 (setq epg-gpg-program "/usr/bin/gpg")
 
-    #+end_src
+  #+end_src
 
 *** [[https://www.emacswiki.org/emacs/EasyPG][EasyPG]] to encrypt/decrypt files with a .gpg extension
     Add the following line to the top of the document to be encrypted and save the file with a .gpg extension.
 
-    #+begin_example
+  #+begin_example
 
     # -*- mode:org; epa-file-encrypt-to: ("sod@oscarfono.com") -*-
 
-    #+end_example
+  #+end_example
 
-    #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 (require 'epa-file)
 (epa-file-enable)
 
-    #+end_src
+  #+end_src
+
 ** Shell
    
 *** Terminal Emulation with [[https://www.emacswiki.org/emacs/MultiTerm][multi-term]]
     Multiple concurrent terminal buffers are the only way to roll.  To start one just simply 'Control-Meta-SPACEBAR'.
 
-    #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 (use-package multi-term
   :bind ("C-M-SPC" . multi-term))
 
+  #+end_src
 
-    #+end_src
 ** Theme
 *** [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Windows-and-Frames.html#Windows-and-Frames][Frames]]
 **** start fullscreen
-     #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
  (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-     #+end_src
+  #+end_src
    
 **** Menu bar
      I like the menu bar to be present so i can find things i've forgotten about
-     #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
  (menu-bar-mode 1)
 
-     #+end_src
+  #+end_src
 
 **** Scroll bars
      I like to see scrollbars for visual reference usually but am trialling without for now.
-     #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
  (scroll-bar-mode 0)
 
-     #+end_src
+  #+end_src
 
      Smoother scrolling experience
-     #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
+
  (setq scroll-step           1
 	scroll-conservatively 10000)
-     #+end_src
+
+  #+end_src
 
 **** Tool bar
      I don't like to see the tool bar taking up my valuable screen real estate
-     #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
  (tool-bar-mode 0)
 
-     #+end_src
+  #+end_src
 
 **** Mode line
      Display full path of file on mode line
 
-     #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
  (setq-default mode-line-buffer-identification
                (let ((orig  (car mode-line-buffer-identification)))
                  `(:eval (cons (concat ,orig (abbreviate-file-name default-directory))
                                (cdr mode-line-buffer-identification)))))
 
-     #+end_src
+  #+end_src
+
 *** [[https://github.com/techquila/melancholy-theme.el][melancholy-theme]]
     The custom theme I'm working on.  Ongoing development. WIP.
 
-    #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 (use-package melancholy-theme)
 
 (load-theme 'melancholy t)
 
-    #+end_src
+  #+end_src
+
 *** [[https://github.com/domtronn/all-the-icons.el#installation][icons]]
     Some sweet icons to enhance the ui.  
 
     In order for the icons to work it is very important that you install the Resource Fonts included in this package, they are available in the fonts directory. You can also install the latest fonts for this package in the (guessed?) based on the OS by calling the following function:
 
-    #+begin_example
-    M-x all-the-icons-install-fonts
-    #+end_example
+  #+begin_example
 
-    #+begin_src emacs-lisp :tangle yes
+    M-x all-the-icons-install-fonts
+
+  #+end_example
+
+  #+begin_src emacs-lisp :tangle sod.el
 
 (use-package all-the-icons)
 
-    #+end_src
+  #+end_src
+
 *** Modeline
 **** [[https://github.com/seagle0128/doom-modeline][doom-modeline]]
      This was a much better option than what I was doing previously.
-     #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
  (use-package doom-modeline
    :hook (after-init . doom-modeline-mode))
 
-     #+end_src
+  #+end_src
+
 *** Inhibit startup screen.
     I don't want the default start up screen displayed on start up.  That logo is hideous!
-    #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
 (setq inhibit-startup-message t)
 
-    #+end_src
+  #+end_src
 
 ** Productivity Management
 *** [[http://orgmode.org/][Org-mode]]
 **** global settings:
 ***** use org
-      #+BEGIN_SRC emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
+
 (use-package org
   :ensure org-plus-contrib)
-      #+END_SRC
+
+  #+end_src
 
 ***** set default directory and files
-      #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
   
 (setq org-directory "~/Dropbox/org")
 
-      #+end_src
+  #+end_src
 
 ***** set global key-bindings for org-mode features
-      #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
 (define-key global-map "\C-cl" 'org-store-link)
 
-      #+end_src
+  #+end_src
 
 ***** use org-contacts for contact management
-      #+BEGIN_SRC emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
 (use-package org-contacts
   :ensure nil
   :after org
   :custom (org-contacts-files '("~/Dropbox/capture/contacts.org")))
 
-      #+END_SRC
+  #+end_src
 
 ***** skeleton setup for org files
-      #+BEGIN_SRC emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
 (define-skeleton org-skeleton
   "Header info for a emacs-org file."
   "Title: "
   "#+TITLE: " str " \n"
   "#+AUTHOR: Sod Oscarfono \n"
-  "#+EMAIL: sod@oscarfono.com\n"
-  "#+BABEL: :session *R* :cache yes :results output graphics :exports both :tangle yes \n"
+  "  #+eMAIL: sod@oscarfono.com\n"
+  "  #+bABEL: :session *R* :cache yes :results output graphics :exports both :tangle yes \n"
   "#+STARTUP: align"
   "-----"
  )
 (global-set-key [C-S-f4] 'org-skeleton)
 
-      #+END_SRC
+  #+end_src
 
 ***** org tempo for source block expansion
-      #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
 (require 'org-tempo)
 
-      #+end_src
+  #+end_src
 
 ***** clock-in
-#+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
+
 (setq org-clock-persist 'history)
 (org-clock-persistence-insinuate)
-#+end_src
+
+  #+end_src
 
 **** TODO's
 ***** set file and priorities
-      #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
 ;;file to save todo items
 (setq org-agenda-files (quote ("~/Dropbox/capture/todo.org")))
@@ -506,7 +552,7 @@ First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this 
                            (?B . (:foreground "#00b7ff"))
                            (?C . (:foreground "#ffb728"))))
 
-      #+end_src
+  #+end_src
 
 ***** set *TODO* sequence
       When TODO keywords are used as workflow states, you might want to keep
@@ -526,31 +572,34 @@ First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this 
       note with timestamp) in parentheses after each keyword. For example,
       with the setting:
 
-      #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 (setq org-todo-keywords
   '((sequence "★ TODO(t)" "📌 NEXT(n/)" "⚠ WAIT(w@/!)" "|" "✔ DONE(d!)" "✘ KILL(k!)" "➰ PASS(p@/!)" )))
 
-      #+end_src
+  #+end_src
 
 ***** Log *TODO* done time
-      #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
 (setq org-log-done 'time)
 
-      #+end_src
+  #+end_src
 
 ***** Set line wrap
 
-      #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
+
 (setq org-startup-align-all-tables t)
 ;; (setq org-startup-indented t) 
 ;; (setq org-startup-truncated nil) ;; Messes with org-mode tables
 
-      #+end_src
+  #+end_src
 
 **** [[http://orgmode.org/manual/Agenda-Views.html][org-agenda]]
-     #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
   (org-agenda nil "a") ;; present org-agenda on emacs startup
  
@@ -590,31 +639,31 @@ First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this 
       (todo priority-down category-keep)
       (tags priority-down category-keep)
       (search category-keep))))
-
-     #+end_src
+  #+end_src
 
 **** [[https://github.com/sabof/org-bullets][org-bullets]]
      Show org-mode bullets as UTF-8 characters.
 
-     #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 (use-package org-bullets
   :config (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
-     #+end_src
+  #+end_src
 
 **** [[http://orgmode.org/manual/Capture.html#Capture][org-capture]]
      Capture lets you quickly store notes with little interruption of your work flow.  
 
-     #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 (define-key global-map "\C-cc" 'org-capture)
 
-     #+end_src
+  #+end_src
 
 **** [[http://orgmode.org/manual/Capture-templates.html#Capture-templates][org-capture-templates]]
 
-     #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
+
 (use-package org-capture
   :ensure nil
   :after org
@@ -662,12 +711,12 @@ First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this 
      ("t" "Todo" entry (file+headline "~/Dropbox/capture/todo.org" "Tasks") "** ★ TODO %?\n %i\n %a" :empty-lines 1)
      ("W" "Wishlist" entry (file+headline "~/Dropbox/capture/someday.org" "Wishlist") "** %^{thing}" :empty-lines 1) 
      ("w" "Watch" entry (file+headline "~/Dropbox/capture/someday.org" "Watch") "** ★  %^{movie title}\n %a" :empty-lines 1))))
-   
-     #+end_src
+
+  #+end_src
 
 **** org-exports
 
-     #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 (require 'ox-latex)
 (unless (boundp 'org-latex-classes)
@@ -694,33 +743,38 @@ First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this 
 
 (setq org-export-backends '(ascii html hugo latex md mediawiki slimhtml))
 
-
-     #+end_src
+  #+end_src
 
 **** org-babel
-
 ***** use org-install
-      #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
 (require 'org-install)
 
-      #+end_src
+  #+end_src
 
 ***** make results lowercase
-#+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
+
 ; Make babel results blocks lowercase
 (setq org-babel-results-keyword "results")
-#+end_src
+
+  #+end_src
 
 ***** ditaa
 requires graphvis system package to be installed
 
-#+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
+
 (setq org-ditaa-jar-path "~/code/src/org-mode/contrib/scripts/ditaa.jar")
-#+end_src
+
+  #+end_src
 
 ***** load these language dictionaries for source blocks
-      #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -734,18 +788,24 @@ requires graphvis system package to be installed
    (sass . t)
    (shell . t)))
 
-      #+end_src
+  #+end_src
 
 **** org-babel-async
-#+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
+
 (use-package ob-async)
-#+end_src
+
+  #+end_src
 
 **** org-mind-map
-     #+begin_src emacs-lisp :tangle yes
-     ;; This is an Emacs package that creates graphviz directed graphs from
+
+  #+begin_src emacs-lisp :tangle sod.el
+
+  ;; This is an Emacs package that creates graphviz directed graphs from
   ;; the headings of an org file
-  (use-package org-mind-map
+  
+(use-package org-mind-map
     :init
     (require 'ox-org)
     ;; Uncomment the below if 'ensure-system-packages` is installed
@@ -759,44 +819,58 @@ requires graphvis system package to be installed
     ;; (setq org-mind-map-engine "twopi")  ; Radial layouts
     ;; (setq org-mind-map-engine "circo")  ; Circular Layout
   )
-     #+end_src
+
+  #+end_src
 
 **** org-plot
      Graphs with gnuplot
 
-     #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
+
 (use-package gnuplot
   :commands gnuplot-mode
   :defer t
   :bind ("C-M-g" . gnuplot))
-     #+end_src
+
+  #+end_src
 
 **** org-publish 
 
-#+begin_src emacs-lisp :tangle no
+  #+begin_src emacs-lisp :tangle no
+
 (add-to-list 'load-path "~/code/src/github.com/techquila/my-blog-publisher/")
 (load "my-blog-publisher") 
-#+end_src
 
-     #+begin_src emacs-lisp :tangle yes
+  #+end_src
+
+  #+begin_src emacs-lisp :tangle sod.el
+
 (require 'ox-publish)
 (require 'seq)
-#+end_src
 
-     #+begin_src emacs-lisp :tangle yes
+  #+end_src
+
+  #+begin_src emacs-lisp :tangle sod.el
+
 (setq my-blog/repo "~/code/src/github.com/techquila/sod.oscarfono.com/blog/")
-     #+end_src
 
-     #+begin_src emacs-lisp :tangle yes
+  #+end_src
+
+  #+begin_src emacs-lisp :tangle sod.el
+
 (setq org-publish-use-timestamps-flag t
       org-publish-timestamp-directory (concat my-blog/repo "cache/"))
-     #+end_src
 
-     #+begin_src emacs-lisp :tangle yes
+  #+end_src
+
+  #+begin_src emacs-lisp :tangle sod.el
+
 (setq org-html-html5-fancy t)     
-     #+end_src
 
-     #+begin_src emacs-lisp :tangle yes
+  #+end_src
+
+  #+begin_src emacs-lisp :tangle sod.el
+
      (setq org-export-global-macros
        '(("begin-article" . "@@html:<article>@@")
          ("end-article" . "@@html:</article>@@")
@@ -808,10 +882,10 @@ requires graphvis system package to be installed
          ("end-header" . "@@html:</header>@@")
          ("begin-footer" . "@@html:<footer>@@")
          ("end-footer" . "@@html:</footer>@@"))) 
+  #+end_src
 
-     #+end_src
+  #+begin_src emacs-lisp :tangle sod.el
 
-     #+begin_src emacs-lisp :tangle yes
 (defun my-blog/get-preview (filename)
     "Returns a list: '(<needs-more> <preview-string>) where
   <needs-more> is t or nil, indicating whether a \"Read More...\"
@@ -833,25 +907,27 @@ requires graphvis system package to be installed
 	;; ;; Return a pair of '(needs-more preview-string)
 	(list (not (= marker (buffer-size)))
 	      (buffer-substring content-start marker)))))
-     #+end_src
+  #+end_src
 
-     #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
+
 (defun my-blog/sitemap (title list)
   "Generate the sitemap (Blog Main Page)"
   (concat "#+TITLE: " title "\n" "--------\n"
           (string-join (mapcar #'car (cdr list)) "\n\n")))
 
-     #+end_src
+  #+end_src
 
-     #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
+
 (defun my-blog/sitemap-entry (entry style project)
   "Sitemap (Blog Main Page) Entry Formatter"
   (when (not (directory-name-p entry))
     (format (string-join
              '("* [[file:%s][%s]]\n"
-               "#+BEGIN_published\n"
+               "  #+bEGIN_published\n"
                "%s\n"
-               "#+END_published\n\n"
+               "  #+eND_published\n\n"
                "%s\n"
                "--------\n"))
             entry
@@ -864,14 +940,16 @@ requires graphvis system package to be installed
                   (format
                    (concat
                     "%s\n\n"
-                    "#+BEGIN_morelink\n"
+                    "  #+bEGIN_morelink\n"
                     "[[file:%s][Read More...]]\n"
-                    "#+END_morelink\n")
+                    "  #+eND_morelink\n")
                    preview-text entry)
                 (format "%s" preview-text))))))
-     #+end_src
 
-     #+begin_src emacs-lisp :tangle yes
+  #+end_src
+
+  #+begin_src emacs-lisp :tangle sod.el
+
        (setq org-publish-project-alist
          `(("blog"
              :components ("posts" "templates" "scripts" "styles" "images" "rss"))
@@ -933,28 +1011,34 @@ requires graphvis system package to be installed
              :with-title t
              :with-toc nil)))
 
+  #+end_src
 
-     #+end_src
 *** Calendar
-
 **** set location for calendar
-     #+BEGIN_SRC emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
+
 (setq calendar-latitude -40.550620)
 (setq calendar-longitude 175.199720)
-     #+END_SRC
+
+  #+end_src
 
 **** Don't display calendars i don't need
-     #+BEGIN_SRC emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
+
 (setq holiday-general-holidays nil)
 (setq holiday-christian-holidays nil)
 (setq holiday-hebrew-holidays nil)
 (setq holiday-islamic-holidays nil)
 (setq holiday-bahai-holidays nil)
 (setq holiday-oriental-holidays nil)
-     #+END_SRC
+
+  #+end_src
 
 **** set NZ Public Holidays
-     #+BEGIN_SRC emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
   ;; Use package nz-holidays to pull in New Zealands Public Holidays for calendar.
   (use-package nz-holidays)
@@ -962,7 +1046,7 @@ requires graphvis system package to be installed
   ;; append it to empty variable holiday-local-holidays
   (setq calendar-holidays (append holiday-local-holidays holiday-nz-holidays))
 
-     #+END_SRC
+  #+end_src
 
 **** Count days in given region
      From within Calendar, these functions enable to me to count days within a given region, excluding weekends, and public holidays.
@@ -970,7 +1054,7 @@ requires graphvis system package to be installed
      Taken from here: 
      [[https://stackoverflow.com/questions/23566000/how-to-count-days-excluding-weekends-and-holidays-in-emacs-calendar][https://stackoverflow.com/questions/23566000/how-to-count-days-excluding-weekends-and-holidays-in-emacs-calendar]]
 
-     #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
   ;; (defun calendar-count-days-region-excluding-weekends-and-holidays ()
   ;;  "Count the number of days (inclusive) between point and the mark, 
   ;;   excluding weekends and public holidays."
@@ -1019,46 +1103,54 @@ requires graphvis system package to be installed
                         start-date end-date)))))
       (message "Region has %d workday%s (inclusive)"
                days (if (> days 1) "s" ""))))
-     #+end_src
+
+  #+end_src
 
 *** Conveniences
 **** Line numbers
      I like to see the line numbers when coding.
-     #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
  (when (version<= "26.0.50" emacs-version )
    (add-hook 'prog-mode-hook #'display-line-numbers-mode))
 
-     #+end_src
+  #+end_src
 
 **** Column numbers
-     #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
  (column-number-mode 1)
 
-     #+end_src
+  #+end_src
 
 **** Delete-selection-mode
      allows me to delete highlighted region.  Not standard behaviour in emacs.
-     #+BEGIN_SRC emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
 (delete-selection-mode 1)
 
-     #+END_SRC
+  #+end_src
+
 **** [[https://github.com/jwiegley/use-package/blob/master/bind-key.el][bind-key]]
      If you have lots of keybindings set in your .emacs file, it can be
      hard to know which ones you haven't set yet, and which may now be
      overriding some new default in a new emacs version.  This module aims
      to solve that problem.
 
-     #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
   (use-package bind-key)
 
-     #+end_src
+  #+end_src
+
 **** Directories 
 ***** Group directories first in Dired
-      #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
+
 (use-package dired
   :ensure nil
   :config
@@ -1066,27 +1158,37 @@ requires graphvis system package to be installed
     (setq dired-listing-switches "-lXGh --group-directories-first")
     (add-hook 'dired-mode-hook 'dired-omit-mode)
     (add-hook 'dired-mode-hook 'dired-hide-details-mode)))
-      #+end_src
+
+  #+end_src
+
 ***** Speedbar directory tree
-      #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
+
 (use-package sr-speedbar
   :bind ("M-s" . sr-speedbar-toggle)
   :custom
   ;; Show tree on the left side
-  (sr-speedbar-right-side nil)
+  (sr-speedbar-right-side t)
   ;; Show all files
   (speedbar-show-unknown-files t)
   ;; Set Width (default is 24)
-  (sr-speedbar-width 20))
+  (sr-speedbar-width 35)
+  ;; Set Max Width
+  (sr-speedbar-max-width 35))
+
+;; Turn off image icons
+  (setq speedbar-use-images nil)
+
 ;; launch on startup
 (sr-speedbar-open)
-      #+end_src
-**** [[https://www.emacswiki.org/emacs/ElDoc][Eldoc]]
 
-**** 
+  #+end_src
+
+**** [[https://www.emacswiki.org/emacs/ElDoc][Eldoc]]
      A very simple but effective thing, eldoc-mode is a MinorMode which shows you, in the echo area, the argument list of the function call you are currently writing. Very handy. By NoahFriedman. Part of Emacs.
 
-     #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 (use-package "eldoc"
   :diminish eldoc-mode
@@ -1098,21 +1200,22 @@ requires graphvis system package to be installed
   (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)))
 
-     #+end_src
+  #+end_src
 
 **** [[https://julien.danjou.info/projects/emacs-packages][Rainbow-mode]] 
      rainbow-mode is a minor mode for Emacs which highlights text representing color codes in various forms by setting the background color of the text accordingly.
 
-     #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 (use-package rainbow-mode
   :diminish rainbow-mode
   :init (rainbow-mode))
 
-     #+end_src
+  #+end_src
 
 **** [[http://ledger-cli.org/3.0/doc/ledger-mode.html][Ledger-mode]]
-     #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
 ;; ledger
 (use-package ledger-mode
@@ -1124,28 +1227,36 @@ requires graphvis system package to be installed
         ledger-clear-whole-transactions t)
         (use-package flycheck-ledger))
 
-     #+end_src
+  #+end_src
 
 **** Regex 
 ***** Re-Builder (M-x re-builder)
-#+begin_src emacs-lisp :tangle no
+
+  #+begin_src emacs-lisp :tangle no
+
 (require 're-builder)
 (setq reb-re-syntax 'string)
-#+end_src
+
+  #+end_src
+
 ***** xr
 converts Emacs regular expressions to the structured rx form thus being and inverse of rx.
-#+begin_src emacs-lisp :tangle no
+
+  #+begin_src emacs-lisp :tangle no
+
 (use-package xr)
-#+end_src
+
+  #+end_src
 
 **** Remote File Access with [[https://www.emacswiki.org/emacs/TrampMode][TRAMP]]
-     #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
 (setq tramp-default-user "sod")
 (setq tramp-default-method "ssh")
 ;;(set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
 
-     #+end_src
+  #+end_src
 
 **** Run emacs-server
      Various programs can invoke your choice of editor to edit a particular
@@ -1162,7 +1273,8 @@ converts Emacs regular expressions to the structured rx form thus being and inve
      You can solve this problem by setting up Emacs as an edit server, so
      that it “listens” for external edit requests and acts accordingly.
 
-     #+begin_src emacs-lisp :tangle no
+  #+begin_src emacs-lisp :tangle no
+
 (add-hook 'after-init-hook
   (lambda ()
     (require 'server)
@@ -1180,7 +1292,7 @@ converts Emacs regular expressions to the structured rx form thus being and inve
     (bury-buffer)
     (switch-to-buffer-other-frame server-buf))))
 
-     #+end_src
+  #+end_src
 
 **** Subwords
      subword-mode changes all cursor movement/edit commands to stop in between the “camelCase” words.
@@ -1191,56 +1303,60 @@ converts Emacs regular expressions to the structured rx form thus being and inve
 
      To see whether you have subword-mode on, call describe-variable then type “subword-mode”.  Same for superword-mode.
 
-     #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 (subword-mode 1)
 
-     #+end_src
+  #+end_src
 
 **** Yes/No becomes y/n
 
-     #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
-     #+end_src
+  #+end_src
 
 **** Links
      Use [[https://www.mozilla.org/en-US/firefox/new/][Firefox]] to open urls
 
-     #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
   (setq browse-url-browser-function 'browse-url-generic)
   (setq browse-url-generic-program "firefox")
 
-     #+end_src
+  #+end_src
+
 **** Multiple cursors
-     #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
 (use-package multiple-cursors)
 
-     #+end_src
+  #+end_src
 
 **** Notifications
      Replace annoying bell with visible-bell
 
-     #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
   (setq visible-bell t)
 
-     #+end_src
+  #+end_src
 
 **** Magit
-     #+BEGIN_SRC emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
+
 (use-package magit
   :bind ("C-x g" . magit-status))
 
-     #+END_SRC
+  #+end_src
 
 **** Project managment with [[https://github.com/bbatsov/projectile][projectile]]
      Helm support using [[https://github.com/bbatsov/helm-projectile][helm-projectile]]
 
-     #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
  (use-package projectile
    :diminish projectile-mode
@@ -1257,21 +1373,23 @@ converts Emacs regular expressions to the structured rx form thus being and inve
  (use-package helm-projectile
    :config (helm-projectile-on))
 
-     #+end_src
+  #+end_src
 
 **** Autocompletion and Snippets
 
 ***** auto-complete mode
-      #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
  (use-package auto-complete)
 
-      #+end_src
+  #+end_src
 
 ***** [[http://company-mode.github.io/][company-mode]]
       Company is a text completion framework for Emacs. The name stands for "*COMP*lete *ANY*thing". It uses pluggable back-ends and front-ends to retrieve and display completion candidates.
 
-      #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
+
  (use-package company
    :defer 0.5
    :delight
@@ -1282,13 +1400,12 @@ converts Emacs regular expressions to the structured rx form thus being and inve
    (company-show-numbers t)
    (company-tooltip-align-annotations 't)
    (global-company-mode t))
-
-      #+end_src
+  #+end_src
 
 ***** [[https://github.com/emacs-helm/helm][helm]]
       Helm is an Emacs framework for incremental completions and narrowing selections. It helps to rapidly complete file names, buffer names, or any other Emacs interactions requiring selecting an item from a list of possible choices.
 
-      #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
  (use-package helm
    :diminish helm-mode
@@ -1316,25 +1433,24 @@ converts Emacs regular expressions to the structured rx form thus being and inve
           ("C-x c Y" . helm-yas-create-snippet-on-region)
           ("C-x c b" . my/helm-do-grep-book-notes)
           ("C-x c SPC" . helm-all-mark-rings)))
-
-      #+end_src
+  #+end_src
 
 ***** [[https://github.com/smihica/emmet-mode][emmet-mode]]
       This is a major mode for html and css expansion that i'm trying out.  Forked from as [[https://github.com/rooney/zencoding][zencoding-mode]].
 
-      #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
  (use-package emmet-mode
    :config
      (progn (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
             (add-hook 'css-mode-hook  'emmet-mode)))
 
-      #+end_src
+  #+end_src
 
 ***** [[https://www.emacswiki.org/emacs/Yasnippet][Yasnippet]]
       YASnippet is a template system for Emacs. It allows you to type an abbreviation and automatically expand it into function templates.
 
-      #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
  (use-package yasnippet
    :diminish yas-minor-mode
@@ -1356,12 +1472,13 @@ converts Emacs regular expressions to the structured rx form thus being and inve
 
  (use-package react-snippets)
 
-      #+end_src
+  #+end_src
+
 **** [[https://github.com/Fuco1/smartparens/wiki][smartparens]]
      Smartparens is minor mode for Emacs that deals with parens pairs and
      tries to be smart about it. 
 
-     #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 (use-package smartparens-config
     :ensure smartparens
@@ -1372,45 +1489,54 @@ converts Emacs regular expressions to the structured rx form thus being and inve
 (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
 (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 
-     #+end_src
+  #+end_src
+
 **** PDF Tools
-     #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
+
  (use-package pdf-tools
    :defer t)
-     #+end_src
+
+  #+end_src
+
 **** Language modes
 ***** configuration management
 ****** ansible-mode
-       #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
  (use-package ansible
    :commands ansible-mode)
 
-       #+end_src
+  #+end_src
 
 ****** crontab-mode
-       #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
  (use-package crontab-mode
  :mode "\\.cron\\(tab\\)?\\'")
 
-       #+end_src
+  #+end_src
  
 ****** [[https://github.com/emacsmirror/ldap-mode][ldap-mode]]
        major modes for editing LDAP schema and LDIF files
 
-       #+begin_src emacs-lisp :tangle no
+  #+begin_src emacs-lisp :tangle no
 
  (use-package ldap-mode
    :commands ldap-mode)
 
-       #+end_src
+  #+end_src
 
 ***** skewer-mode
-      #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
+
  (use-package skewer-mode
     :init (add-hook 'js2-mode-hook 'skewer-mode))
-      #+end_src
+
+  #+end_src
 
       Kick things off with run-skewer, and then:
 
@@ -1422,54 +1548,64 @@ converts Emacs regular expressions to the structured rx form thus being and inve
       `skewer-load-buffer’ 
 
 ***** LATEX
-      #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
+
   (use-package auctex
     :defer t)
-      #+end_src
 
-      #+begin_src emacs-lisp :tangle yes
+  #+end_src
+
+  #+begin_src emacs-lisp :tangle sod.el
+
  (use-package tex
    :ensure auctex)
-      #+end_src
 
-***** LISP
-***** PDF
+  #+end_src
+
 ***** PYTHON
 ***** HTML
 ****** emacs-htmlize
-       #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
+
  (use-package htmlize)
-       #+end_src
+
+  #+end_src
+
 ***** CSS
 ****** scss-mode
 
-       #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
  (use-package scss-mode
    :commands scss-mode
    :mode "\\.s{a|c}ss?\\'")
 
-       #+end_src
+  #+end_src
 
 ******* ssh-mode
-	#+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
  (use-package ssh-config-mode
    :mode ((".ssh/config\\'"       . ssh-config-mode)
           ("sshd?_config\\'"      . ssh-config-mode)
           ("known_hosts\\'"       . ssh-known-hosts-mode)
           ("authorized_keys2?\\'" . ssh-authorized-keys-mode)))
-
-	#+end_src
+  #+end_src
 
 ******* yaml-mode
-	#+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
+
  (use-package yaml-mode
    :commands yaml-mode
    :mode "\\.yml\\'")
    :delight 
 
-	#+end_src
+  #+end_src
+
 ***** JAVASCRIPT
 ****** [[https://www.emacswiki.org/emacs/Js2Mode][js2-mode]]
        This JavaScript editing mode supports:
@@ -1489,7 +1625,7 @@ converts Emacs regular expressions to the structured rx form thus being and inve
        - code browsing using the `imenu' package
        - many customization options
 
-	 #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
        (use-package js2-mode
 	 :init
@@ -1508,33 +1644,40 @@ converts Emacs regular expressions to the structured rx form thus being and inve
 
 	 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
 
-	 #+end_src
+  #+end_src
 
 ******* Color defined variables with color-identifiers-mode:
 
-	#+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
+
  (use-package color-identifiers-mode
      :init
        (add-hook 'js2-mode-hook 'color-identifiers-mode))
-	#+end_src
+
+  #+end_src
 
 *******  While editing JavaScript is baked into Emacs, it is quite important to have flycheck validate the source based on jshint, and eslint. Let’s prefer eslint:
 
-	#+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
+
  (add-hook 'js2-mode-hook
            (lambda () (flycheck-select-checker "javascript-eslint")))
-	#+end_src
+
+  #+end_src
 
 ****** tern
        The Tern project is a JavaScript analyzer that can be used to improve the JavaScript integration with editors like Emacs.
-       #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
+
  (use-package tern)
 
  (use-package tern-auto-complete
     :config
       (use-package company-tern
          :init (add-to-list 'company-backends 'company-tern)))
-       #+end_src
+
+  #+end_src
 
        The following additional keys are bound:
 
@@ -1575,16 +1718,17 @@ converts Emacs regular expressions to the structured rx form thus being and inve
        - sv is split-var-declaration: Splits a var with multiple vars declared, into several var statements.
        - uw is unwrap: Replaces the parent statement with the selected region.
 
+  #+begin_src emacs-lisp :tangle sod.el
 
-       #+begin_src emacs-lisp :tangle yes
  (use-package js2-refactor
    :init   (add-hook 'js2-mode-hook 'js2-refactor-mode)
    :config (js2r-add-keybindings-with-prefix "C-c ."))
-       #+end_src
+
+  #+end_src
 
 ****** rjsx-mode
 
-       #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
  (use-package rjsx-mode
    :commands rjsx-mode
@@ -1592,58 +1736,70 @@ converts Emacs regular expressions to the structured rx form thus being and inve
    (progn
      (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
      (setq js2-basic-offset 2)))
-    
 
-       #+end_src
+  #+end_src
 
 ****** vue-mode
-       #+BEGIN_SRC emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
+
  (use-package vue-mode
    :config (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode)))
 
-       #+END_SRC
+  #+end_src
 
 ****** vue-html-mode
-       #+BEGIN_SRC emacs-lisp :tangle no
+
+  #+begin_src emacs-lisp :tangle no
+
  (use-package vue-html-mode)
-       #+END_SRC
+
+  #+end_src
 
 ***** GO
 ****** go-mode
-       #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
+
  (use-package go-mode
    :defer 1
    :commands go-mode
    :mode "\\.go$")
- 
-       #+end_src
+
+  #+end_src
 
 **** Linting
 ***** flycheck
 
-      #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 (use-package flycheck
   :config
     (global-flycheck-mode))
 
-      #+end_src
+  #+end_src
+
 ***** package-lint
-    #+BEGIN_SRC emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
+
 (use-package package-lint)
-    #+END_SRC
+
+  #+end_src
+
 **** Syntax Highlighting
      Activate syntax highlighting globally
 
-     #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
  (global-font-lock-mode 1)
 
-     #+end_src
+  #+end_src
 
 *** Docker
     integrate docker functionality into emacs
-    #+begin_src emacs-lisp :tangle yes
+
+  #+begin_src emacs-lisp :tangle sod.el
 
  ;; dockerfile-mode: An emacs mode for handling Dockerfiles
  ;; https://github.com/spotify/dockerfile-mode
@@ -1667,7 +1823,7 @@ converts Emacs regular expressions to the structured rx form thus being and inve
  (use-package docker-tramp
    :defer t)
 
-    #+end_src
+  #+end_src
 
 *** Email with [[https://www.emacswiki.org/emacs/GnusTutorial][GNU's]]
 
@@ -1676,16 +1832,17 @@ converts Emacs regular expressions to the structured rx form thus being and inve
      other things). It offers features that other news and mail readers
      lack. It is highly customizable and extensible.
 
-     #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 (require 'gnus)
 
-     #+end_src
+  #+end_src
+
 ** End INIT
 
-   #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle sod.el
 
 (provide 'init)
 ;;; sod.org ends here
 
-   #+end_src
+  #+end_src

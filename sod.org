@@ -54,8 +54,7 @@
   - Increase my overall productivity by integrating more of the powerful tools that org-mode offers, such as org-capture templates
   - Enhance my knowledge by learning new ways of yeilding productivity gains through emacs, and seeing how others achieve
   - Provide some sort of meaningful structure to my configuration
-  - Provide sufficient meaningful documentation in order that the next time i am inspired to play with my configuration I know whats up
-
+  - Provide sufficient meaningful documentation in order that the next time i am inspired to play with my configuration I know whats 
 * Source
 
   #+begin_src emacs-lisp :tangle sod.el
@@ -63,7 +62,7 @@
  ;;; Code:
  ;; ========================================
  
- #+end_src
+  #+end_src
 
 ** Personalisation
 *** Default Name and Email
@@ -1345,11 +1344,11 @@ converts Emacs regular expressions to the structured rx form thus being and inve
   #+end_src
 
 **** Magit
-
+     
   #+begin_src emacs-lisp :tangle sod.el
 
-(use-package magit
-  :bind ("C-x g" . magit-status))
+  (use-package magit
+    :bind ("C-x g" . magit-status))
 
   #+end_src
 

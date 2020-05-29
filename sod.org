@@ -78,7 +78,7 @@
 
   #+begin_src emacs-lisp :tangle sod.el
 
-(setq default-directory "~/code/src/github.com/techquila/")
+(setq default-directory "~/src/github.com/techquila/")
 
   #+end_src
 
@@ -767,7 +767,7 @@ requires graphvis system package to be installed
 
   #+begin_src emacs-lisp :tangle sod.el
 
-(setq org-ditaa-jar-path "~/code/src/org-mode/contrib/scripts/ditaa.jar")
+(setq org-ditaa-jar-path "~/src/org-mode/contrib/scripts/ditaa.jar")
 
   #+end_src
 
@@ -837,7 +837,7 @@ requires graphvis system package to be installed
 
   #+begin_src emacs-lisp :tangle no
 
-(add-to-list 'load-path "~/code/src/github.com/techquila/my-blog-publisher/")
+(add-to-list 'load-path "~/src/github.com/techquila/my-blog-publisher/")
 (load "my-blog-publisher") 
 
   #+end_src
@@ -851,7 +851,7 @@ requires graphvis system package to be installed
 
   #+begin_src emacs-lisp :tangle sod.el
 
-(setq my-blog/repo "~/code/src/github.com/techquila/sod.oscarfono.com/blog/")
+(setq my-blog/repo "~/src/github.com/techquila/sod.oscarfono.com/blog/")
 
   #+end_src
 
@@ -1362,7 +1362,7 @@ converts Emacs regular expressions to the structured rx form thus being and inve
    :bind-keymap ("C-c p" . projectile-command-map)
    :config
    (progn
- (setq projectile-project-search-path '("~/code/src/" "~/dev/"))
+ (setq projectile-project-search-path '("~/src/")
      (setq projectile-completion-system 'helm)
      (setq projectile-enable-caching t)
      (setq projectile-indexing-method 'alien)

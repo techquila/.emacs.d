@@ -6,7 +6,7 @@
   #+begin_src emacs-lisp :tangle sod.el
 ;;; sod.el --- emacs configuration  -*- lexical-binding: t; -*-
 ;; URL: https://github.com/techquila/.emacs.d/
-;; Version: 1.04
+;; Version: 2.04
 ;; Keywords: emacs
   #+end_src
 * Copyright

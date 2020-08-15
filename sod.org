@@ -42,6 +42,8 @@
 ** [[http://ergoemacs.org/emacs/blog.html][Xah Lee]]
 ** [[http://pragmaticemacs.com/emacs/org-mode-basics-vii-a-todo-list-with-schedules-and-deadlines/][Dr Ben Maughan]]
 ** [[https://github.com/purcell][Steve Purcell]]
+** [[https://jamiecollinson.com/blog/my-emacs-config/][Jamie Collinson]]
+
 * Description
   Org file to better manage my emacs configuration using Babel and literate programming techniques.
   #+begin_src emacs-lisp :tangle sod.el
@@ -50,13 +52,13 @@
 ;; Emacs configuration generated from org file using babel.
   #+end_src
 * Aims
+  - Build my ultimate ide/editor
   - Automate as much as I can get away with
   - Increase my overall productivity by integrating more of the powerful tools that org-mode offers, such as org-capture templates
   - Enhance my knowledge by learning new ways of yeilding productivity gains through emacs, and seeing how others achieve
   - Provide some sort of meaningful structure to my configuration
-  - Provide sufficient meaningful documentation in order that the next time i am inspired to play with my configuration I know whats
+  - Provide sufficient meaningful documentation in order that the next time i am inspired to play with my configuration I know whats up
 * Source
-
   #+begin_src emacs-lisp :tangle sod.el
 
  ;;; Code:
@@ -442,7 +444,6 @@
 
   #+end_src
 
-
 *** Theme
 **** [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Windows-and-Frames.html#Windows-and-Frames][Frames]]
 ***** start fullscreen
@@ -545,8 +546,7 @@
 
    #+begin_src emacs-lisp :tangle sod.el
 
- (setq inhibit-startup-message t
-       initial-buffer-choice nil)
+ (setq inhibit-startup-message t)
 
    #+end_src
 
@@ -1271,9 +1271,38 @@ requires graphvis system package to be installed
   (setq speedbar-use-images nil)
 
 ;; launch on startup
-(sr-speedbar-open)
+;; (sr-speedbar-open)
 
   #+end_src
+
+**** Docker
+     integrate docker functionality into emacs
+
+   #+begin_src emacs-lisp :tangle sod.el
+
+  ;; dockerfile-mode: An emacs mode for handling Dockerfiles
+  ;; https://github.com/spotify/dockerfile-mode
+  (use-package dockerfile-mode
+    :mode ("Dockerfile\\'" . dockerfile-mode))
+
+  ;; docker: manager docker from emacs
+  ;; https://github.com/Silex/docker.el
+  (use-package docker
+    :defer t
+    :ensure-system-package docker
+    :bind ("C-c d" . docker))
+
+  ;; docker-compose-mode: Major mode for editing docker-compose files
+  ;; https://github.com/meqif/docker-compose-mode
+  (use-package docker-compose-mode
+    :defer t)
+
+  ;; docker-tramp: TRAMP integration for docker containers
+  ;; https://github.com/emacs-pe/docker-tramp.el
+  (use-package docker-tramp
+    :defer t)
+
+   #+end_src
 
 **** [[https://www.emacswiki.org/emacs/ElDoc][Eldoc]]
      A very simple but effective thing, eldoc-mode is a MinorMode which shows you, in the echo area, the argument list of the function call you are currently writing. Very handy. By NoahFriedman. Part of Emacs.
@@ -1839,35 +1868,6 @@ requires graphvis system package to be installed
       `skewer-eval-defun’
       C-c C-k
       `skewer-load-buffer’
-
-*** Docker
-    integrate docker functionality into emacs
-
-  #+begin_src emacs-lisp :tangle sod.el
-
- ;; dockerfile-mode: An emacs mode for handling Dockerfiles
- ;; https://github.com/spotify/dockerfile-mode
- (use-package dockerfile-mode
-   :mode ("Dockerfile\\'" . dockerfile-mode))
-
- ;; docker: manager docker from emacs
- ;; https://github.com/Silex/docker.el
- (use-package docker
-   :defer t
-   :ensure-system-package docker
-   :bind ("C-c d" . docker))
-
- ;; docker-compose-mode: Major mode for editing docker-compose files
- ;; https://github.com/meqif/docker-compose-mode
- (use-package docker-compose-mode
-   :defer t)
-
- ;; docker-tramp: TRAMP integration for docker containers
- ;; https://github.com/emacs-pe/docker-tramp.el
- (use-package docker-tramp
-   :defer t)
-
-  #+end_src
 
 *** Email with [[https://www.emacswiki.org/emacs/GnusTutorial][GNU's]]
 

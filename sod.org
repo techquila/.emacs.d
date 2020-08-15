@@ -64,15 +64,44 @@
  
   #+end_src
 
-** Personalisation
-*** Default Name and Email
+** First things First
+*** Benchmarking
+    #+begin_src emacs-lisp :tangle sod.el
+ (use-package benchmark-init
+     :config
+     ;; To disable collection of benchmark data after init is done.
+     (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
-  #+begin_src emacs-lisp :tangle sod.el
+     (add-hook 'after-init-hook
+             (lambda () (message "loaded in %s" (emacs-init-time))))
+    #+end_src
 
- (setq user-full-name "Sod Oscarfono"
-	user-mail-address "sod@oscarfono.com")
+*** Garbage Collection
+    #+begin_src emacs-lisp :tangle sod.el
 
-  #+end_src
+ (setq gc-cons-threshold 10000000)
+
+   ;; Restore after startup
+   (add-hook 'after-init-hook
+             (lambda ()
+               (setq gc-cons-threshold 1000000)
+               (message "gc-cons-threshold restored to %S"
+			gc-cons-threshold)))
+
+    #+end_src
+
+*** Shortcut to quickly find and edit this file
+    #+begin_src emacs-lisp :tangle sod.el
+
+ (defun edit-config ()
+     "Edit config file, sod.org"
+     (interactive)
+     (find-file "~/src/github.com/techquila/.emacs.d/sod.org"))
+
+   (global-set-key (kbd "C-c I") 'edit-config)
+
+
+    #+end_src
 
 *** Default Directory
 
@@ -82,382 +111,411 @@
 
   #+end_src
 
-** Errors
+*** Errors
 
-  #+begin_src emacs-lisp :tangle sod.el
+   #+begin_src emacs-lisp :tangle sod.el
 
-;; backtrace on error
-(setq debug-on-error t)
+ ;; backtrace on error
+ (setq debug-on-error t)
 
-  #+end_src
+   #+end_src
 
-** Encoding
+*** Notifications
+    Replace annoying bell with visible-bell
 
-  #+begin_src emacs-lisp :tangle sod.el
+ #+begin_src emacs-lisp :tangle sod.el
 
-;; all about the 'utf-8 yo
-(prefer-coding-system 'utf-8)
-(set-language-environment 'utf-8)
-(set-default-coding-systems 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-selection-coding-system 'utf-8)
+ (setq visible-bell t)
 
-  #+end_src
+ #+end_src
+*** Encoding
 
-** [[https://www.emacswiki.org/emacs/ELPA][Package Management]]
+    #+begin_src emacs-lisp :tangle sod.el
 
-First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this bug]]
+  ;; all about the 'utf-8 yo
+  (prefer-coding-system 'utf-8)
+  (set-language-environment 'utf-8)
+  (set-default-coding-systems 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-selection-coding-system 'utf-8)
 
-  #+begin_src emacs-lisp :tangle sod.el
+    #+end_src
 
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+*** [[https://www.emacswiki.org/emacs/ELPA][Package Management]]
 
-  #+end_src
+ First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this bug]]
 
-   We source our packages from the following repositories only:
+   #+begin_src emacs-lisp :tangle sod.el
 
-  #+begin_src emacs-lisp :tangle sod.el
+ (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
-(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")))
+   #+end_src
 
-  #+end_src
+    We source our packages from the following repositories only:
 
-*** Package Initialistion
-    Activate all the packages, (in particular autoloads), and set load path.
+   #+begin_src emacs-lisp :tangle sod.el
 
-  #+begin_src emacs-lisp :tangle sod.el
+ (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                          ("melpa" . "https://melpa.org/packages/")
+                          ("org" . "https://orgmode.org/elpa/")))
 
-(require 'package)
-(package-initialize)
-(package-refresh-contents)
+   #+end_src
 
-  #+end_src
+**** Package Initialistion
+     Activate all the packages, (in particular autoloads), and set load path.
 
-*** use-package
-**** Install [[https://github.com/jwiegley/use-package/blob/master/README.md][use-package]], unless present. 
+   #+begin_src emacs-lisp :tangle sod.el
 
-  #+begin_src emacs-lisp :tangle sod.el
+ (require 'package)
+ (package-initialize)
+ (package-refresh-contents)
 
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+   #+end_src
 
-(setq use-package-verbose t)
+**** use-package
+***** Install [[https://github.com/jwiegley/use-package/blob/master/README.md][use-package]], unless present. 
 
-(require 'use-package)
+   #+begin_src emacs-lisp :tangle sod.el
 
-  #+end_src
+ (unless (package-installed-p 'use-package)
+   (package-refresh-contents)
+   (package-install 'use-package))
 
-**** Download packages not installed
-     Ensure that [[https://github.com/jwiegley/use-package/blob/master/README.md][use-package]] downloads and installs packages that are not found locally. /(This requires [[http://wikemacs.org/wiki/Package.el][package.el]])/
+ (setq use-package-verbose t)
 
-  #+begin_src emacs-lisp :tangle sod.el
+ (require 'use-package)
 
-(setq use-package-always-ensure t)
+   #+end_src
 
-  #+end_src
+***** Download packages not installed
+      Ensure that [[https://github.com/jwiegley/use-package/blob/master/README.md][use-package]] downloads and installs packages that are not found locally. /(This requires [[http://wikemacs.org/wiki/Package.el][package.el]])/
 
-**** Keep packages updated automatically
+   #+begin_src emacs-lisp :tangle sod.el
 
-  #+begin_src emacs-lisp :tangle sod.el
+ (setq use-package-always-ensure t)
 
-(use-package auto-package-update
-  :config
-    (setq auto-package-update-delete-old-versions t)
-    (setq auto-package-update-hide-results t)
-    (auto-package-update-maybe))
+   #+end_src
 
-  #+end_src
+***** Keep packages updated automatically
 
-**** Ensure required system packages are installed
+   #+begin_src emacs-lisp :tangle sod.el
 
-  #+begin_src emacs-lisp :tangle sod.el
+ (use-package auto-package-update
+   :config
+     (setq auto-package-update-delete-old-versions t)
+     (setq auto-package-update-hide-results t)
+     (auto-package-update-maybe))
 
-(use-package use-package-ensure-system-package)
+   #+end_src
 
-  #+end_src
+***** Ensure required system packages are installed
 
-**** Diminishing and delighting minor modes
-***** Diminish
-      "diminish is invoked with the :diminish keyword, which is passed either a minor mode symbol, a cons of the symbol and its replacement string, or just a replacement string, in which case the minor mode symbol is guessed to be the package name with "-mode" appended at the end:"
+   #+begin_src emacs-lisp :tangle sod.el
 
-  #+begin_src emacs-lisp :tangle sod.el
+ (use-package use-package-ensure-system-package)
 
-(use-package diminish)
+   #+end_src
 
-  #+end_src
+***** Diminishing and delighting minor modes
+****** Diminish
+       "diminish is invoked with the :diminish keyword, which is passed either a minor mode symbol, a cons of the symbol and its replacement string, or just a replacement string, in which case the minor mode symbol is guessed to be the package name with "-mode" appended at the end:"
 
-***** Delight
-      "delight is invoked with the :delight keyword, which is passed a minor mode symbol, a replacement string or quoted mode-line data (in which case the minor mode symbol is guessed to be the package name with "-mode" appended at the end), both of these, or several lists of both. If no arguments are provided, the default mode name is hidden completely."
+   #+begin_src emacs-lisp :tangle sod.el
 
-  #+begin_src emacs-lisp :tangle sod.el
+ (use-package diminish)
 
-(use-package delight)
+   #+end_src
 
-  #+end_src
+****** Delight
+       "delight is invoked with the :delight keyword, which is passed a minor mode symbol, a replacement string or quoted mode-line data (in which case the minor mode symbol is guessed to be the package name with "-mode" appended at the end), both of these, or several lists of both. If no arguments are provided, the default mode name is hidden completely."
 
-** File Management
-   To keep the user's home and the =~/.emacs.d= folder as clean as possible, I
-   follow the [[https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html][XDG base directory specification]].
+   #+begin_src emacs-lisp :tangle sod.el
 
-   GNU Emacs will not create the appropriate folders if they do not
-   exist. Therefore, it is necessary to create them yourself:
+ (use-package delight)
 
-  #+begin_src bash
+   #+end_src
 
-  mkdir ~/.cache/emacs ~/.local/share/emacs/
+*** File Management
+    To keep the user's home and the =~/.emacs.d= folder as clean as possible, I
+    follow the [[https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html][XDG base directory specification]].
 
-  #+end_src
+    GNU Emacs will not create the appropriate folders if they do not
+    exist. Therefore, it is necessary to create them yourself:
 
-   *NOTE:* you can find out more by going to my [[https://github.com/techquila/dotfiles][dotfiles]].
+   #+begin_src bash
 
-  #+begin_src emacs-lisp :tangle sod.el
+   mkdir ~/.cache/emacs ~/.local/share/emacs/
 
-  (defvar xdg-bin (getenv "XDG_BIN_HOME")
-    "The XDG bin base directory.")
+   #+end_src
 
-  (defvar xdg-cache (getenv "XDG_CACHE_HOME")
-    "The XDG cache base directory.")
+    *NOTE:* you can find out more by going to my [[https://github.com/techquila/dotfiles][dotfiles]].
 
-  (defvar xdg-config (getenv "XDG_CONFIG_HOME")
-    "The XDG config base directory.")
+   #+begin_src emacs-lisp :tangle sod.el
 
-  (defvar xdg-data (getenv "XDG_DATA_HOME")
-    "The XDG data base directory.")
+   (defvar xdg-bin (getenv "XDG_BIN_HOME")
+     "The XDG bin base directory.")
 
-  (defvar xdg-lib (getenv "XDG_LIB_HOME")
-    "The XDG lib base directory.")
+   (defvar xdg-cache (getenv "XDG_CACHE_HOME")
+     "The XDG cache base directory.")
 
-  #+end_src
+   (defvar xdg-config (getenv "XDG_CONFIG_HOME")
+     "The XDG config base directory.")
 
-** Backups
-   bastardised from [[https://stackoverflow.com/questions/151945/how-do-i-control-how-emacs-makes-backup-files][this stackoverflow post]]
+   (defvar xdg-data (getenv "XDG_DATA_HOME")
+     "The XDG data base directory.")
 
-*** Set backup directory and sane defaults.
+   (defvar xdg-lib (getenv "XDG_LIB_HOME")
+     "The XDG lib base directory.")
 
-  #+begin_src emacs-lisp :tangle sod.el
+   #+end_src
 
-(defvar --backup-directory (concat user-emacs-directory "backups"))
-(if (not (file-exists-p --backup-directory))
-        (make-directory --backup-directory t))
-(setq backup-directory-alist `(("." . ,--backup-directory)))
-(setq make-backup-files t               ; backup of a file the first time it is saved.
-      backup-by-copying t               ; don't clobber symlinks
-      version-control t                 ; version numbers for backup files 
-      vc-make-backup-files t            ; backup versioned files, which Emacs does not do by default (you don't commit on every save, right?)
-      delete-old-versions t             ; delete excess backup files silently
-      delete-by-moving-to-trash t
-      kept-old-versions 2               ; oldest versions to keep when a new numbered backup is made (default: 2)
-      kept-new-versions 10              ; newest versions to keep when a new numbered backup is made (default: 2)
-      auto-save-default t               ; auto-save every buffer that visits a file
-      auto-save-timeout 20              ; number of seconds idle time before auto-save (default: 30)
-      auto-save-interval 200            ; number of keystrokes between auto-saves (default: 300)
-      auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
+*** Backups
+    bastardised from [[https://stackoverflow.com/questions/151945/how-do-i-control-how-emacs-makes-backup-files][this stackoverflow post]]
 
-  #+end_src
+**** Set backup directory and sane defaults.
 
-*** per save and per session backups
+   #+begin_src emacs-lisp :tangle sod.el
 
-  #+begin_src emacs-lisp :tangle sod.el
+ (defvar --backup-directory (concat user-emacs-directory "backups"))
+ (if (not (file-exists-p --backup-directory))
+         (make-directory --backup-directory t))
+ (setq backup-directory-alist `(("." . ,--backup-directory)))
+ (setq make-backup-files t               ; backup of a file the first time it is saved.
+       backup-by-copying t               ; don't clobber symlinks
+       version-control t                 ; version numbers for backup files 
+       vc-make-backup-files t            ; backup versioned files, which Emacs does not do by default (you don't commit on every save, right?)
+       delete-old-versions t             ; delete excess backup files silently
+       delete-by-moving-to-trash t
+       kept-old-versions 2               ; oldest versions to keep when a new numbered backup is made (default: 2)
+       kept-new-versions 10              ; newest versions to keep when a new numbered backup is made (default: 2)
+       auto-save-default t               ; auto-save every buffer that visits a file
+       auto-save-timeout 20              ; number of seconds idle time before auto-save (default: 30)
+       auto-save-interval 200            ; number of keystrokes between auto-saves (default: 300)
+       auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
 
-;; Default and per-save backups go here:
-(setq backup-directory-alist '(("" . "~/.emacs.d/backups/per-save")))
+   #+end_src
 
-(defun force-backup-of-buffer ()
-  ;; Make a special "per session" backup at the first save of each
-  ;; emacs session.
-  (when (not buffer-backed-up)
-    ;; Override the default parameters for per-session backups.
-    (let ((backup-directory-alist '(("" . "~/.emacs.d/backups/per-session")))
-          (kept-new-versions 3))
-      (backup-buffer)))
-  ;; Make a "per save" backup on each save.  The first save results in
-  ;; both a per-session and a per-save backup, to keep the numbering
-  ;; of per-save backups consistent.
-  (let ((buffer-backed-up nil))
-    (backup-buffer)))
+**** per save and per session backups
 
-(add-hook 'before-save-hook  'force-backup-of-buffer)
+   #+begin_src emacs-lisp :tangle sod.el
 
-  #+end_src
+ ;; Default and per-save backups go here:
+ (setq backup-directory-alist '(("" . "~/.emacs.d/backups/per-save")))
 
-*** Stop lock files being created
+ (defun force-backup-of-buffer ()
+   ;; Make a special "per session" backup at the first save of each
+   ;; emacs session.
+   (when (not buffer-backed-up)
+     ;; Override the default parameters for per-session backups.
+     (let ((backup-directory-alist '(("" . "~/.emacs.d/backups/per-session")))
+           (kept-new-versions 3))
+       (backup-buffer)))
+   ;; Make a "per save" backup on each save.  The first save results in
+   ;; both a per-session and a per-save backup, to keep the numbering
+   ;; of per-save backups consistent.
+   (let ((buffer-backed-up nil))
+     (backup-buffer)))
 
-  #+begin_src emacs-lisp :tangle sod.el
+ (add-hook 'before-save-hook  'force-backup-of-buffer)
 
-(setq create-lockfiles nil)
+   #+end_src
 
-  #+end_src
+**** Stop lock files being created
 
-** Authentication
-*** Auth source
-    I have a non-world readable file named /.authoinfo.gpg / within my home
-    directory where I store my authentication details for the various
-    services I need to authenticate to.  ERC and Org2Blog need these credentials to operate.
+   #+begin_src emacs-lisp :tangle sod.el
 
-  #+begin_src emacs-lisp :tangle sod.el
+ (setq create-lockfiles nil)
 
-(require 'auth-source)
-(add-to-list 'auth-sources "~/.authinfo.gpg")
+   #+end_src
 
-  #+end_src
+*** Authentication
+**** Auth source
+     I have a non-world readable file named /.authoinfo.gpg / within my home
+     directory where I store my authentication details for the various
+     services I need to authenticate to.  ERC and Org2Blog need these credentials to operate.
 
-*** IRC
-    Load configuration and authentication info from an external source.
+   #+begin_src emacs-lisp :tangle sod.el
 
-  #+begin_src emacs-lisp :tangle sod.el
+ (require 'auth-source)
+ (add-to-list 'auth-sources "~/.authinfo.gpg")
 
-(load "~/.emacs.d/secrets/erc-config.el")
+   #+end_src
 
-  #+end_src
+**** IRC
+     Load configuration and authentication info from an external source.
 
-** Encryption
+   #+begin_src emacs-lisp :tangle sod.el
 
-*** GPG Agent
-    Use an agent to manage GPG between shell sessions.
+ (load "~/.emacs.d/secrets/erc-config.el")
 
-  #+begin_src emacs-lisp :tangle sod.el
+   #+end_src
 
-(setq epg-gpg-program "/usr/bin/gpg")
+*** Encryption
 
-  #+end_src
+**** GPG Agent
+     Use an agent to manage GPG between shell sessions.
 
-*** [[https://www.emacswiki.org/emacs/EasyPG][EasyPG]] to encrypt/decrypt files with a .gpg extension
-    Add the following line to the top of the document to be encrypted and save the file with a .gpg extension.
+   #+begin_src emacs-lisp :tangle sod.el
 
-  #+begin_example
+ (setq epg-gpg-program "/usr/bin/gpg")
 
-    # -*- mode:org; epa-file-encrypt-to: ("sod@oscarfono.com") -*-
+   #+end_src
 
-  #+end_example
+**** [[https://www.emacswiki.org/emacs/EasyPG][EasyPG]] to encrypt/decrypt files with a .gpg extension
+     Add the following line to the top of the document to be encrypted and save the file with a .gpg extension.
 
-  #+begin_src emacs-lisp :tangle sod.el
+   #+begin_example
 
-(require 'epa-file)
-(epa-file-enable)
+     # -*- mode:org; epa-file-encrypt-to: ("sod@oscarfono.com") -*-
 
-  #+end_src
+   #+end_example
 
-** Shell
+   #+begin_src emacs-lisp :tangle sod.el
+
+ (require 'epa-file)
+ (epa-file-enable)
+
+   #+end_src
+
+*** Shell
    
-*** Terminal Emulation with [[https://www.emacswiki.org/emacs/MultiTerm][multi-term]]
-    Multiple concurrent terminal buffers are the only way to roll.  To start one just simply 'Control-Meta-SPACEBAR'.
+**** Terminal Emulation with [[https://www.emacswiki.org/emacs/MultiTerm][multi-term]]
+     Multiple concurrent terminal buffers are the only way to roll.  To start one just simply 'Control-Meta-SPACEBAR'.
+
+   #+begin_src emacs-lisp :tangle sod.el
+
+ (use-package multi-term
+   :bind ("C-M-SPC" . multi-term))
+
+   #+end_src
+
+ *
+*** Syntax Highlighting
+    Activate syntax highlighting globally
+
+ #+begin_src emacs-lisp :tangle sod.el
+
+(global-font-lock-mode 1)
+
+ #+end_src
+
+** Personalisation
+*** Default Name and Email
 
   #+begin_src emacs-lisp :tangle sod.el
 
-(use-package multi-term
-  :bind ("C-M-SPC" . multi-term))
+ (setq user-full-name "Sod Oscarfono"
+       user-mail-address "sod@oscarfono.com")
 
   #+end_src
 
-** Theme
-*** [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Windows-and-Frames.html#Windows-and-Frames][Frames]]
-**** start fullscreen
 
-  #+begin_src emacs-lisp :tangle sod.el
+*** Theme
+**** [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Windows-and-Frames.html#Windows-and-Frames][Frames]]
+***** start fullscreen
 
- (add-to-list 'default-frame-alist '(fullscreen . maximized))
+   #+begin_src emacs-lisp :tangle sod.el
 
-  #+end_src
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+   #+end_src
    
-**** Menu bar
-     I like the menu bar to be present so i can find things i've forgotten about
+***** Menu bar
+      I like the menu bar to be present so i can find things i've forgotten about
 
-  #+begin_src emacs-lisp :tangle sod.el
+   #+begin_src emacs-lisp :tangle sod.el
 
- (menu-bar-mode 1)
+  (menu-bar-mode 1)
 
-  #+end_src
+   #+end_src
 
-**** Scroll bars
-     I like to see scrollbars for visual reference usually but am trialling without for now.
+***** Scroll bars
+      I like to see scrollbars for visual reference usually but am trialling without for now.
 
-  #+begin_src emacs-lisp :tangle sod.el
+   #+begin_src emacs-lisp :tangle sod.el
 
- (scroll-bar-mode 0)
+  (scroll-bar-mode 0)
 
-  #+end_src
+   #+end_src
 
-     Smoother scrolling experience
+      Smoother scrolling experience
 
-  #+begin_src emacs-lisp :tangle sod.el
+   #+begin_src emacs-lisp :tangle sod.el
 
- (setq scroll-step           1
-	scroll-conservatively 10000)
+  (setq scroll-step           1
+	 scroll-conservatively 10000)
 
-  #+end_src
+   #+end_src
 
-**** Tool bar
-     I don't like to see the tool bar taking up my valuable screen real estate
+***** Tool bar
+      I don't like to see the tool bar taking up my valuable screen real estate
 
-  #+begin_src emacs-lisp :tangle sod.el
+   #+begin_src emacs-lisp :tangle sod.el
 
- (tool-bar-mode 0)
+  (tool-bar-mode 0)
 
-  #+end_src
+   #+end_src
 
-**** Mode line
-     Display full path of file on mode line
+***** Mode line
+      Display full path of file on mode line
 
-  #+begin_src emacs-lisp :tangle sod.el
+   #+begin_src emacs-lisp :tangle sod.el
 
- (setq-default mode-line-buffer-identification
-               (let ((orig  (car mode-line-buffer-identification)))
-                 `(:eval (cons (concat ,orig (abbreviate-file-name default-directory))
-                               (cdr mode-line-buffer-identification)))))
+  (setq-default mode-line-buffer-identification
+		(let ((orig  (car mode-line-buffer-identification)))
+                  `(:eval (cons (concat ,orig (abbreviate-file-name default-directory))
+				(cdr mode-line-buffer-identification)))))
 
-  #+end_src
+   #+end_src
 
-*** [[https://github.com/techquila/melancholy-theme.el][melancholy-theme]]
-    The custom theme I'm working on.  Ongoing development. WIP.
+**** [[https://github.com/techquila/melancholy-theme.el][melancholy-theme]]
+     The custom theme I'm working on.  Ongoing development. WIP.
 
-  #+begin_src emacs-lisp :tangle sod.el
+   #+begin_src emacs-lisp :tangle sod.el
 
-(use-package melancholy-theme)
+ (use-package melancholy-theme)
 
-(load-theme 'melancholy t)
+ (load-theme 'melancholy t)
 
-  #+end_src
+   #+end_src
 
-*** [[https://github.com/domtronn/all-the-icons.el#installation][icons]]
-    Some sweet icons to enhance the ui.  
+**** [[https://github.com/domtronn/all-the-icons.el#installation][icons]]
+     Some sweet icons to enhance the ui.  
 
-    In order for the icons to work it is very important that you install the Resource Fonts included in this package, they are available in the fonts directory. You can also install the latest fonts for this package in the (guessed?) based on the OS by calling the following function:
+     In order for the icons to work it is very important that you install the Resource Fonts included in this package, they are available in the fonts directory. You can also install the latest fonts for this package in the (guessed?) based on the OS by calling the following function:
 
-  #+begin_example
+   #+begin_example
 
-    M-x all-the-icons-install-fonts
+     M-x all-the-icons-install-fonts
 
-  #+end_example
+   #+end_example
 
-  #+begin_src emacs-lisp :tangle sod.el
+   #+begin_src emacs-lisp :tangle sod.el
 
-(use-package all-the-icons)
+ (use-package all-the-icons)
 
-  #+end_src
+   #+end_src
 
-*** Modeline
-**** [[https://github.com/seagle0128/doom-modeline][doom-modeline]]
-     This was a much better option than what I was doing previously.
+**** Modeline
+***** [[https://github.com/seagle0128/doom-modeline][doom-modeline]]
+      This was a much better option than what I was doing previously.
 
-  #+begin_src emacs-lisp :tangle sod.el
+   #+begin_src emacs-lisp :tangle sod.el
 
- (use-package doom-modeline
-   :hook (after-init . doom-modeline-mode))
+  (use-package doom-modeline
+    :hook (after-init . doom-modeline-mode))
 
-  #+end_src
+   #+end_src
 
-*** Inhibit startup screen.
-    I don't want the default start up screen displayed on start up.  That logo is hideous!
+**** Inhibit startup screen.
+     I don't want the default start up screen displayed on start up.  That logo is hideous!
 
-  #+begin_src emacs-lisp :tangle sod.el
+   #+begin_src emacs-lisp :tangle sod.el
 
-(setq inhibit-startup-message t)
+ (setq inhibit-startup-message t)
 
-  #+end_src
+   #+end_src
 
 ** Productivity Management
 *** [[http://orgmode.org/][Org-mode]]
@@ -475,7 +533,7 @@ First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this 
 
   #+begin_src emacs-lisp :tangle sod.el
   
-(setq org-directory "~/Dropbox/org")
+(setq org-directory "~/src/Dropbox/org")
 
   #+end_src
 
@@ -494,7 +552,7 @@ First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this 
 (use-package org-contacts
   :ensure nil
   :after org
-  :custom (org-contacts-files '("~/Dropbox/capture/contacts.org")))
+  :custom (org-contacts-files '("~/src/Dropbox/capture/contacts.org")))
 
   #+end_src
 
@@ -539,7 +597,7 @@ First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this 
   #+begin_src emacs-lisp :tangle sod.el
 
 ;;file to save todo items
-(setq org-agenda-files (quote ("~/Dropbox/capture/todo.org")))
+(setq org-agenda-files (quote ("~/src/Dropbox/capture/todo.org")))
 
 ;;set priority range from A to C with default A
 (setq org-highest-priority ?A)
@@ -697,19 +755,19 @@ First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this 
       :END:" "Template to capture recipe information")
  :custom
  (org-capture-templates
-   `(("c" "Contact" entry (file+headline "~/Dropbox/capture/contacts.org" "Friends"), my/org-contacts-template :empty-lines 1)
-     ("d" "Documentation" entry (file+headline "~/Dropbox/capture/docs.org" "Documentation") "** %^{Subject}\n %^g\n %?\n %i\n Added %U")
-     ("e" "Expense" entry (file+datetree "~/Dropbox/capture/expenses.org"), my/org-expenses-template :empty-lines 1)
-     ("i" "Idea" entry (file+datetree "~/Dropbox/capture/ideas.org" "Ideas") "** 💡 %?\n I had this idea on %U\n %a" :empty-lines 1)
-     ("j" "Journal" entry (file+datetree "~/Dropbox/capture/journal.org") "* %?\n Entered on %U\n" :empty-lines 1)
-     ("L" "Lyric" entry (file+headline "~/Dropbox/capture/lyrics.org" "Lyrical Ideas Capture") "** %^{working-title}\n %^{verse}\n %^{hook}\n")
-     ("gq" "Quote" entry (file+headline "~/Dropbox/capture/quotes.org"), my/org-greatquotes-template :empty-lines 1)
-     ("r" "Read" entry (file+headline "~/Dropbox/capture/someday.org" "Read") "** %^{title}\n %^{author}" :empty-lines 1)
-     ("R" "Recipe" entry (file+headline "~/Dropbox/capture/recipes.org" "Recipes"), my/org-recipe-template :empty-lines 1)
-     ("s" "Subject" entry (file+headline "~/Dropbox/capture/someday.org" "Write"), "** %^{subject}\n" :empty-lines 1)
-     ("t" "Todo" entry (file+headline "~/Dropbox/capture/todo.org" "Tasks") "** ★ TODO %?\n %i\n %a" :empty-lines 1)
-     ("W" "Wishlist" entry (file+headline "~/Dropbox/capture/someday.org" "Wishlist") "** %^{thing}" :empty-lines 1) 
-     ("w" "Watch" entry (file+headline "~/Dropbox/capture/someday.org" "Watch") "** ★  %^{movie title}\n %a" :empty-lines 1))))
+   `(("c" "Contact" entry (file+headline "~/src/Dropbox/capture/contacts.org" "Friends"), my/org-contacts-template :empty-lines 1)
+     ("d" "Documentation" entry (file+headline "~/src/Dropbox/capture/docs.org" "Documentation") "** %^{Subject}\n %^g\n %?\n %i\n Added %U")
+     ("e" "Expense" entry (file+olp+datetree "~/src/Dropbox/capture/expenses.org"), my/org-expenses-template :empty-lines 1)
+     ("i" "Idea" entry (file+olp+datetree "~/src/Dropbox/capture/ideas.org" "Ideas") "** 💡 %?\n I had this idea on %U\n %a" :empty-lines 1)
+     ("j" "Journal" entry (file+olp+datetree "~/src/Dropbox/capture/journal.org") "* %?\n Entered on %U\n" :empty-lines 1)
+     ("L" "Lyric" entry (file+headline "~/src/Dropbox/capture/lyrics.org" "Lyrical Ideas Capture") "** %^{working-title}\n %^{verse}\n %^{hook}\n")
+     ("gq" "Quote" entry (file+headline "~/src/Dropbox/capture/quotes.org"), my/org-greatquotes-template :empty-lines 1)
+     ("r" "Read" entry (file+headline "~/src/Dropbox/capture/someday.org" "Read") "** %^{title}\n %^{author}" :empty-lines 1)
+     ("R" "Recipe" entry (file+headline "~/src/Dropbox/capture/recipes.org" "Recipes"), my/org-recipe-template :empty-lines 1)
+     ("s" "Subject" entry (file+headline "~/src/Dropbox/capture/someday.org" "Write"), "** %^{subject}\n" :empty-lines 1)
+     ("t" "Todo" entry (file+headline "~/src/Dropbox/capture/todo.org" "Tasks") "** ★ TODO %?\n %i\n %a" :empty-lines 1)
+     ("W" "Wishlist" entry (file+headline "~/src/Dropbox/capture/someday.org" "Wishlist") "** %^{thing}" :empty-lines 1) 
+     ("w" "Watch" entry (file+headline "~/src/Dropbox/capture/someday.org" "Watch") "** ★  %^{movie title}\n %a" :empty-lines 1))))
 
   #+end_src
 
@@ -721,20 +779,20 @@ First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this 
 (unless (boundp 'org-latex-classes)
   (setq org-latex-classes nil))
 (add-to-list 'org-latex-classes
-             '("article"
-               "\\documentclass{article}"
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+	     '("article"
+	       "\\documentclass{article}"
+	       ("\\section{%s}" . "\\section*{%s}")
+	       ("\\subsection{%s}" . "\\subsection*{%s}")
+	       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+	       ("\\paragraph{%s}" . "\\paragraph*{%s}")
+	       ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
 	      '("book"
-               "\\documentclass{book}"
-               ("\\part{%s}" . "\\part*{%s}")
-               ("\\chapter{%s}" . "\\chapter*{%s}")
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
+	       "\\documentclass{book}"
+	       ("\\part{%s}" . "\\part*{%s}")
+	       ("\\chapter{%s}" . "\\chapter*{%s}")
+	       ("\\section{%s}" . "\\section*{%s}")
+	       ("\\subsection{%s}" . "\\subsection*{%s}")
+	       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
 
 (use-package ox-hugo)
 (use-package ox-mediawiki)
@@ -923,19 +981,19 @@ requires graphvis system package to be installed
   "Sitemap (Blog Main Page) Entry Formatter"
   (when (not (directory-name-p entry))
     (format (string-join
-             '("* [[file:%s][%s]]\n"
-               "  #+bEGIN_published\n"
-               "%s\n"
-               "  #+eND_published\n\n"
-               "%s\n"
-               "--------\n"))
+	     '("* [[file:%s][%s]]\n"
+	       "  #+bEGIN_published\n"
+	       "%s\n"
+	       "  #+eND_published\n\n"
+	       "%s\n"
+	       "--------\n"))
             entry
             (org-publish-find-title entry project)
             (format-time-string "%A, %B %_d %Y at %l:%M %p %Z" (org-publish-find-date entry project))
             (let* ((preview (my-blog/get-preview entry))
                    (needs-more (car preview))
                    (preview-text (cadr preview)))
-              (if needs-more
+	      (if needs-more
                   (format
                    (concat
                     "%s\n\n"
@@ -951,64 +1009,64 @@ requires graphvis system package to be installed
 
        (setq org-publish-project-alist
          `(("blog"
-             :components ("posts" "templates" "scripts" "styles" "images" "rss"))
+	     :components ("posts" "templates" "scripts" "styles" "images" "rss"))
            ("posts"
-             :base-directory ,(concat my-blog/repo "posts/")
-             :base-extension "org"
-             :publishing-directory ,(concat my-blog/repo "public/posts/")
-             :publishing-function ox-slimhtml-publish-to-html
-             :with-author t
-             :with-creator nil
-             :with-date t
-             :with-title t
-             :with-toc nil
-             :html-doctype html5
-             :html-head-include-default-style nil
-             :html-head-include-scripts nil
-             :html-html5-fancy t
-             :html-link-home "/"
-             :html-link-up "articles.html"
-             :auto-sitemap t
-             :sitemap-filename "articles.org"
-             :sitemap-format-entry my-blog/sitemap-entry
-             :sitemap-function my-blog/sitemap
-             :sitemap-title "Published articles"
-             :sitemap-sort-files anti-chronologically)
+	     :base-directory ,(concat my-blog/repo "posts/")
+	     :base-extension "org"
+	     :publishing-directory ,(concat my-blog/repo "public/posts/")
+	     :publishing-function ox-slimhtml-publish-to-html
+	     :with-author t
+	     :with-creator nil
+	     :with-date t
+	     :with-title t
+	     :with-toc nil
+	     :html-doctype html5
+	     :html-head-include-default-style nil
+	     :html-head-include-scripts nil
+	     :html-html5-fancy t
+	     :html-link-home "/"
+	     :html-link-up "articles.html"
+	     :auto-sitemap t
+	     :sitemap-filename "articles.org"
+	     :sitemap-format-entry my-blog/sitemap-entry
+	     :sitemap-function my-blog/sitemap
+	     :sitemap-title "Published articles"
+	     :sitemap-sort-files anti-chronologically)
            ("templates"
-             :base-directory ,(concat my-blog/repo "templates/")
-             :base-extension "html"
-             :publishing-directory ,(concat my-blog/repo "public/templates")
-             :publishing-function org-publish-attachment
-             :recursive t)
+	     :base-directory ,(concat my-blog/repo "templates/")
+	     :base-extension "html"
+	     :publishing-directory ,(concat my-blog/repo "public/templates")
+	     :publishing-function org-publish-attachment
+	     :recursive t)
            ("scripts"
-             :base-directory ,(concat my-blog/repo "templates/")
-             :base-extension "el\\|go\\|js"
-             :publishing-directory ,(concat my-blog/repo "public/templates")
-             :publishing-function org-publish-attachment
-             :recursive t)
+	     :base-directory ,(concat my-blog/repo "templates/")
+	     :base-extension "el\\|go\\|js"
+	     :publishing-directory ,(concat my-blog/repo "public/templates")
+	     :publishing-function org-publish-attachment
+	     :recursive t)
            ("styles"
-             :base-directory ,(concat my-blog/repo "templates/")
-             :base-extension "css"
-             :publishing-directory ,(concat my-blog/repo "public/templates")
-             :publishing-function org-publish-attachment
-             :recursive t)
+	     :base-directory ,(concat my-blog/repo "templates/")
+	     :base-extension "css"
+	     :publishing-directory ,(concat my-blog/repo "public/templates")
+	     :publishing-function org-publish-attachment
+	     :recursive t)
            ("images"
-             :base-directory ,(concat my-blog/repo "templates/")
-             :base-extension "jpg\\|gif\\|png\\|svg"
-             :publishing-directory ,(concat my-blog/repo "public/templates")
-             :publishing-function org-publish-attachment
-             :recursive t)
+	     :base-directory ,(concat my-blog/repo "templates/")
+	     :base-extension "jpg\\|gif\\|png\\|svg"
+	     :publishing-directory ,(concat my-blog/repo "public/templates")
+	     :publishing-function org-publish-attachment
+	     :recursive t)
            ("rss"
-             :base-directory , (concat my-blog/repo "raw/")
-             :base-extension ".org"
-             :publishing-directory ,(concat my-blog/repo "public/raw")
-             :publishing-function org-rss-publish-to-rss
-             :html-link-use-abs-url t
-             :export-with-tags nil
-             :section-numbers nil
-             :with-date t
-             :with-title t
-             :with-toc nil)))
+	     :base-directory , (concat my-blog/repo "raw/")
+	     :base-extension ".org"
+	     :publishing-directory ,(concat my-blog/repo "public/raw")
+	     :publishing-function org-rss-publish-to-rss
+	     :html-link-use-abs-url t
+	     :export-with-tags nil
+	     :section-numbers nil
+	     :with-date t
+	     :with-title t
+	     :with-toc nil)))
 
   #+end_src
 
@@ -1082,7 +1140,7 @@ requires graphvis system package to be installed
                             (calendar-gregorian-from-absolute tmp-date))))
           (if (or (= day-of-week 0)
                   (= day-of-week 6))
-              (incf weekend-days ))
+	      (incf weekend-days ))
           (incf tmp-date)))
       weekend-days))
 
@@ -1098,10 +1156,10 @@ requires graphvis system package to be installed
            (end-date (if (> date1 date2) date1 date2))
            (days (- (my-calendar-count-days d1 d2)
                     (+ (my-calendar-count-weekend-days start-date end-date)
-                       (my-calendar-count-holidays-on-weekdays-in-range
+		       (my-calendar-count-holidays-on-weekdays-in-range
                         start-date end-date)))))
       (message "Region has %d workday%s (inclusive)"
-               days (if (> days 1) "s" ""))))
+	       days (if (> days 1) "s" ""))))
 
   #+end_src
 
@@ -1228,25 +1286,6 @@ requires graphvis system package to be installed
 
   #+end_src
 
-**** Regex 
-***** Re-Builder (M-x re-builder)
-
-  #+begin_src emacs-lisp :tangle no
-
-(require 're-builder)
-(setq reb-re-syntax 'string)
-
-  #+end_src
-
-***** xr
-converts Emacs regular expressions to the structured rx form thus being and inverse of rx.
-
-  #+begin_src emacs-lisp :tangle no
-
-(use-package xr)
-
-  #+end_src
-
 **** Remote File Access with [[https://www.emacswiki.org/emacs/TrampMode][TRAMP]]
 
   #+begin_src emacs-lisp :tangle sod.el
@@ -1280,7 +1319,7 @@ converts Emacs regular expressions to the structured rx form thus being and inve
     (setq server-auth-dir "~/.emacs.d/server") ;; Server file location
     (setq server-name "emacs_server0")         ;; Server mutex file name
     (unless (server-running-p)
-              (server-start))))
+	      (server-start))))
 
 (add-hook 'server-done-hook ((lambda nil (kill-buffer nil)) delete-frame))
 
@@ -1334,14 +1373,6 @@ converts Emacs regular expressions to the structured rx form thus being and inve
 
   #+end_src
 
-**** Notifications
-     Replace annoying bell with visible-bell
-
-  #+begin_src emacs-lisp :tangle sod.el
-
-  (setq visible-bell t)
-
-  #+end_src
 
 **** Magit
      
@@ -1355,7 +1386,7 @@ converts Emacs regular expressions to the structured rx form thus being and inve
 **** Project managment with [[https://github.com/bbatsov/projectile][projectile]]
      Helm support using [[https://github.com/bbatsov/helm-projectile][helm-projectile]]
 
-  #+begin_src emacs-lisp :tangle sod.el
+  #+begin_src emacs-lisp :tangle no
 
  (use-package projectile
    :diminish projectile-mode
@@ -1435,7 +1466,7 @@ converts Emacs regular expressions to the structured rx form thus being and inve
   #+end_src
 
 ***** [[https://github.com/smihica/emmet-mode][emmet-mode]]
-      This is a major mode for html and css expansion that i'm trying out.  Forked from as [[https://github.com/rooney/zencoding][zencoding-mode]].
+      This is a major mode for html and css expansion.  Forked from [[https://github.com/rooney/zencoding][zencoding-mode]].
 
   #+begin_src emacs-lisp :tangle sod.el
 
@@ -1477,7 +1508,7 @@ converts Emacs regular expressions to the structured rx form thus being and inve
      Smartparens is minor mode for Emacs that deals with parens pairs and
      tries to be smart about it. 
 
-  #+begin_src emacs-lisp :tangle sod.el
+  #+begin_src emacs-lisp :tangle yes
 
 (use-package smartparens-config
     :ensure smartparens
@@ -1499,6 +1530,24 @@ converts Emacs regular expressions to the structured rx form thus being and inve
 
   #+end_src
 
+**** Linting
+***** flycheck
+
+  #+begin_src emacs-lisp :tangle sod.el
+
+(use-package flycheck
+  :config
+    (global-flycheck-mode))
+
+  #+end_src
+
+***** package-lint
+
+  #+begin_src emacs-lisp :tangle sod.el
+
+(use-package package-lint)
+
+  #+end_src
 **** Language modes
 ***** configuration management
 ****** ansible-mode
@@ -1519,16 +1568,6 @@ converts Emacs regular expressions to the structured rx form thus being and inve
 
   #+end_src
  
-****** [[https://github.com/emacsmirror/ldap-mode][ldap-mode]]
-       major modes for editing LDAP schema and LDIF files
-
-  #+begin_src emacs-lisp :tangle no
-
- (use-package ldap-mode
-   :commands ldap-mode)
-
-  #+end_src
-
 ***** skewer-mode
   #+begin_src emacs-lisp :tangle sod.el
 
@@ -1671,10 +1710,8 @@ converts Emacs regular expressions to the structured rx form thus being and inve
 
  (use-package tern)
 
- (use-package tern-auto-complete
-    :config
-      (use-package company-tern
-         :init (add-to-list 'company-backends 'company-tern)))
+ (use-package tern-auto-complete)
+
 
   #+end_src
 
@@ -1733,7 +1770,7 @@ converts Emacs regular expressions to the structured rx form thus being and inve
    :commands rjsx-mode
    :init
    (progn
-     (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
+     (add-to-list 'auto-mode-alist '("{components|pages}\\/.*\\.js\\'" . rjsx-mode))
      (setq js2-basic-offset 2)))
 
   #+end_src
@@ -1749,7 +1786,7 @@ converts Emacs regular expressions to the structured rx form thus being and inve
 
 ****** vue-html-mode
 
-  #+begin_src emacs-lisp :tangle no
+  #+begin_src emacs-lisp :tangle sod.el
 
  (use-package vue-html-mode)
 
@@ -1767,33 +1804,6 @@ converts Emacs regular expressions to the structured rx form thus being and inve
 
   #+end_src
 
-**** Linting
-***** flycheck
-
-  #+begin_src emacs-lisp :tangle sod.el
-
-(use-package flycheck
-  :config
-    (global-flycheck-mode))
-
-  #+end_src
-
-***** package-lint
-
-  #+begin_src emacs-lisp :tangle sod.el
-
-(use-package package-lint)
-
-  #+end_src
-
-**** Syntax Highlighting
-     Activate syntax highlighting globally
-
-  #+begin_src emacs-lisp :tangle sod.el
-
- (global-font-lock-mode 1)
-
-  #+end_src
 
 *** Docker
     integrate docker functionality into emacs

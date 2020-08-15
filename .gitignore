@@ -12,8 +12,9 @@ tramp
 url/
 
 # NO NO NO
-backups/
-secrets/
+backups/*
+secrets/*
+server/*
 bookmarks
 recentf
 
@@ -22,6 +23,7 @@ sod.el
 
 # Org-mode
 .org-id-locations
+org-clock-save.el
 *_archive
 
 # flymake-mode
@@ -29,9 +31,6 @@ sod.el
 
 # elpa packages
 /elpa/
-
-# emacs server
-server/*
 
 # erc
 erc-config.el
@@ -75,6 +74,3 @@ session*
 # transient
 transient/
 true
-
-
-

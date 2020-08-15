@@ -1406,7 +1406,6 @@ requires graphvis system package to be installed
 
   #+end_src
 
-
 **** Magit
 
   #+begin_src emacs-lisp :tangle sod.el

@@ -72,10 +72,9 @@
  (use-package benchmark-init
      :config
      ;; To disable collection of benchmark data after init is done.
-     (add-hook 'after-init-hook 'benchmark-init/deactivate))
-
+     (add-hook 'after-init-hook 'benchmark-init/deactivate)
      (add-hook 'after-init-hook
-             (lambda () (message "loaded in %s" (emacs-init-time))))
+             (lambda () (message "loaded in %s" (emacs-init-time)))))
     #+end_src
 
 *** Garbage Collection
@@ -566,7 +565,7 @@
 
   #+begin_src emacs-lisp :tangle sod.el
 
-(setq org-directory "~/src/Dropbox/org")
+  (setq org-directory "~/src/Dropbox/creative/org")
 
   #+end_src
 
@@ -598,8 +597,8 @@
   "Title: "
   "#+TITLE: " str " \n"
   "#+AUTHOR: Sod Oscarfono \n"
-  "  #+eMAIL: sod@oscarfono.com\n"
-  "  #+bABEL: :session *R* :cache yes :results output graphics :exports both :tangle yes \n"
+  "#+EMAIL: sod@oscarfono.com\n"
+  "#+BABEL: :session *R* :cache yes :results output graphics :exports both :tangle yes \n"
   "#+STARTUP: align"
   "-----"
  )
@@ -665,7 +664,7 @@
   #+begin_src emacs-lisp :tangle sod.el
 
 (setq org-todo-keywords
-  '((sequence "★ TODO(t)" "📌 NEXT(n/)" "⚠ WAIT(w@/!)" "|" "✔ DONE(d!)" "✘ KILL(k!)" "➰ PASS(p@/!)" )))
+  '((sequence "★ TODO(t)" ">>> NEXT(n/)" "⚠ WAIT(w@/!)" "|" "✔ DONE(d!)" "✘ KILL(k!)" "➰ PASS(p@/!)" )))
 
   #+end_src
 
@@ -754,53 +753,54 @@
 
   #+begin_src emacs-lisp :tangle sod.el
 
-(use-package org-capture
-  :ensure nil
-  :after org
-  :preface
-    (defvar my/org-contacts-template "* %(org-contacts-template-name)
-      :PROPERTIES:
-        :ADDRESS: %^{street name. city, postcode NZ}
-        :BIRTHDAY: %^{yyyy-mm-dd}t
-        :EMAIL: %(org-contacts-template-email)
-        :PHONE: %^{022 222 222}
-        :NOTE: %^{NOTE}
-      :END:" "Template for org-contacts.")
-    (defvar my/org-expenses-template "* %^{expense}
-      :PROPERTIES:
-        :DATE: %U
-        :AMOUNT: %^{$0.00}
-        :PAID_TO: %^{company}
-        :PAYMENT_TYPE: %^{eftpos|cash|effort}
-      :END:" "Template to capture expenses")
-    (defvar my/org-greatquotes-template "* %^{great quote here}
-     :PROPERTIES:
-       :ATTRIBUTION: /n %?
-     :END" "Template to capture great quotes when i learn of them")
-    (defvar my/org-recipe-template "** %^{recipe-name}
-      :PROPERTIES:
-        :PREPTIME:
-        :COOKTIME:
-        :EATTIME:
-        :INGREDIENTS: %?
-        :METHOD:
-        :SHOPLIST:
-      :END:" "Template to capture recipe information")
- :custom
- (org-capture-templates
-   `(("c" "Contact" entry (file+headline "~/src/Dropbox/capture/contacts.org" "Friends"), my/org-contacts-template :empty-lines 1)
-     ("d" "Documentation" entry (file+headline "~/src/Dropbox/capture/docs.org" "Documentation") "** %^{Subject}\n %^g\n %?\n %i\n Added %U")
-     ("e" "Expense" entry (file+olp+datetree "~/src/Dropbox/capture/expenses.org"), my/org-expenses-template :empty-lines 1)
-     ("i" "Idea" entry (file+olp+datetree "~/src/Dropbox/capture/ideas.org" "Ideas") "** 💡 %?\n I had this idea on %U\n %a" :empty-lines 1)
-     ("j" "Journal" entry (file+olp+datetree "~/src/Dropbox/capture/journal.org") "* %?\n Entered on %U\n" :empty-lines 1)
-     ("L" "Lyric" entry (file+headline "~/src/Dropbox/capture/lyrics.org" "Lyrical Ideas Capture") "** %^{working-title}\n %^{verse}\n %^{hook}\n")
-     ("gq" "Quote" entry (file+headline "~/src/Dropbox/capture/quotes.org"), my/org-greatquotes-template :empty-lines 1)
-     ("r" "Read" entry (file+headline "~/src/Dropbox/capture/someday.org" "Read") "** %^{title}\n %^{author}" :empty-lines 1)
-     ("R" "Recipe" entry (file+headline "~/src/Dropbox/capture/recipes.org" "Recipes"), my/org-recipe-template :empty-lines 1)
-     ("s" "Subject" entry (file+headline "~/src/Dropbox/capture/someday.org" "Write"), "** %^{subject}\n" :empty-lines 1)
-     ("t" "Todo" entry (file+headline "~/src/Dropbox/capture/todo.org" "Tasks") "** ★ TODO %?\n %i\n %a" :empty-lines 1)
-     ("W" "Wishlist" entry (file+headline "~/src/Dropbox/capture/someday.org" "Wishlist") "** %^{thing}" :empty-lines 1)
-     ("w" "Watch" entry (file+headline "~/src/Dropbox/capture/someday.org" "Watch") "** ★  %^{movie title}\n %a" :empty-lines 1))))
+    (use-package org-capture
+      :ensure nil
+      :after org
+      :preface
+        (defvar my/org-contacts-template "** %^{contact}
+          :PROPERTIES:
+            :ADDRESS: %^{street name. city, postcode NZ}
+            :BIRTHDAY: %^{yyyy-mm-dd}t
+            :EMAIL: %(org-contacts-template-email)
+            :PHONE: %^{022 222 222}
+            :NOTE: %^{NOTE}
+          :END:" "Template for org-contacts.")
+        (defvar my/org-expenses-template "* %^{expense}
+          :PROPERTIES:
+            :DATE: %U
+            :AMOUNT: %^{$0.00}
+            :PAID_TO: %^{company}
+            :PAYMENT_TYPE: %^{eftpos|cash|effort}
+          :END:" "Template to capture expenses")
+        (defvar my/org-greatquotes-template "* %^{great quote here}
+         :PROPERTIES:
+           :QUOTE: %^{great quote}
+           :ATTRIBUTION: /n %?
+         :END" "Template to capture great quotes when i learn of them")
+        (defvar my/org-recipe-template "** %^{recipe-name}
+          :PROPERTIES:
+            :PREPTIME:
+            :COOKTIME:
+            :EATTIME:
+            :INGREDIENTS: %?
+            :METHOD:
+            :SHOPLIST:
+          :END:" "Template to capture recipe information")
+     :custom
+     (org-capture-templates
+       `(("c" "Contact" entry (file+headline "~/src/Dropbox/capture/contacts.org" "Friends"), my/org-contacts-template :empty-lines 1)
+         ("d" "Documentation" entry (file+headline "~/src/Dropbox/capture/docs.org" "Documentation") "** %^{Subject}\n %^g\n %?\n %i\n Added %U")
+         ("e" "Expense" entry (file+olp+datetree "~/src/Dropbox/capture/expenses.org"), my/org-expenses-template :empty-lines 1)
+         ("i" "Idea" entry (file+olp+datetree "~/src/Dropbox/capture/ideas.org" "Ideas") "**  %?\n I had this idea on %U\n %a" :empty-lines 1)
+         ("j" "Journal" entry (file+olp+datetree "~/src/Dropbox/capture/journal.org") "* %?\n Entered on %U\n" :empty-lines 1)
+         ("L" "Lyric" entry (file+headline "~/src/Dropbox/capture/lyrics.org" "Lyrical Ideas Capture") "** %^{working-title}\n %^{verse}\n %^{hook}\n")
+         ("p" "Quote" entry (file+headline "~/src/Dropbox/capture/quotes.org"), my/org-greatquotes-template :empty-lines 1)
+         ("r" "Read" entry (file+headline "~/src/Dropbox/capture/someday.org" "Read") "** %^{title}\n %^{author}" :empty-lines 1)
+         ("R" "Recipe" entry (file+headline "~/src/Dropbox/capture/recipes.org" "Recipes"), my/org-recipe-template :empty-lines 1)
+         ("s" "Subject" entry (file+headline "~/src/Dropbox/capture/someday.org" "Write"), "** %^{subject}\n" :empty-lines 1)
+         ("t" "Todo" entry (file+headline "~/src/Dropbox/capture/todo.org" "Tasks") "** ★ TODO %?\n %i\n %a" :empty-lines 1)
+         ("W" "Wishlist" entry (file+headline "~/src/Dropbox/capture/someday.org" "Wishlist") "** %^{thing}" :empty-lines 1)
+         ("w" "Watch" entry (file+headline "~/src/Dropbox/capture/someday.org" "Watch") "** ★  %^{movie title}\n %a" :empty-lines 1))))
 
   #+end_src
 
@@ -858,7 +858,7 @@ requires graphvis system package to be installed
 
   #+begin_src emacs-lisp :tangle sod.el
 
-(setq org-ditaa-jar-path "~/src/org-mode/contrib/scripts/ditaa.jar")
+(setq org-ditaa-jar-path "~/src/contrib/org-mode/contrib/scripts/ditaa.jar")
 
   #+end_src
 
@@ -974,7 +974,7 @@ requires graphvis system package to be installed
          ("end-footer" . "@@html:</footer>@@")))
   #+end_src
 
-  #+begin_src emacs-lisp :tangle sod.el
+  #+begin_src emacs-lisp :tangle no
 
 (defun my-blog/get-preview (filename)
     "Returns a list: '(<needs-more> <preview-string>) where
@@ -999,7 +999,7 @@ requires graphvis system package to be installed
 	      (buffer-substring content-start marker)))))
   #+end_src
 
-  #+begin_src emacs-lisp :tangle sod.el
+  #+begin_src emacs-lisp :tangle no
 
 (defun my-blog/sitemap (title list)
   "Generate the sitemap (Blog Main Page)"
@@ -1015,9 +1015,9 @@ requires graphvis system package to be installed
   (when (not (directory-name-p entry))
     (format (string-join
 	     '("* [[file:%s][%s]]\n"
-	       "  #+bEGIN_published\n"
+	       "  #+BEGIN_PUBLISHED\n"
 	       "%s\n"
-	       "  #+eND_published\n\n"
+	       "  #+END_PUBLISHED\n\n"
 	       "%s\n"
 	       "--------\n"))
             entry
@@ -1030,9 +1030,9 @@ requires graphvis system package to be installed
                   (format
                    (concat
                     "%s\n\n"
-                    "  #+bEGIN_morelink\n"
+                    "  #+BEGIN_MORELINK\n"
                     "[[file:%s][Read More...]]\n"
-                    "  #+eND_morelink\n")
+                    "  #+END_MORELINK\n")
                    preview-text entry)
                 (format "%s" preview-text))))))
 
@@ -1431,8 +1431,12 @@ requires graphvis system package to be installed
 
   #+begin_src emacs-lisp :tangle sod.el
 
-(use-package multiple-cursors)
-
+(use-package multiple-cursors
+   :config (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+           (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+           (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+           (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+           (define-key mc/keymap (kbd "<return>") nil))
   #+end_src
 
 **** Magit

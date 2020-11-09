@@ -68,7 +68,7 @@
 
 ** First things First
 *** Benchmarking
-    #+begin_src emacs-lisp :tangle sod.el
+    #+begin_src emacs-lisp :tangle no
  (use-package benchmark-init
      :config
      ;; To disable collection of benchmark data after init is done.
@@ -97,7 +97,7 @@
  (defun edit-config ()
      "Edit config file, sod.org"
      (interactive)
-     (find-file "~/src/github.com/techquila/.emacs.d/sod.org"))
+     (find-file "~/src/Github/techquila/.emacs.d/sod.org"))
 
    (global-set-key (kbd "C-c I") 'edit-config)
 
@@ -108,7 +108,7 @@
 
   #+begin_src emacs-lisp :tangle sod.el
 
-(setq default-directory "~/src/github.com/techquila/")
+(setq default-directory "~/src/Github/techquila/")
 
   #+end_src
 
@@ -928,7 +928,7 @@ requires graphvis system package to be installed
 
   #+begin_src emacs-lisp :tangle no
 
-(add-to-list 'load-path "~/src/github.com/techquila/my-blog-publisher/")
+(add-to-list 'load-path "~/src/Github/techquila/my-blog-publisher/")
 (load "my-blog-publisher")
 
   #+end_src
@@ -942,7 +942,7 @@ requires graphvis system package to be installed
 
   #+begin_src emacs-lisp :tangle sod.el
 
-(setq my-blog/repo "~/src/github.com/techquila/sod.oscarfono.com/blog/")
+(setq my-blog/repo "~/src/Github/techquila/sod.oscarfono.com/blog/")
 
   #+end_src
 
@@ -1263,7 +1263,7 @@ requires graphvis system package to be installed
   ;; Show all files
   (speedbar-show-unknown-files t)
   ;; Set Width (default is 24)
-  (sr-speedbar-width 35)
+  (sr-speedbar-width 50)
   ;; Set Max Width
   (sr-speedbar-max-width 35))
 

@@ -565,7 +565,13 @@
 
   #+begin_src emacs-lisp :tangle sod.el
 
-  (setq org-directory "~/src/Dropbox/creative/org")
+  (setq org-directory "~/src/Dropbox/capture")
+
+;; Set to the name of the file where new notes will be stored
+  (setq org-mobile-inbox-for-pull "~/src/Dropbox/capture/flagged.org")
+
+;; Set to <your Dropbox root directory>/MobileOrg.
+  (setq org-mobile-directory "~/src/Dropbox/apps/MobileOrg")
 
   #+end_src
 

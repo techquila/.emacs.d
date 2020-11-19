@@ -146,9 +146,10 @@
 
 *** [[https://www.emacswiki.org/emacs/ELPA][Package Management]]
 
- First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this bug]]
+ +First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this bug]]+
+Fixed in 27.1
 
-   #+begin_src emacs-lisp :tangle sod.el
+   #+begin_src emacs-lisp :tangle no
 
  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
@@ -170,7 +171,6 @@
    #+begin_src emacs-lisp :tangle sod.el
 
  (require 'package)
- (package-initialize)
  (package-refresh-contents)
 
    #+end_src
@@ -1739,7 +1739,7 @@ requires graphvis system package to be installed
 	 :init
 	   (setq js-basic-indent 2)
 	   (setq-default js2-basic-indent 2
-                         js2-basic-offset 2
+                         js2-indent-level 2
 			 js2-auto-indent-p t
 			 js2-cleanup-whitespace t
 			 js2-enter-indents-newline t

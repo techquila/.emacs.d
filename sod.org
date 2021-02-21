@@ -1,6 +1,6 @@
 #+TITLE: sod.org
-#+AUTHOR: @sodoscarfono
-#+EMAIL: sod@oscarfono.com
+#+AUTHOR: @mindthelion
+#+EMAIL: cooper@oscarfono.com
 
 * Info
   #+begin_src emacs-lisp :tangle sod.el
@@ -438,8 +438,8 @@ Fixed in 27.1
 
   #+begin_src emacs-lisp :tangle sod.el
 
- (setq user-full-name "Sod Oscarfono"
-       user-mail-address "sod@oscarfono.com")
+ (setq user-full-name "Cooper Oscarfono"
+       user-mail-address "cooper@oscarfono.com")
 
   #+end_src
 

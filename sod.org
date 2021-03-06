@@ -55,10 +55,10 @@
 * Aims
   - Build my ultimate ide/editor
   - Automate as much as I can get away with
-  - Increase my overall productivity by integrating more of the powerful tools that org-mode offers, such as org-capture templates
-  - Enhance my knowledge by learning new ways of yeilding productivity gains through emacs, and seeing how others achieve
+  - Increase my overall productivity by integrating more of the powerful tools that emacs and org-mode offers
+  - Enhance my knowledge by learning new ways of yeilding productivity gains through emacs, and seeing how others achieve this
   - Provide some sort of meaningful structure to my configuration
-  - Provide sufficient meaningful documentation in order that the next time i am inspired to play with my configuration I know whats up
+  - Provide sufficient meaningful documentation in order that the next time i'm inspired to play with my configuration I know what's up
 * Source
   #+begin_src emacs-lisp :tangle sod.el
 

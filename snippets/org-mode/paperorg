@@ -1,0 +1,41 @@
+# key: paperorg
+# name: paperorg
+# --
+#+TITLE:
+#+AUTHOR: Cooper Oscarfono
+#+EMAIL: cooper@oscarfono.com
+#+BABEL: :session *R* :cache yes :results output graphics :exports both :tangle yes
+#+STARTUP: align-----
+
+* Coordinators
+  | Name                 | Office                 |       Phone | Email                 |
+  |----------------------+------------------------+-------------+-----------------------|
+  |                      |                        |             |                       |
+
+* Assessments
+| Assessment Type    | Weighting % |       Week Assigned |            Deadline | Assessing                                                                |
+|--------------------+-------------+---------------------+---------------------+--------------------------------------------------------------------------|
+
+* Texts
+
+| Title                                                                                           | Author | ISBN | Edition | Publisher |
+|-------------------------------------------------------------------------------------------------+--------+------+---------+-----------|
+|
+
+* Glossary
+  | Term | Definition | Further reading |
+  |------+------------+-----------------|
+  |      |            |                 |
+
+* Curriculum
+** Week 1
+** Week 2
+** Week 3
+** Week 4
+** Week 5
+** Week 6
+** Week 7
+** Week 8
+** Week 9
+** Week 10
+** Week 11

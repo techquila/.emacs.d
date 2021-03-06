@@ -7,5 +7,6 @@
 
 (setq mc/cmds-to-run-once
       '(
+        end-of-buffer
         sp-backward-delete-char
         ))

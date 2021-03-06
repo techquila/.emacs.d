@@ -1,32 +1,32 @@
-#+TITLE: sod.org
+#+TITLE: Emacs Configuration File
 #+AUTHOR: @mindthelion
 #+EMAIL: cooper@oscarfono.com
 
 * Info
   #+begin_src emacs-lisp :tangle sod.el
-;;; sod.el --- emacs configuration  -*- lexical-binding: t; -*-
-;; URL: https://github.com/techquila/.emacs.d/
-;; Version: 2.04
-;; Keywords: emacs
+    ;;; sod.el --- emacs configuration  -*- lexical-binding: t; -*-
+    ;; URL: https://github.com/techquila/.emacs.d/
+    ;; Version: 2.04
+    ;; Keywords: emacs
   #+end_src
 * Copyright
   #+begin_src emacs-lisp :tangle sod.el
-;; Copyright (C) 2019 Sod Oscarfono
+    ;; Copyright (C) 2019 Cooper Oscarfono
 
-;; Author: Sod Oscarfono <sod@oscarfono.com>
+    ;; Author: Cooper Oscarfono <cooper@oscarfono.com>
 
-;; This file is free software; you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 3, or (at your option)
-;; any later version.
+    ;; This file is free software; you can redistribute it and/or modify
+    ;; it under the terms of the GNU General Public License as published by
+    ;; the Free Software Foundation; either version 3, or (at your option)
+    ;; any later version.
 
-;; This program is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
+    ;; This program is distributed in the hope that it will be useful,
+    ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ;; GNU General Public License for more details.
 
-;; For a full copy of the GNU General Public License
-;; see <http://www.gnu.org/licenses/>.
+    ;; For a full copy of the GNU General Public License
+    ;; see <http://www.gnu.org/licenses/>.
   #+end_src
 * Credits
   Standing on the shoulders of giants...
@@ -43,13 +43,14 @@
 ** [[http://pragmaticemacs.com/emacs/org-mode-basics-vii-a-todo-list-with-schedules-and-deadlines/][Dr Ben Maughan]]
 ** [[https://github.com/purcell][Steve Purcell]]
 ** [[https://jamiecollinson.com/blog/my-emacs-config/][Jamie Collinson]]
+** [[https://www.youtube.com/c/jrkitchin-jmax/videos][John Kitchen]]
 
 * Description
   Org file to better manage my emacs configuration using Babel and literate programming techniques.
   #+begin_src emacs-lisp :tangle sod.el
-;;; Commentary:
-;; ========================================
-;; Emacs configuration generated from org file using babel.
+    ;;; Commentary:
+    ;; ========================================
+    ;; Emacs configuration generated from org file using babel.
   #+end_src
 * Aims
   - Build my ultimate ide/editor
@@ -61,182 +62,182 @@
 * Source
   #+begin_src emacs-lisp :tangle sod.el
 
- ;;; Code:
- ;; ========================================
+    ;;; Code:
+    ;; ========================================
 
   #+end_src
 
 ** First things First
 *** Benchmarking
     #+begin_src emacs-lisp :tangle no
- (use-package benchmark-init
-     :config
-     ;; To disable collection of benchmark data after init is done.
-     (add-hook 'after-init-hook 'benchmark-init/deactivate)
-     (add-hook 'after-init-hook
-             (lambda () (message "loaded in %s" (emacs-init-time)))))
+      (use-package benchmark-init
+        :config
+        ;; To disable collection of benchmark data after init is done.
+        (add-hook 'after-init-hook 'benchmark-init/deactivate)
+        (add-hook 'after-init-hook
+                  (lambda () (message "loaded in %s" (emacs-init-time)))))
     #+end_src
 
 *** Garbage Collection
     #+begin_src emacs-lisp :tangle sod.el
 
- (setq gc-cons-threshold 10000000)
+      (setq gc-cons-threshold 10000000)
 
-   ;; Restore after startup
-   (add-hook 'after-init-hook
-             (lambda ()
-               (setq gc-cons-threshold 1000000)
-               (message "gc-cons-threshold restored to %S"
-			gc-cons-threshold)))
+      ;; Restore after startup
+      (add-hook 'after-init-hook
+                (lambda ()
+                  (setq gc-cons-threshold 1000000)
+                  (message "gc-cons-threshold restored to %S"
+                           gc-cons-threshold)))
 
     #+end_src
 
 *** Shortcut to quickly find and edit this file
     #+begin_src emacs-lisp :tangle sod.el
 
- (defun edit-config ()
-     "Edit config file, sod.org"
-     (interactive)
-     (find-file "~/src/Github/techquila/.emacs.d/sod.org"))
+      (defun edit-config ()
+        "Edit config file, sod.org"
+        (interactive)
+        (find-file "~/src/Github/techquila/.emacs.d/sod.org"))
 
-   (global-set-key (kbd "C-c I") 'edit-config)
+      (global-set-key (kbd "C-c I") 'edit-config)
 
 
     #+end_src
 
 *** Default Directory
 
-  #+begin_src emacs-lisp :tangle sod.el
+    #+begin_src emacs-lisp :tangle sod.el
 
-(setq default-directory "~/src/Github/techquila/")
+      (setq default-directory "~/src/Github/techquila/")
 
-  #+end_src
+    #+end_src
 
 *** Errors
 
-   #+begin_src emacs-lisp :tangle sod.el
+    #+begin_src emacs-lisp :tangle sod.el
 
- ;; backtrace on error
- (setq debug-on-error t)
+      ;; backtrace on error
+      (setq debug-on-error t)
 
-   #+end_src
+    #+end_src
 
 *** Notifications
     Replace annoying bell with visible-bell
 
- #+begin_src emacs-lisp :tangle sod.el
+    #+begin_src emacs-lisp :tangle sod.el
 
- (setq visible-bell t)
+      (setq visible-bell t)
 
- #+end_src
+    #+end_src
 
 *** Encoding
 
     #+begin_src emacs-lisp :tangle sod.el
 
-  ;; all about the 'utf-8 yo
-  (prefer-coding-system 'utf-8)
-  (set-language-environment 'utf-8)
-  (set-default-coding-systems 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (set-terminal-coding-system 'utf-8)
-  (set-selection-coding-system 'utf-8)
+      ;; all about the 'utf-8 yo
+      (prefer-coding-system 'utf-8)
+      (set-language-environment 'utf-8)
+      (set-default-coding-systems 'utf-8)
+      (set-keyboard-coding-system 'utf-8)
+      (set-terminal-coding-system 'utf-8)
+      (set-selection-coding-system 'utf-8)
 
     #+end_src
 
 *** [[https://www.emacswiki.org/emacs/ELPA][Package Management]]
 
- +First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this bug]]+
-Fixed in 27.1
+    +First let's address [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341][this bug]]+
+    Fixed in 27.1
 
-   #+begin_src emacs-lisp :tangle no
+    #+begin_src emacs-lisp :tangle no
 
- (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+      (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
-   #+end_src
+    #+end_src
 
     We source our packages from the following repositories only:
 
-   #+begin_src emacs-lisp :tangle sod.el
+    #+begin_src emacs-lisp :tangle sod.el
 
- (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                          ("melpa" . "https://melpa.org/packages/")
-                          ("org" . "https://orgmode.org/elpa/")))
+      (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                               ("melpa" . "https://melpa.org/packages/")
+                               ("org" . "https://orgmode.org/elpa/")))
 
-   #+end_src
+    #+end_src
 
 **** Package Initialistion
      Activate all the packages, (in particular autoloads), and set load path.
 
-   #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
- (require 'package)
- (package-refresh-contents)
+       (require 'package)
+       (package-refresh-contents)
 
-   #+end_src
+     #+end_src
 
 **** use-package
 ***** Install [[https://github.com/jwiegley/use-package/blob/master/README.md][use-package]], unless present.
 
-   #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
- (unless (package-installed-p 'use-package)
-   (package-refresh-contents)
-   (package-install 'use-package))
+        (unless (package-installed-p 'use-package)
+          (package-refresh-contents)
+          (package-install 'use-package))
 
- (setq use-package-verbose t)
+        (setq use-package-verbose t)
 
- (require 'use-package)
+        (require 'use-package)
 
-   #+end_src
+      #+end_src
 
 ***** Download packages not installed
       Ensure that [[https://github.com/jwiegley/use-package/blob/master/README.md][use-package]] downloads and installs packages that are not found locally. /(This requires [[http://wikemacs.org/wiki/Package.el][package.el]])/
 
-   #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
- (setq use-package-always-ensure t)
+        (setq use-package-always-ensure t)
 
-   #+end_src
+      #+end_src
 
 ***** Keep packages updated automatically
 
-   #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
- (use-package auto-package-update
-   :config
-     (setq auto-package-update-delete-old-versions t)
-     (setq auto-package-update-hide-results t)
-     (auto-package-update-maybe))
+        (use-package auto-package-update
+          :config
+          (setq auto-package-update-delete-old-versions t)
+          (setq auto-package-update-hide-results t)
+          (auto-package-update-maybe))
 
-   #+end_src
+      #+end_src
 
 ***** Ensure required system packages are installed
 
-   #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
- (use-package use-package-ensure-system-package)
+        (use-package use-package-ensure-system-package)
 
-   #+end_src
+      #+end_src
 
 ***** Diminishing and delighting minor modes
 ****** Diminish
        "diminish is invoked with the :diminish keyword, which is passed either a minor mode symbol, a cons of the symbol and its replacement string, or just a replacement string, in which case the minor mode symbol is guessed to be the package name with "-mode" appended at the end:"
 
-   #+begin_src emacs-lisp :tangle sod.el
+       #+begin_src emacs-lisp :tangle sod.el
 
- (use-package diminish)
+         (use-package diminish)
 
-   #+end_src
+       #+end_src
 
 ****** Delight
        "delight is invoked with the :delight keyword, which is passed a minor mode symbol, a replacement string or quoted mode-line data (in which case the minor mode symbol is guessed to be the package name with "-mode" appended at the end), both of these, or several lists of both. If no arguments are provided, the default mode name is hidden completely."
 
-   #+begin_src emacs-lisp :tangle sod.el
+       #+begin_src emacs-lisp :tangle sod.el
 
- (use-package delight)
+         (use-package delight)
 
-   #+end_src
+       #+end_src
 
 *** File Management
     To keep the user's home and the =~/.emacs.d= folder as clean as possible, I
@@ -245,91 +246,91 @@ Fixed in 27.1
     GNU Emacs will not create the appropriate folders if they do not
     exist. Therefore, it is necessary to create them yourself:
 
-   #+begin_src bash
+    #+begin_src bash
 
-   mkdir ~/.cache/emacs ~/.local/share/emacs/
+      mkdir ~/.cache/emacs ~/.local/share/emacs/
 
-   #+end_src
+    #+end_src
 
     *NOTE:* you can find out more by going to my [[https://github.com/techquila/dotfiles][dotfiles]].
 
-   #+begin_src emacs-lisp :tangle sod.el
+    #+begin_src emacs-lisp :tangle sod.el
 
-   (defvar xdg-bin (getenv "XDG_BIN_HOME")
-     "The XDG bin base directory.")
+      (defvar xdg-bin (getenv "XDG_BIN_HOME")
+        "The XDG bin base directory.")
 
-   (defvar xdg-cache (getenv "XDG_CACHE_HOME")
-     "The XDG cache base directory.")
+      (defvar xdg-cache (getenv "XDG_CACHE_HOME")
+        "The XDG cache base directory.")
 
-   (defvar xdg-config (getenv "XDG_CONFIG_HOME")
-     "The XDG config base directory.")
+      (defvar xdg-config (getenv "XDG_CONFIG_HOME")
+        "The XDG config base directory.")
 
-   (defvar xdg-data (getenv "XDG_DATA_HOME")
-     "The XDG data base directory.")
+      (defvar xdg-data (getenv "XDG_DATA_HOME")
+        "The XDG data base directory.")
 
-   (defvar xdg-lib (getenv "XDG_LIB_HOME")
-     "The XDG lib base directory.")
+      (defvar xdg-lib (getenv "XDG_LIB_HOME")
+        "The XDG lib base directory.")
 
-   #+end_src
+    #+end_src
 
 *** Backups
     bastardised from [[https://stackoverflow.com/questions/151945/how-do-i-control-how-emacs-makes-backup-files][this stackoverflow post]]
 
 **** Set backup directory and sane defaults.
 
-   #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
- (defvar --backup-directory (concat user-emacs-directory "backups"))
- (if (not (file-exists-p --backup-directory))
-         (make-directory --backup-directory t))
- (setq backup-directory-alist `(("." . ,--backup-directory)))
- (setq make-backup-files t               ; backup of a file the first time it is saved.
-       backup-by-copying t               ; don't clobber symlinks
-       version-control t                 ; version numbers for backup files
-       vc-make-backup-files t            ; backup versioned files, which Emacs does not do by default (you don't commit on every save, right?)
-       delete-old-versions t             ; delete excess backup files silently
-       delete-by-moving-to-trash t
-       kept-old-versions 2               ; oldest versions to keep when a new numbered backup is made (default: 2)
-       kept-new-versions 10              ; newest versions to keep when a new numbered backup is made (default: 2)
-       auto-save-default t               ; auto-save every buffer that visits a file
-       auto-save-timeout 20              ; number of seconds idle time before auto-save (default: 30)
-       auto-save-interval 200            ; number of keystrokes between auto-saves (default: 300)
-       auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
+       (defvar --backup-directory (concat user-emacs-directory "backups"))
+       (if (not (file-exists-p --backup-directory))
+           (make-directory --backup-directory t))
+       (setq backup-directory-alist `(("." . ,--backup-directory)))
+       (setq make-backup-files t               ; backup of a file the first time it is saved.
+             backup-by-copying t               ; don't clobber symlinks
+             version-control t                 ; version numbers for backup files
+             vc-make-backup-files t            ; backup versioned files, which Emacs does not do by default (you don't commit on every save, right?)
+             delete-old-versions t             ; delete excess backup files silently
+             delete-by-moving-to-trash t
+             kept-old-versions 2               ; oldest versions to keep when a new numbered backup is made (default: 2)
+             kept-new-versions 10              ; newest versions to keep when a new numbered backup is made (default: 2)
+             auto-save-default t               ; auto-save every buffer that visits a file
+             auto-save-timeout 20              ; number of seconds idle time before auto-save (default: 30)
+             auto-save-interval 200            ; number of keystrokes between auto-saves (default: 300)
+             auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
 
-   #+end_src
+     #+end_src
 
 **** per save and per session backups
 
-   #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
- ;; Default and per-save backups go here:
- (setq backup-directory-alist '(("" . "~/.emacs.d/backups/per-save")))
+       ;; Default and per-save backups go here:
+       (setq backup-directory-alist '(("" . "~/.emacs.d/backups/per-save")))
 
- (defun force-backup-of-buffer ()
-   ;; Make a special "per session" backup at the first save of each
-   ;; emacs session.
-   (when (not buffer-backed-up)
-     ;; Override the default parameters for per-session backups.
-     (let ((backup-directory-alist '(("" . "~/.emacs.d/backups/per-session")))
-           (kept-new-versions 3))
-       (backup-buffer)))
-   ;; Make a "per save" backup on each save.  The first save results in
-   ;; both a per-session and a per-save backup, to keep the numbering
-   ;; of per-save backups consistent.
-   (let ((buffer-backed-up nil))
-     (backup-buffer)))
+       (defun force-backup-of-buffer ()
+         ;; Make a special "per session" backup at the first save of each
+         ;; emacs session.
+         (when (not buffer-backed-up)
+           ;; Override the default parameters for per-session backups.
+           (let ((backup-directory-alist '(("" . "~/.emacs.d/backups/per-session")))
+                 (kept-new-versions 3))
+             (backup-buffer)))
+         ;; Make a "per save" backup on each save.  The first save results in
+         ;; both a per-session and a per-save backup, to keep the numbering
+         ;; of per-save backups consistent.
+         (let ((buffer-backed-up nil))
+           (backup-buffer)))
 
- (add-hook 'before-save-hook  'force-backup-of-buffer)
+       (add-hook 'before-save-hook  'force-backup-of-buffer)
 
-   #+end_src
+     #+end_src
 
 **** Stop lock files being created
 
-   #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
- (setq create-lockfiles nil)
+       (setq create-lockfiles nil)
 
-   #+end_src
+     #+end_src
 
 *** Authentication
 **** Auth source
@@ -337,83 +338,83 @@ Fixed in 27.1
      directory where I store my authentication details for the various
      services I need to authenticate to.  ERC and Org2Blog need these credentials to operate.
 
-   #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
- (require 'auth-source)
- (add-to-list 'auth-sources "~/.authinfo.gpg")
+       (require 'auth-source)
+       (add-to-list 'auth-sources "~/.authinfo.gpg")
 
-   #+end_src
+     #+end_src
 
 **** IRC
      Load configuration and authentication info from an external source.
 
-   #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
- (load "~/.emacs.d/secrets/erc-config.el")
+       (load "~/.emacs.d/secrets/erc-config.el")
 
-   #+end_src
+     #+end_src
 
 *** Encryption
 
 **** GPG Agent
      Use an agent to manage GPG between shell sessions.
 
-   #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
- (setq epg-gpg-program "/usr/bin/gpg")
+       (setq epg-gpg-program "/usr/bin/gpg")
 
-   #+end_src
+     #+end_src
 
 **** [[https://www.emacswiki.org/emacs/EasyPG][EasyPG]] to encrypt/decrypt files with a .gpg extension
      Add the following line to the top of the document to be encrypted and save the file with a .gpg extension.
 
-   #+begin_example
+     #+begin_example
 
-     # -*- mode:org; epa-file-encrypt-to: ("sod@oscarfono.com") -*-
+       # -*- mode:org; epa-file-encrypt-to: ("sod@oscarfono.com") -*-
 
-   #+end_example
+     #+end_example
 
-   #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
- (require 'epa-file)
- (epa-file-enable)
+       (require 'epa-file)
+       (epa-file-enable)
 
-   #+end_src
+     #+end_src
 
 *** Shell
 
 **** Environment Management
      #+begin_src emacs-lisp :tangle sod.el
 
-(use-package exec-path-from-shell
-    :config
-    (exec-path-from-shell-initialize))
+       (use-package exec-path-from-shell
+         :config
+         (exec-path-from-shell-initialize))
 
      #+end_src
 
 **** Terminal Emulation with [[https://www.emacswiki.org/emacs/MultiTerm][multi-term]]
      Multiple concurrent terminal buffers are the only way to roll.  To start one just simply 'Control-Meta-SPACEBAR'.
 
-   #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
- (use-package multi-term
-   :bind ("C-M-SPC" . multi-term))
+       (use-package multi-term
+         :bind ("C-M-SPC" . multi-term))
 
-   #+end_src
+     #+end_src
 
 *** Syntax Highlighting
     Activate syntax highlighting globally
 
- #+begin_src emacs-lisp :tangle sod.el
+    #+begin_src emacs-lisp :tangle sod.el
 
-(global-font-lock-mode 1)
+      (global-font-lock-mode 1)
 
- #+end_src
+    #+end_src
 
 *** Customization
     #+begin_src emacs-lisp :tangle true
 
-(setq custom-file (make-temp-file "emacs-custom"))
+      (setq custom-file (make-temp-file "emacs-custom"))
 
     #+end_src
 
@@ -421,7 +422,7 @@ Fixed in 27.1
 **** Delete trailing whitespace
      #+begin_src emacs-lisp :tangle sod.el
 
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+       (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
      #+end_src
 
@@ -429,225 +430,238 @@ Fixed in 27.1
 
     #+begin_src emacs-lisp :tangle sod.el
 
-(setq-default indent-tabs-mode nil)
+      (setq-default indent-tabs-mode nil)
 
     #+end_src
 
 ** Personalisation
 *** Default Name and Email
 
-  #+begin_src emacs-lisp :tangle sod.el
+    #+begin_src emacs-lisp :tangle sod.el
 
- (setq user-full-name "Cooper Oscarfono"
-       user-mail-address "cooper@oscarfono.com")
+      (setq user-full-name "Cooper Oscarfono"
+            user-mail-address "cooper@oscarfono.com")
 
-  #+end_src
+    #+end_src
 
 *** Theme
 **** [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Windows-and-Frames.html#Windows-and-Frames][Frames]]
 ***** start fullscreen
 
-   #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+        (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-   #+end_src
+      #+end_src
 
 ***** Menu bar
       I like the menu bar to be present so i can find things i've forgotten about
 
-   #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-  (menu-bar-mode 1)
+        (menu-bar-mode 1)
 
-   #+end_src
+      #+end_src
 
 ***** Scroll bars
       I like to see scrollbars for visual reference usually but am trialling without for now.
 
-   #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-  (scroll-bar-mode 0)
+        (scroll-bar-mode 0)
 
-   #+end_src
+      #+end_src
 
       Smoother scrolling experience
 
-   #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-  (setq scroll-step           1
-	 scroll-conservatively 10000)
+        (setq scroll-step           1
+              scroll-conservatively 10000)
 
-   #+end_src
+      #+end_src
 
 ***** Tool bar
       I don't like to see the tool bar taking up my valuable screen real estate
 
-   #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-  (tool-bar-mode 0)
+        (tool-bar-mode 0)
 
-   #+end_src
+      #+end_src
 
 ***** Mode line
       Display full path of file on mode line
 
-   #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-  (setq-default mode-line-buffer-identification
-		(let ((orig  (car mode-line-buffer-identification)))
-                  `(:eval (cons (concat ,orig (abbreviate-file-name default-directory))
-				(cdr mode-line-buffer-identification)))))
+        (setq-default mode-line-buffer-identification
+                      (let ((orig  (car mode-line-buffer-identification)))
+                        `(:eval (cons (concat ,orig (abbreviate-file-name default-directory))
+                                      (cdr mode-line-buffer-identification)))))
 
-   #+end_src
+      #+end_src
 
 **** [[https://github.com/techquila/melancholy-theme.el][melancholy-theme]]
      The custom theme I'm working on.  Ongoing development. WIP.
 
-   #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
- (use-package melancholy-theme)
+       (use-package melancholy-theme)
 
- (load-theme 'melancholy t)
+       (load-theme 'melancholy t)
 
-   #+end_src
+     #+end_src
 
 **** [[https://github.com/domtronn/all-the-icons.el#installation][icons]]
      Some sweet icons to enhance the ui.
 
      In order for the icons to work it is very important that you install the Resource Fonts included in this package, they are available in the fonts directory. You can also install the latest fonts for this package in the (guessed?) based on the OS by calling the following function:
 
-   #+begin_example
+     #+begin_example
 
-     M-x all-the-icons-install-fonts
+       M-x all-the-icons-install-fonts
 
-   #+end_example
+     #+end_example
 
-   #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
- (use-package all-the-icons)
+       (use-package all-the-icons)
 
-   #+end_src
+     #+end_src
 
 **** Modeline
 ***** [[https://github.com/seagle0128/doom-modeline][doom-modeline]]
       This was a much better option than what I was doing previously.
 
-   #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-  (use-package doom-modeline
-    :hook (after-init . doom-modeline-mode))
+        (use-package doom-modeline
+          :hook (after-init . doom-modeline-mode))
 
-   #+end_src
+      #+end_src
 
 **** Inhibit startup screen.
      I don't want the default start up screen displayed on start up.  That logo is hideous!  Nor do I want a scratch buffer.
 
-   #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
- (setq inhibit-startup-message t)
+       (setq inhibit-startup-message t)
 
-   #+end_src
+     #+end_src
 
 ** Productivity Management
 *** [[http://orgmode.org/][Org-mode]]
 **** global settings:
 ***** use org
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-(use-package org
-  :ensure org-plus-contrib)
+        (use-package org
+          :ensure org-plus-contrib)
 
-  #+end_src
+      #+end_src
 
 ***** set default directory and files
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-  (setq org-directory "~/src/Dropbox/capture")
+        (setq org-directory "~/src/Dropbox/capture")
 
-;; Set to the name of the file where new notes will be stored
-  (setq org-mobile-inbox-for-pull "~/src/Dropbox/capture/flagged.org")
+        ;; Set to the name of the file where new notes will be stored
+        (setq org-mobile-inbox-for-pull "~/src/Dropbox/capture/flagged.org")
 
-;; Set to <your Dropbox root directory>/MobileOrg.
-  (setq org-mobile-directory "~/src/Dropbox/apps/MobileOrg")
+        ;; Set to <your Dropbox root directory>/MobileOrg.
+        (setq org-mobile-directory "~/src/Dropbox/apps/MobileOrg")
 
-  #+end_src
+      #+end_src
 
 ***** set global key-bindings for org-mode features
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-(define-key global-map "\C-cl" 'org-store-link)
+        (define-key global-map "\C-cl" 'org-store-link)
 
-  #+end_src
+      #+end_src
 
 ***** use org-contacts for contact management
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-(use-package org-contacts
-  :ensure nil
-  :after org
-  :custom (org-contacts-files '("~/src/Dropbox/capture/contacts.org")))
+        (use-package org-contacts
+          :ensure nil
+          :after org
+          :custom (org-contacts-files '("~/src/Dropbox/capture/contacts.org")))
 
-  #+end_src
+      #+end_src
 
 ***** skeleton setup for org files
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-(define-skeleton org-skeleton
-  "Header info for a emacs-org file."
-  "Title: "
-  "#+TITLE: " str " \n"
-  "#+AUTHOR: Sod Oscarfono \n"
-  "#+EMAIL: sod@oscarfono.com\n"
-  "#+BABEL: :session *R* :cache yes :results output graphics :exports both :tangle yes \n"
-  "#+STARTUP: align"
-  "-----"
- )
-(global-set-key [C-S-f4] 'org-skeleton)
+        (define-skeleton org-skeleton
+          "Header info for a emacs-org file."
+          "Title: "
+          "#+TITLE: " str " \n"
+          "#+AUTHOR: Cooper Oscarfono \n"
+          "#+EMAIL:  cooper@oscarfono.com\n"
+          "#+BABEL:  :session *R* :cache yes :results output graphics :exports both :tangle yes \n"
+          "#+STARTUP: align"
+          "-----"
+          )
+        (global-set-key [C-S-f4] 'org-skeleton)
 
-  #+end_src
+      #+end_src
 
+
+***** skeleton setup for academic writing
+      #+begin_src emacs-lisp :tangle sod.el
+        (define-skeleton apa-skeleton
+          "Header info for academic writing documents using apa referencing and latex"
+          "#+TITLE: " str " \n"
+          "#+OPTIONS: title:nil toc:nil H:4 author:nil date:nil TeX:t LaTeX:t  ^:nil \n"
+          "#+EXPORT_SELECT_TAGS: export \n"
+          "#+EXPORT_EXCLUDE_TAGS: noexport \n"
+          "#+INCLUDE: './preamble.org'"
+          )
+        (global-set-key [C-S-f5] 'apa-skeleton)
+      #+end_src
 ***** org tempo for source block expansion
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-(require 'org-tempo)
+        (require 'org-tempo)
 
-  #+end_src
+      #+end_src
 
 ***** clock-in
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-(setq org-clock-persist 'history)
-(org-clock-persistence-insinuate)
+        (setq org-clock-persist 'history)
+        (org-clock-persistence-insinuate)
 
-  #+end_src
+      #+end_src
 
 **** TODO's
 ***** set file and priorities
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-;;file to save todo items
-(setq org-agenda-files (quote ("~/src/Dropbox/capture/todo.org")))
+        ;;file to save todo items
+        (setq org-agenda-files (quote ("~/src/Dropbox/capture/todo.org")))
 
-;;set priority range from A to C with default A
-(setq org-highest-priority ?A)
-(setq org-lowest-priority ?C)
-(setq org-default-priority ?C)
+        ;;set priority range from A to C with default A
+        (setq org-highest-priority ?A)
+        (setq org-lowest-priority ?C)
+        (setq org-default-priority ?C)
 
-;;set colours for priorities
-(setq org-priority-faces '((?A . (:foreground "#f92672" :weight bold))
-                           (?B . (:foreground "#00b7ff"))
-                           (?C . (:foreground "#ffb728"))))
+        ;;set colours for priorities
+        (setq org-priority-faces '((?A . (:foreground "#f92672" :weight bold))
+                                   (?B . (:foreground "#00b7ff"))
+                                   (?C . (:foreground "#ffb728"))))
 
-  #+end_src
+      #+end_src
 
 ***** set *TODO* sequence
       When TODO keywords are used as workflow states, you might want to keep
@@ -667,482 +681,491 @@ Fixed in 27.1
       note with timestamp) in parentheses after each keyword. For example,
       with the setting:
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-(setq org-todo-keywords
-  '((sequence "★ TODO(t)" ">>> NEXT(n/)" "⚠ WAIT(w@/!)" "|" "✔ DONE(d!)" "✘ KILL(k!)" "➰ PASS(p@/!)" )))
+        (setq org-todo-keywords
+              '((sequence "★ TODO(t)" ">>> NEXT(n/)" "⚠ WAIT(w@/!)" "|" "✔ DONE(d!)" "✘ KILL(k!)" "➰ PASS(p@/!)" )))
 
-  #+end_src
+      #+end_src
 
 ***** Log *TODO* done time
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-(setq org-log-done 'time)
+        (setq org-log-done 'time)
 
-  #+end_src
+      #+end_src
 
 ***** Set line wrap
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-(setq org-startup-align-all-tables t)
-;; (setq org-startup-indented t)
-;; (setq org-startup-truncated nil) ;; Messes with org-mode tables
+        (setq org-startup-align-all-tables t)
+        ;; (setq org-startup-indented t)
+        ;; (setq org-startup-truncated nil) ;; Messes with org-mode tables
 
-  #+end_src
+      #+end_src
 
 **** [[http://orgmode.org/manual/Agenda-Views.html][org-agenda]]
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-  (org-agenda nil "a") ;; present org-agenda on emacs startup
+       (org-agenda nil "a") ;; present org-agenda on emacs startup
 
-  (define-key global-map "\C-ca" 'org-agenda)
+       (define-key global-map "\C-ca" 'org-agenda)
 
-  ;; Emacs contains the calendar and diary by Edward M. Reingold.  The
-  ;; calendar displays a three-month calendar with holidays from
-  ;; different countries and cultures. The diary allows you to keep
-  ;; track of anniversaries, lunar phases, sunrise/set, recurrent
-  ;; appointments (weekly, monthly) and more. In this way, it is quite
-  ;; complementary to Org. It can be very useful to combine output from
-  ;; Org with the diary.
+       ;; Emacs contains the calendar and diary by Edward M. Reingold.  The
+       ;; calendar displays a three-month calendar with holidays from
+       ;; different countries and cultures. The diary allows you to keep
+       ;; track of anniversaries, lunar phases, sunrise/set, recurrent
+       ;; appointments (weekly, monthly) and more. In this way, it is quite
+       ;; complementary to Org. It can be very useful to combine output from
+       ;; Org with the diary.
 
-  ;; In order to include entries from the Emacs diary into Org mode's
-  ;; agenda, you only need to customize the variable
-  (setq org-agenda-include-diary t)
+       ;; In order to include entries from the Emacs diary into Org mode's
+       ;; agenda, you only need to customize the variable
+       (setq org-agenda-include-diary t)
 
-  ;;open agenda in current window
-  (setq org-agenda-window-setup (quote current-window))
-  ;;warn me of any deadlines in next 7 days
-  (setq org-deadline-warning-days 7)
-  ;;show me tasks scheduled or due in next fortnight
-  (setq org-agenda-span (quote fortnight))
-  ;;don't show tasks as scheduled if they are already shown as a deadline
-  (setq org-agenda-skip-scheduled-if-deadline-is-shown t)
-  ;;don't give awarning colour to tasks with impending deadlines
-  ;;if they are scheduled to be done
-  (setq org-agenda-skip-deadline-prewarning-if-scheduled (quote pre-scheduled))
-  ;;don't show tasks that are scheduled or have deadlines in the
-  ;;normal todo list
-  (setq org-agenda-todo-ignore-deadlines (quote all))
-  (setq org-agenda-todo-ignore-scheduled (quote all))
-  ;;sort tasks in order of when they are due and then by priority
-  (setq org-agenda-sorting-strategy
-    (quote
-     ((agenda deadline-up priority-down)
-      (todo priority-down category-keep)
-      (tags priority-down category-keep)
-      (search category-keep))))
-  #+end_src
+       ;;open agenda in current window
+       (setq org-agenda-window-setup (quote current-window))
+       ;;warn me of any deadlines in next 7 days
+       (setq org-deadline-warning-days 7)
+       ;;show me tasks scheduled or due in next fortnight
+       (setq org-agenda-span (quote fortnight))
+       ;;don't show tasks as scheduled if they are already shown as a deadline
+       (setq org-agenda-skip-scheduled-if-deadline-is-shown t)
+       ;;don't give awarning colour to tasks with impending deadlines
+       ;;if they are scheduled to be done
+       (setq org-agenda-skip-deadline-prewarning-if-scheduled (quote pre-scheduled))
+       ;;don't show tasks that are scheduled or have deadlines in the
+       ;;normal todo list
+       (setq org-agenda-todo-ignore-deadlines (quote all))
+       (setq org-agenda-todo-ignore-scheduled (quote all))
+       ;;sort tasks in order of when they are due and then by priority
+       (setq org-agenda-sorting-strategy
+             (quote
+              ((agenda deadline-up priority-down)
+               (todo priority-down category-keep)
+               (tags priority-down category-keep)
+               (search category-keep))))
+     #+end_src
 
 **** [[https://github.com/sabof/org-bullets][org-bullets]]
      Show org-mode bullets as UTF-8 characters.
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-(use-package org-bullets
-  :config (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+       (use-package org-bullets
+         :config (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
-  #+end_src
+     #+end_src
 
 **** [[http://orgmode.org/manual/Capture.html#Capture][org-capture]]
      Capture lets you quickly store notes with little interruption of your work flow.
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-(define-key global-map "\C-cc" 'org-capture)
+       (define-key global-map "\C-cc" 'org-capture)
 
-  #+end_src
+     #+end_src
 
 **** [[http://orgmode.org/manual/Capture-templates.html#Capture-templates][org-capture-templates]]
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-    (use-package org-capture
-      :ensure nil
-      :after org
-      :preface
-        (defvar my/org-contacts-template "** %^{contact}
-          :PROPERTIES:
-            :ADDRESS: %^{street name. city, postcode NZ}
-            :BIRTHDAY: %^{yyyy-mm-dd}t
-            :EMAIL: %(org-contacts-template-email)
-            :PHONE: %^{022 222 222}
-            :NOTE: %^{NOTE}
-          :END:" "Template for org-contacts.")
-        (defvar my/org-expenses-template "* %^{expense}
-          :PROPERTIES:
-            :DATE: %U
-            :AMOUNT: %^{$0.00}
-            :PAID_TO: %^{company}
-            :PAYMENT_TYPE: %^{eftpos|cash|effort}
-          :END:" "Template to capture expenses")
-        (defvar my/org-greatquotes-template "* %^{great quote here}
-         :PROPERTIES:
-           :QUOTE: %^{great quote}
-           :ATTRIBUTION: /n %?
-         :END" "Template to capture great quotes when i learn of them")
-        (defvar my/org-recipe-template "** %^{recipe-name}
-          :PROPERTIES:
-            :PREPTIME:
-            :COOKTIME:
-            :EATTIME:
-            :INGREDIENTS: %?
-            :METHOD:
-            :SHOPLIST:
-          :END:" "Template to capture recipe information")
-     :custom
-     (org-capture-templates
-       `(("c" "Contact" entry (file+headline "~/src/Dropbox/capture/contacts.org" "Friends"), my/org-contacts-template :empty-lines 1)
-         ("d" "Documentation" entry (file+headline "~/src/Dropbox/capture/docs.org" "Documentation") "** %^{Subject}\n %^g\n %?\n %i\n Added %U")
-         ("e" "Expense" entry (file+olp+datetree "~/src/Dropbox/capture/expenses.org"), my/org-expenses-template :empty-lines 1)
-         ("i" "Idea" entry (file+olp+datetree "~/src/Dropbox/capture/ideas.org" "Ideas") "**  %?\n I had this idea on %U\n %a" :empty-lines 1)
-         ("j" "Journal" entry (file+olp+datetree "~/src/Dropbox/capture/journal.org") "* %?\n Entered on %U\n" :empty-lines 1)
-         ("L" "Lyric" entry (file+headline "~/src/Dropbox/capture/lyrics.org" "Lyrical Ideas Capture") "** %^{working-title}\n %^{verse}\n %^{hook}\n")
-         ("p" "Quote" entry (file+headline "~/src/Dropbox/capture/quotes.org"), my/org-greatquotes-template :empty-lines 1)
-         ("r" "Read" entry (file+headline "~/src/Dropbox/capture/someday.org" "Read") "** %^{title}\n %^{author}" :empty-lines 1)
-         ("R" "Recipe" entry (file+headline "~/src/Dropbox/capture/recipes.org" "Recipes"), my/org-recipe-template :empty-lines 1)
-         ("s" "Subject" entry (file+headline "~/src/Dropbox/capture/someday.org" "Write"), "** %^{subject}\n" :empty-lines 1)
-         ("t" "Todo" entry (file+headline "~/src/Dropbox/capture/todo.org" "Tasks") "** ★ TODO %?\n %i\n %a" :empty-lines 1)
-         ("W" "Wishlist" entry (file+headline "~/src/Dropbox/capture/someday.org" "Wishlist") "** %^{thing}" :empty-lines 1)
-         ("w" "Watch" entry (file+headline "~/src/Dropbox/capture/someday.org" "Watch") "** ★  %^{movie title}\n %a" :empty-lines 1))))
+       (use-package org-capture
+         :ensure nil
+         :after org
+         :preface
+         (defvar my/org-contacts-template "** %^{contact}
+             :PROPERTIES:
+               :ADDRESS: %^{street name. city, postcode NZ}
+               :BIRTHDAY: %^{yyyy-mm-dd}t
+               :EMAIL: %(org-contacts-template-email)
+               :PHONE: %^{022 222 222}
+               :NOTE: %^{NOTE}
+             :END:" "Template for org-contacts.")
+         (defvar my/org-expenses-template "* %^{expense}
+             :PROPERTIES:
+               :DATE: %U
+               :AMOUNT: %^{$0.00}
+               :PAID_TO: %^{company}
+               :PAYMENT_TYPE: %^{eftpos|cash|effort}
+             :END:" "Template to capture expenses")
+         (defvar my/org-greatquotes-template "* %^{great quote here}
+            :PROPERTIES:
+              :QUOTE: %^{great quote}
+              :ATTRIBUTION: /n %?
+            :END" "Template to capture great quotes when i learn of them")
+         (defvar my/org-recipe-template "** %^{recipe-name}
+             :PROPERTIES:
+               :PREPTIME:
+               :COOKTIME:
+               :EATTIME:
+               :INGREDIENTS: %?
+               :METHOD:
+               :SHOPLIST:
+             :END:" "Template to capture recipe information")
+         :custom
+         (org-capture-templates
+          `(("c" "Contact" entry (file+headline "~/src/Dropbox/capture/contacts.org" "Friends"), my/org-contacts-template :empty-lines 1)
+            ("d" "Documentation" entry (file+headline "~/src/Dropbox/capture/docs.org" "Documentation") "** %^{Subject}\n %^g\n %?\n %i\n Added %U")
+            ("e" "Expense" entry (file+olp+datetree "~/src/Dropbox/capture/expenses.org"), my/org-expenses-template :empty-lines 1)
+            ("i" "Idea" entry (file+olp+datetree "~/src/Dropbox/capture/ideas.org" "Ideas") "**  %?\n I had this idea on %U\n %a" :empty-lines 1)
+            ("j" "Journal" entry (file+olp+datetree "~/src/Dropbox/capture/journal.org") "* %?\n Entered on %U\n" :empty-lines 1)
+            ("L" "Lyric" entry (file+headline "~/src/Dropbox/capture/lyrics.org" "Lyrical Ideas Capture") "** %^{working-title}\n %^{verse}\n %^{hook}\n")
+            ("p" "Quote" entry (file+headline "~/src/Dropbox/capture/quotes.org"), my/org-greatquotes-template :empty-lines 1)
+            ("r" "Read" entry (file+headline "~/src/Dropbox/capture/someday.org" "Read") "** %^{title}\n %^{author}" :empty-lines 1)
+            ("R" "Recipe" entry (file+headline "~/src/Dropbox/capture/recipes.org" "Recipes"), my/org-recipe-template :empty-lines 1)
+            ("s" "Subject" entry (file+headline "~/src/Dropbox/capture/someday.org" "Write"), "** %^{subject}\n" :empty-lines 1)
+            ("t" "Todo" entry (file+headline "~/src/Dropbox/capture/todo.org" "Tasks") "** ★ TODO %?\n %i\n %a" :empty-lines 1)
+            ("W" "Wishlist" entry (file+headline "~/src/Dropbox/capture/someday.org" "Wishlist") "** %^{thing}" :empty-lines 1)
+            ("w" "Watch" entry (file+headline "~/src/Dropbox/capture/someday.org" "Watch") "** ★  %^{movie title}\n %a" :empty-lines 1))))
 
-  #+end_src
+     #+end_src
 
 **** org-exports
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-(require 'ox-latex)
-(unless (boundp 'org-latex-classes)
-  (setq org-latex-classes nil))
-(add-to-list 'org-latex-classes
-	     '("article"
-	       "\\documentclass{article}"
-	       ("\\section{%s}" . "\\section*{%s}")
-	       ("\\subsection{%s}" . "\\subsection*{%s}")
-	       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-	       ("\\paragraph{%s}" . "\\paragraph*{%s}")
-	       ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
-	      '("book"
-	       "\\documentclass{book}"
-	       ("\\part{%s}" . "\\part*{%s}")
-	       ("\\chapter{%s}" . "\\chapter*{%s}")
-	       ("\\section{%s}" . "\\section*{%s}")
-	       ("\\subsection{%s}" . "\\subsection*{%s}")
-	       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
+       (require 'ox-latex)
+       (unless (boundp 'org-latex-classes)
+         (setq org-latex-classes nil))
+       (add-to-list 'org-latex-classes
+                    '("article"
+                      "\\documentclass{article}"
+                      ("\\section{%s}" . "\\section*{%s}")
+                      ("\\subsection{%s}" . "\\subsection*{%s}")
+                      ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                      ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                      ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+                    '("book"
+                      "\\documentclass{book}"
+                      ("\\part{%s}" . "\\part*{%s}")
+                      ("\\chapter{%s}" . "\\chapter*{%s}")
+                      ("\\section{%s}" . "\\section*{%s}")
+                      ("\\subsection{%s}" . "\\subsection*{%s}")
+                      ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
 
-(use-package ox-hugo)
-(use-package ox-mediawiki)
-(use-package ox-slimhtml)
+       (setq org-latex-listings 'minted
+             org-latex-packages-alist '(("" "minted"))
+             org-latex-pdf-process (quote ("texi2dvi --pdf %f
+                                               pdflatex --shell-escape %f
+                                               texi2dvi --pdf %f --shell-escape
+                                               latexmk -pdflatex='lualatex -shell-escape -interaction nonstopmode' -pdf -f  %f --synctex=1")))
 
-(setq org-export-backends '(ascii html hugo latex md mediawiki slimhtml))
+       (use-package ox-hugo)
+       (use-package ox-mediawiki)
+       (use-package ox-slimhtml)
 
-  #+end_src
+       (setq org-export-backends '(ascii html hugo latex md mediawiki slimhtml))
+
+
+     #+end_src
+
 
 **** org-babel
 ***** use org-install
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-(require 'org-install)
+        (require 'org-install)
 
-  #+end_src
+      #+end_src
 
 ***** make results lowercase
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-; Make babel results blocks lowercase
-(setq org-babel-results-keyword "results")
+                                                ; Make babel results blocks lowercase
+        (setq org-babel-results-keyword "results")
 
-  #+end_src
+      #+end_src
 
 ***** ditaa
-requires graphvis system package to be installed
+      requires graphvis system package to be installed
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-(setq org-ditaa-jar-path "~/src/contrib/org-mode/contrib/scripts/ditaa.jar")
+        (setq org-ditaa-jar-path "~/src/contrib/org-mode/contrib/scripts/ditaa.jar")
 
-  #+end_src
+      #+end_src
 
 ***** load these language dictionaries for source blocks
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((ditaa . t)
-   (css . t)
-   (js . t)
-   (latex . t)
-   (ledger . t)
-   (python . t)
-   (R . t)
-   (sass . t)
-   (shell . t)))
+        (org-babel-do-load-languages
+         'org-babel-load-languages
+         '((ditaa . t)
+           (css . t)
+           (js . t)
+           (latex . t)
+           (ledger . t)
+           (python . t)
+           (R . t)
+           (sass . t)
+           (shell . t)))
 
-  #+end_src
+      #+end_src
 
 **** org-babel-async
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-(use-package ob-async)
+       (use-package ob-async)
 
-  #+end_src
+     #+end_src
 
 **** org-mind-map
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-  ;; This is an Emacs package that creates graphviz directed graphs from
-  ;; the headings of an org file
+       ;; This is an Emacs package that creates graphviz directed graphs from
+       ;; the headings of an org file
 
-(use-package org-mind-map
-    :init
-    (require 'ox-org)
-    ;; Uncomment the below if 'ensure-system-packages` is installed
-    ;; ensure-system-package (gvgen .graphviz)
-    :config
-    (setq org-mind-map-engine "dot")       ; Default. Directed Graph
-    ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
-    ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
-    ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
-    ;; (setq org-mind-map-engine "sfdp")   ; Multiscale version of fdp for the layout of large graphs
-    ;; (setq org-mind-map-engine "twopi")  ; Radial layouts
-    ;; (setq org-mind-map-engine "circo")  ; Circular Layout
-  )
+       (use-package org-mind-map
+         :init
+         (require 'ox-org)
+         ;; Uncomment the below if 'ensure-system-packages` is installed
+         ;; ensure-system-package (gvgen .graphviz)
+         :config
+         (setq org-mind-map-engine "dot")       ; Default. Directed Graph
+         ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
+         ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
+         ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
+         ;; (setq org-mind-map-engine "sfdp")   ; Multiscale version of fdp for the layout of large graphs
+         ;; (setq org-mind-map-engine "twopi")  ; Radial layouts
+         ;; (setq org-mind-map-engine "circo")  ; Circular Layout
+         )
 
-  #+end_src
+     #+end_src
 
 **** org-plot
      Graphs with gnuplot
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-(use-package gnuplot
-  :commands gnuplot-mode
-  :defer t
-  :bind ("C-M-g" . gnuplot))
+       (use-package gnuplot
+         :commands gnuplot-mode
+         :defer t
+         :bind ("C-M-g" . gnuplot))
 
-  #+end_src
+     #+end_src
 
 **** org-publish
 
-  #+begin_src emacs-lisp :tangle no
+     #+begin_src emacs-lisp :tangle no
 
-(add-to-list 'load-path "~/src/Github/techquila/my-blog-publisher/")
-(load "my-blog-publisher")
+       (add-to-list 'load-path "~/src/Github/techquila/my-blog-publisher/")
+       (load "my-blog-publisher")
 
-  #+end_src
+     #+end_src
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-(require 'ox-publish)
-(require 'seq)
+       (require 'ox-publish)
+       (require 'seq)
 
-  #+end_src
+     #+end_src
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-(setq my-blog/repo "~/src/Github/techquila/sod.oscarfono.com/blog/")
+       (setq my-blog/repo "~/src/Github/techquila/sod.oscarfono.com/blog/")
 
-  #+end_src
+     #+end_src
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-(setq org-publish-use-timestamps-flag t
-      org-publish-timestamp-directory (concat my-blog/repo "cache/"))
+       (setq org-publish-use-timestamps-flag t
+             org-publish-timestamp-directory (concat my-blog/repo "cache/"))
 
-  #+end_src
+     #+end_src
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-(setq org-html-html5-fancy t)
+       (setq org-html-html5-fancy t)
 
-  #+end_src
+     #+end_src
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-     (setq org-export-global-macros
-       '(("begin-article" . "@@html:<article>@@")
-         ("end-article" . "@@html:</article>@@")
-         ("begin-section" . "@@html:<section>@@")
-         ("end-section" . "@@html:</section>@@")
-         ("begin-aside" . "@@html:<aside>@@")
-         ("end-aside" . "@@html:</aside>@@")
-         ("begin-header" . "@@html:<header>@@")
-         ("end-header" . "@@html:</header>@@")
-         ("begin-footer" . "@@html:<footer>@@")
-         ("end-footer" . "@@html:</footer>@@")))
-  #+end_src
+       (setq org-export-global-macros
+             '(("begin-article" . "@@html:<article>@@")
+               ("end-article" . "@@html:</article>@@")
+               ("begin-section" . "@@html:<section>@@")
+               ("end-section" . "@@html:</section>@@")
+               ("begin-aside" . "@@html:<aside>@@")
+               ("end-aside" . "@@html:</aside>@@")
+               ("begin-header" . "@@html:<header>@@")
+               ("end-header" . "@@html:</header>@@")
+               ("begin-footer" . "@@html:<footer>@@")
+               ("end-footer" . "@@html:</footer>@@")))
+     #+end_src
 
-  #+begin_src emacs-lisp :tangle no
+     #+begin_src emacs-lisp :tangle no
 
-(defun my-blog/get-preview (filename)
-    "Returns a list: '(<needs-more> <preview-string>) where
-  <needs-more> is t or nil, indicating whether a \"Read More...\"
-  link is needed."
-    (with-temp-buffer
-      (insert-file-contents (concat my-blog/repo "posts/" filename))
-      (goto-char (point-min))
-      (let ((content-start (or
-			    ;; Look for the first non-keyword line
-			    (and (re-search-forward "^[^#]" nil t)
-				 (match-beginning 0))
-			    ;; Failing that, assume we're malformed and
-			    ;; have no content
-			    (buffer-size)))
-	    (marker (or
-		     (and (re-search-forward "^#\\+BEGIN_more$" nil t)
-			  (match-beginning 0))
-		     (buffer-size))))
-	;; ;; Return a pair of '(needs-more preview-string)
-	(list (not (= marker (buffer-size)))
-	      (buffer-substring content-start marker)))))
-  #+end_src
+       (defun my-blog/get-preview (filename)
+         "Returns a list: '(<needs-more> <preview-string>) where
+         <needs-more> is t or nil, indicating whether a \"Read More...\"
+         link is needed."
+         (with-temp-buffer
+           (insert-file-contents (concat my-blog/repo "posts/" filename))
+           (goto-char (point-min))
+           (let ((content-start (or
+                                 ;; Look for the first non-keyword line
+                                 (and (re-search-forward "^[^#]" nil t)
+                                      (match-beginning 0))
+                                 ;; Failing that, assume we're malformed and
+                                 ;; have no content
+                                 (buffer-size)))
+                 (marker (or
+                          (and (re-search-forward "^#\\+BEGIN_more$" nil t)
+                               (match-beginning 0))
+                          (buffer-size))))
+             ;; ;; Return a pair of '(needs-more preview-string)
+             (list (not (= marker (buffer-size)))
+                   (buffer-substring content-start marker)))))
+     #+end_src
 
-  #+begin_src emacs-lisp :tangle no
+     #+begin_src emacs-lisp :tangle no
 
-(defun my-blog/sitemap (title list)
-  "Generate the sitemap (Blog Main Page)"
-  (concat "#+TITLE: " title "\n" "--------\n"
-          (string-join (mapcar #'car (cdr list)) "\n\n")))
+       (defun my-blog/sitemap (title list)
+         "Generate the sitemap (Blog Main Page)"
+         (concat "#+TITLE: " title "\n" "--------\n"
+                 (string-join (mapcar #'car (cdr list)) "\n\n")))
 
-  #+end_src
+     #+end_src
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-(defun my-blog/sitemap-entry (entry style project)
-  "Sitemap (Blog Main Page) Entry Formatter"
-  (when (not (directory-name-p entry))
-    (format (string-join
-	     '("* [[file:%s][%s]]\n"
-	       "  #+BEGIN_PUBLISHED\n"
-	       "%s\n"
-	       "  #+END_PUBLISHED\n\n"
-	       "%s\n"
-	       "--------\n"))
-            entry
-            (org-publish-find-title entry project)
-            (format-time-string "%A, %B %_d %Y at %l:%M %p %Z" (org-publish-find-date entry project))
-            (let* ((preview (my-blog/get-preview entry))
-                   (needs-more (car preview))
-                   (preview-text (cadr preview)))
-	      (if needs-more
-                  (format
-                   (concat
-                    "%s\n\n"
-                    "  #+BEGIN_MORELINK\n"
-                    "[[file:%s][Read More...]]\n"
-                    "  #+END_MORELINK\n")
-                   preview-text entry)
-                (format "%s" preview-text))))))
+       (defun my-blog/sitemap-entry (entry style project)
+         "Sitemap (Blog Main Page) Entry Formatter"
+         (when (not (directory-name-p entry))
+           (format (string-join
+                    '("* [[file:%s][%s]]\n"
+                      "  #+BEGIN_PUBLISHED\n"
+                      "%s\n"
+                      "  #+END_PUBLISHED\n\n"
+                      "%s\n"
+                      "--------\n"))
+                   entry
+                   (org-publish-find-title entry project)
+                   (format-time-string "%A, %B %_d %Y at %l:%M %p %Z" (org-publish-find-date entry project))
+                   (let* ((preview (my-blog/get-preview entry))
+                          (needs-more (car preview))
+                          (preview-text (cadr preview)))
+                     (if needs-more
+                         (format
+                          (concat
+                           "%s\n\n"
+                           "  #+BEGIN_MORELINK\n"
+                           "[[file:%s][Read More...]]\n"
+                           "  #+END_MORELINK\n")
+                          preview-text entry)
+                       (format "%s" preview-text))))))
 
-  #+end_src
+     #+end_src
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
        (setq org-publish-project-alist
-         `(("blog"
-	     :components ("posts" "templates" "scripts" "styles" "images" "rss"))
-           ("posts"
-	     :base-directory ,(concat my-blog/repo "posts/")
-	     :base-extension "org"
-	     :publishing-directory ,(concat my-blog/repo "public/posts/")
-	     :publishing-function ox-slimhtml-publish-to-html
-	     :with-author t
-	     :with-creator nil
-	     :with-date t
-	     :with-title t
-	     :with-toc nil
-	     :html-doctype html5
-	     :html-head-include-default-style nil
-	     :html-head-include-scripts nil
-	     :html-html5-fancy t
-	     :html-link-home "/"
-	     :html-link-up "articles.html"
-	     :auto-sitemap t
-	     :sitemap-filename "articles.org"
-	     :sitemap-format-entry my-blog/sitemap-entry
-	     :sitemap-function my-blog/sitemap
-	     :sitemap-title "Published articles"
-	     :sitemap-sort-files anti-chronologically)
-           ("templates"
-	     :base-directory ,(concat my-blog/repo "templates/")
-	     :base-extension "html"
-	     :publishing-directory ,(concat my-blog/repo "public/templates")
-	     :publishing-function org-publish-attachment
-	     :recursive t)
-           ("scripts"
-	     :base-directory ,(concat my-blog/repo "templates/")
-	     :base-extension "el\\|go\\|js"
-	     :publishing-directory ,(concat my-blog/repo "public/templates")
-	     :publishing-function org-publish-attachment
-	     :recursive t)
-           ("styles"
-	     :base-directory ,(concat my-blog/repo "templates/")
-	     :base-extension "css"
-	     :publishing-directory ,(concat my-blog/repo "public/templates")
-	     :publishing-function org-publish-attachment
-	     :recursive t)
-           ("images"
-	     :base-directory ,(concat my-blog/repo "templates/")
-	     :base-extension "jpg\\|gif\\|png\\|svg"
-	     :publishing-directory ,(concat my-blog/repo "public/templates")
-	     :publishing-function org-publish-attachment
-	     :recursive t)
-           ("rss"
-	     :base-directory , (concat my-blog/repo "raw/")
-	     :base-extension ".org"
-	     :publishing-directory ,(concat my-blog/repo "public/raw")
-	     :publishing-function org-rss-publish-to-rss
-	     :html-link-use-abs-url t
-	     :export-with-tags nil
-	     :section-numbers nil
-	     :with-date t
-	     :with-title t
-	     :with-toc nil)))
+             `(("blog"
+                :components ("posts" "templates" "scripts" "styles" "images" "rss"))
+               ("posts"
+                :base-directory ,(concat my-blog/repo "posts/")
+                :base-extension "org"
+                :publishing-directory ,(concat my-blog/repo "public/posts/")
+                :publishing-function ox-slimhtml-publish-to-html
+                :with-author t
+                :with-creator nil
+                :with-date t
+                :with-title t
+                :with-toc nil
+                :html-doctype html5
+                :html-head-include-default-style nil
+                :html-head-include-scripts nil
+                :html-html5-fancy t
+                :html-link-home "/"
+                :html-link-up "articles.html"
+                :auto-sitemap t
+                :sitemap-filename "articles.org"
+                :sitemap-format-entry my-blog/sitemap-entry
+                :sitemap-function my-blog/sitemap
+                :sitemap-title "Published articles"
+                :sitemap-sort-files anti-chronologically)
+               ("templates"
+                :base-directory ,(concat my-blog/repo "templates/")
+                :base-extension "html"
+                :publishing-directory ,(concat my-blog/repo "public/templates")
+                :publishing-function org-publish-attachment
+                :recursive t)
+               ("scripts"
+                :base-directory ,(concat my-blog/repo "templates/")
+                :base-extension "el\\|go\\|js"
+                :publishing-directory ,(concat my-blog/repo "public/templates")
+                :publishing-function org-publish-attachment
+                :recursive t)
+               ("styles"
+                :base-directory ,(concat my-blog/repo "templates/")
+                :base-extension "css"
+                :publishing-directory ,(concat my-blog/repo "public/templates")
+                :publishing-function org-publish-attachment
+                :recursive t)
+               ("images"
+                :base-directory ,(concat my-blog/repo "templates/")
+                :base-extension "jpg\\|gif\\|png\\|svg"
+                :publishing-directory ,(concat my-blog/repo "public/templates")
+                :publishing-function org-publish-attachment
+                :recursive t)
+               ("rss"
+                :base-directory , (concat my-blog/repo "raw/")
+                :base-extension ".org"
+                :publishing-directory ,(concat my-blog/repo "public/raw")
+                :publishing-function org-rss-publish-to-rss
+                :html-link-use-abs-url t
+                :export-with-tags nil
+                :section-numbers nil
+                :with-date t
+                :with-title t
+                :with-toc nil)))
 
-  #+end_src
+     #+end_src
 
 *** Calendar
 **** set location for calendar
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-(setq calendar-latitude -40.550620)
-(setq calendar-longitude 175.199720)
+       (setq calendar-latitude -40.550620)
+       (setq calendar-longitude 175.199720)
 
-  #+end_src
+     #+end_src
 
 **** Don't display calendars i don't need
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-(setq holiday-general-holidays nil)
-(setq holiday-christian-holidays nil)
-(setq holiday-hebrew-holidays nil)
-(setq holiday-islamic-holidays nil)
-(setq holiday-bahai-holidays nil)
-(setq holiday-oriental-holidays nil)
+       (setq holiday-general-holidays nil)
+       (setq holiday-christian-holidays nil)
+       (setq holiday-hebrew-holidays nil)
+       (setq holiday-islamic-holidays nil)
+       (setq holiday-bahai-holidays nil)
+       (setq holiday-oriental-holidays nil)
 
-  #+end_src
+     #+end_src
 
 **** set NZ Public Holidays
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-  ;; Use package nz-holidays to pull in New Zealands Public Holidays for calendar.
-  (use-package nz-holidays)
+       ;; Use package nz-holidays to pull in New Zealands Public Holidays for calendar.
+       (use-package nz-holidays)
 
-  ;; append it to empty variable holiday-local-holidays
-  (setq calendar-holidays (append holiday-local-holidays holiday-nz-holidays))
+       ;; append it to empty variable holiday-local-holidays
+       (setq calendar-holidays (append holiday-local-holidays holiday-nz-holidays))
 
-  #+end_src
+     #+end_src
 
 **** Count days in given region
      From within Calendar, these functions enable to me to count days within a given region, excluding weekends, and public holidays.
@@ -1150,85 +1173,85 @@ requires graphvis system package to be installed
      Taken from here:
      [[https://stackoverflow.com/questions/23566000/how-to-count-days-excluding-weekends-and-holidays-in-emacs-calendar][https://stackoverflow.com/questions/23566000/how-to-count-days-excluding-weekends-and-holidays-in-emacs-calendar]]
 
-  #+begin_src emacs-lisp :tangle sod.el
-  ;; (defun calendar-count-days-region-excluding-weekends-and-holidays ()
-  ;;  "Count the number of days (inclusive) between point and the mark,
-  ;;   excluding weekends and public holidays."
-  ;;   (interactive)
-  ;;   (let* ((days (- (calendar-absolute-from-gregorian
-  ;;                    (calendar-cursor-to-date t))
-  ;;                   (calendar-absolute-from-gregorian
-  ;;                    (or (car calendar-mark-ring)
-  ;;                        (error "No mark set in this buffer")))))
-  ;;          (days (1+ (if (> days 0) days (- days)))))
-  ;;     (message "Region has %d day%s (inclusive)"
-  ;;              days (if (> days 1) "s" ""))))
+     #+begin_src emacs-lisp :tangle sod.el
+       ;; (defun calendar-count-days-region-excluding-weekends-and-holidays ()
+       ;;  "Count the number of days (inclusive) between point and the mark,
+       ;;   excluding weekends and public holidays."
+       ;;   (interactive)
+       ;;   (let* ((days (- (calendar-absolute-from-gregorian
+       ;;                    (calendar-cursor-to-date t))
+       ;;                   (calendar-absolute-from-gregorian
+       ;;                    (or (car calendar-mark-ring)
+       ;;                        (error "No mark set in this buffer")))))
+       ;;          (days (1+ (if (> days 0) days (- days)))))
+       ;;     (message "Region has %d day%s (inclusive)"
+       ;;              days (if (> days 1) "s" ""))))
 
-  (defun my-calendar-count-days(d1 d2)
-    (let* ((days (- (calendar-absolute-from-gregorian d1)
-                    (calendar-absolute-from-gregorian d2)))
-           (days (1+ (if (> days 0) days (- days)))))
-      days))
+       (defun my-calendar-count-days(d1 d2)
+         (let* ((days (- (calendar-absolute-from-gregorian d1)
+                         (calendar-absolute-from-gregorian d2)))
+                (days (1+ (if (> days 0) days (- days)))))
+           days))
 
-  (defun my-calendar-count-weekend-days(date1 date2)
-    (let* ((tmp-date (if (< date1 date2) date1 date2))
-           (end-date (if (> date1 date2) date1 date2))
-           (weekend-days 0))
-      (while (<= tmp-date end-date)
-        (let ((day-of-week (calendar-day-of-week
-                            (calendar-gregorian-from-absolute tmp-date))))
-          (if (or (= day-of-week 0)
-                  (= day-of-week 6))
-	      (incf weekend-days ))
-          (incf tmp-date)))
-      weekend-days))
+       (defun my-calendar-count-weekend-days(date1 date2)
+         (let* ((tmp-date (if (< date1 date2) date1 date2))
+                (end-date (if (> date1 date2) date1 date2))
+                (weekend-days 0))
+           (while (<= tmp-date end-date)
+             (let ((day-of-week (calendar-day-of-week
+                                 (calendar-gregorian-from-absolute tmp-date))))
+               (if (or (= day-of-week 0)
+                       (= day-of-week 6))
+                   (incf weekend-days ))
+               (incf tmp-date)))
+           weekend-days))
 
-  (defun calendar-count-days-region2 ()
-    "Count the number of days (inclusive) between point and the mark
-    excluding weekends and holidays."
-    (interactive)
-    (let* ((d1 (calendar-cursor-to-date t))
-           (d2 (car calendar-mark-ring))
-           (date1 (calendar-absolute-from-gregorian d1))
-           (date2 (calendar-absolute-from-gregorian d2))
-           (start-date (if (<  date1 date2) date1 date2))
-           (end-date (if (> date1 date2) date1 date2))
-           (days (- (my-calendar-count-days d1 d2)
-                    (+ (my-calendar-count-weekend-days start-date end-date)
-		       (my-calendar-count-holidays-on-weekdays-in-range
-                        start-date end-date)))))
-      (message "Region has %d workday%s (inclusive)"
-	       days (if (> days 1) "s" ""))))
+       (defun calendar-count-days-region2 ()
+         "Count the number of days (inclusive) between point and the mark
+         excluding weekends and holidays."
+         (interactive)
+         (let* ((d1 (calendar-cursor-to-date t))
+                (d2 (car calendar-mark-ring))
+                (date1 (calendar-absolute-from-gregorian d1))
+                (date2 (calendar-absolute-from-gregorian d2))
+                (start-date (if (<  date1 date2) date1 date2))
+                (end-date (if (> date1 date2) date1 date2))
+                (days (- (my-calendar-count-days d1 d2)
+                         (+ (my-calendar-count-weekend-days start-date end-date)
+                            (my-calendar-count-holidays-on-weekdays-in-range
+                             start-date end-date)))))
+           (message "Region has %d workday%s (inclusive)"
+                    days (if (> days 1) "s" ""))))
 
-  #+end_src
+     #+end_src
 
 *** Conveniences
 **** Line numbers
      I like to see the line numbers when coding.
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
- (when (version<= "26.0.50" emacs-version )
-   (add-hook 'prog-mode-hook #'display-line-numbers-mode))
+       (when (version<= "26.0.50" emacs-version )
+         (add-hook 'prog-mode-hook #'display-line-numbers-mode))
 
-  #+end_src
+     #+end_src
 
 **** Column numbers
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
- (column-number-mode 1)
+       (column-number-mode 1)
 
-  #+end_src
+     #+end_src
 
 **** Delete-selection-mode
      allows me to delete highlighted region.  Not standard behaviour in emacs.
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-(delete-selection-mode 1)
+       (delete-selection-mode 1)
 
-  #+end_src
+     #+end_src
 
 **** [[https://github.com/jwiegley/use-package/blob/master/bind-key.el][bind-key]]
      If you have lots of keybindings set in your .emacs file, it can be
@@ -1236,133 +1259,133 @@ requires graphvis system package to be installed
      overriding some new default in a new emacs version.  This module aims
      to solve that problem.
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-  (use-package bind-key)
+       (use-package bind-key)
 
-  #+end_src
+     #+end_src
 
 **** Directories
 ***** Group directories first in Dired
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-(use-package dired
-  :ensure nil
-  :config
-  (progn
-    (setq dired-listing-switches "-lXGh --group-directories-first")
-    (add-hook 'dired-mode-hook 'dired-omit-mode)
-    (add-hook 'dired-mode-hook 'dired-hide-details-mode)))
+        (use-package dired
+          :ensure nil
+          :config
+          (progn
+            (setq dired-listing-switches "-lXGh --group-directories-first")
+            (add-hook 'dired-mode-hook 'dired-omit-mode)
+            (add-hook 'dired-mode-hook 'dired-hide-details-mode)))
 
-  #+end_src
+      #+end_src
 
 ***** Speedbar directory tree
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-(use-package sr-speedbar
-  :bind ("M-s" . sr-speedbar-toggle)
-  :custom
-  ;; Show tree on the left side
-  (sr-speedbar-right-side t)
-  ;; Show all files
-  (speedbar-show-unknown-files t)
-  ;; Set Width (default is 24)
-  (sr-speedbar-width 50)
-  ;; Set Max Width
-  (sr-speedbar-max-width 35))
+        (use-package sr-speedbar
+          :bind ("M-s" . sr-speedbar-toggle)
+          :custom
+          ;; Show tree on the left side
+          (sr-speedbar-right-side t)
+          ;; Show all files
+          (speedbar-show-unknown-files t)
+          ;; Set Width (default is 24)
+          (sr-speedbar-width 50)
+          ;; Set Max Width
+          (sr-speedbar-max-width 35))
 
-;; Turn off image icons
-  (setq speedbar-use-images nil)
+        ;; Turn off image icons
+        (setq speedbar-use-images nil)
 
-;; launch on startup
-;; (sr-speedbar-open)
+        ;; launch on startup
+        ;; (sr-speedbar-open)
 
-  #+end_src
+      #+end_src
 
 **** Docker
      integrate docker functionality into emacs
 
-   #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-  ;; dockerfile-mode: An emacs mode for handling Dockerfiles
-  ;; https://github.com/spotify/dockerfile-mode
-  (use-package dockerfile-mode
-    :mode ("Dockerfile\\'" . dockerfile-mode))
+       ;; dockerfile-mode: An emacs mode for handling Dockerfiles
+       ;; https://github.com/spotify/dockerfile-mode
+       (use-package dockerfile-mode
+         :mode ("Dockerfile\\'" . dockerfile-mode))
 
-  ;; docker: manager docker from emacs
-  ;; https://github.com/Silex/docker.el
-  (use-package docker
-    :defer t
-    :ensure-system-package docker
-    :bind ("C-c d" . docker))
+       ;; docker: manager docker from emacs
+       ;; https://github.com/Silex/docker.el
+       (use-package docker
+         :defer t
+         :ensure-system-package docker
+         :bind ("C-c d" . docker))
 
-  ;; docker-compose-mode: Major mode for editing docker-compose files
-  ;; https://github.com/meqif/docker-compose-mode
-  (use-package docker-compose-mode
-    :defer t)
+       ;; docker-compose-mode: Major mode for editing docker-compose files
+       ;; https://github.com/meqif/docker-compose-mode
+       (use-package docker-compose-mode
+         :defer t)
 
-  ;; docker-tramp: TRAMP integration for docker containers
-  ;; https://github.com/emacs-pe/docker-tramp.el
-  (use-package docker-tramp
-    :defer t)
+       ;; docker-tramp: TRAMP integration for docker containers
+       ;; https://github.com/emacs-pe/docker-tramp.el
+       (use-package docker-tramp
+         :defer t)
 
-   #+end_src
+     #+end_src
 
 **** [[https://www.emacswiki.org/emacs/ElDoc][Eldoc]]
      A very simple but effective thing, eldoc-mode is a MinorMode which shows you, in the echo area, the argument list of the function call you are currently writing. Very handy. By NoahFriedman. Part of Emacs.
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-(use-package "eldoc"
-  :diminish eldoc-mode
-  :commands turn-on-eldoc-mode
-  :defer t
-  :init
-  (progn
-  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-  (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)))
+       (use-package "eldoc"
+         :diminish eldoc-mode
+         :commands turn-on-eldoc-mode
+         :defer t
+         :init
+         (progn
+           (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+           (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+           (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)))
 
-  #+end_src
+     #+end_src
 
 **** [[https://julien.danjou.info/projects/emacs-packages][Rainbow-mode]]
      rainbow-mode is a minor mode for Emacs which highlights text representing color codes in various forms by setting the background color of the text accordingly.
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-(use-package rainbow-mode
-  :diminish rainbow-mode
-  :init (rainbow-mode))
+       (use-package rainbow-mode
+         :diminish rainbow-mode
+         :init (rainbow-mode))
 
-  #+end_src
+     #+end_src
 
 **** [[http://ledger-cli.org/3.0/doc/ledger-mode.html][Ledger-mode]]
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-;; ledger
-(use-package ledger-mode
-  :mode "\\.ledger\\'"
-  :config
-  (define-key ledger-mode-map (kbd "C-c t") 'ledger-mode-clean-buffer)
-  (setq ledger-post-amount-alignment-at :decimal
-        ledger-post-amount-alignment-column 49
-        ledger-clear-whole-transactions t)
-        (use-package flycheck-ledger))
+       ;; ledger
+       (use-package ledger-mode
+         :mode "\\.ledger\\'"
+         :config
+         (define-key ledger-mode-map (kbd "C-c t") 'ledger-mode-clean-buffer)
+         (setq ledger-post-amount-alignment-at :decimal
+               ledger-post-amount-alignment-column 49
+               ledger-clear-whole-transactions t)
+         (use-package flycheck-ledger))
 
-  #+end_src
+     #+end_src
 
 **** Remote File Access with [[https://www.emacswiki.org/emacs/TrampMode][TRAMP]]
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-(setq tramp-default-user "sod")
-(setq tramp-default-method "ssh")
-;;(set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
+       (setq tramp-default-user "sod")
+       (setq tramp-default-method "ssh")
+       ;;(set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
 
-  #+end_src
+     #+end_src
 
 **** Run emacs-server
      Various programs can invoke your choice of editor to edit a particular
@@ -1379,26 +1402,26 @@ requires graphvis system package to be installed
      You can solve this problem by setting up Emacs as an edit server, so
      that it “listens” for external edit requests and acts accordingly.
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-(add-hook 'after-init-hook
-  (lambda ()
-    (require 'server)
-    (setq server-auth-dir "~/.emacs.d/server") ;; Server file location
-    (setq server-name "emacs_server0")         ;; Server mutex file name
-    (unless (server-running-p)
-	      (server-start))))
+       (add-hook 'after-init-hook
+                 (lambda ()
+                   (require 'server)
+                   (setq server-auth-dir "~/.emacs.d/server") ;; Server file location
+                   (setq server-name "emacs_server0")         ;; Server mutex file name
+                   (unless (server-running-p)
+                     (server-start))))
 
-;; (add-hook 'server-done-hook ((lambda nil (kill-buffer nil)) delete-frame))
+       ;; (add-hook 'server-done-hook ((lambda nil (kill-buffer nil)) delete-frame))
 
-(add-hook 'server-switch-hook
-  (lambda nil
-    (let (server-buf)
-    (setq server-buf (current-buffer))
-    (bury-buffer)
-    (switch-to-buffer-other-frame server-buf))))
+       (add-hook 'server-switch-hook
+                 (lambda nil
+                   (let (server-buf)
+                     (setq server-buf (current-buffer))
+                     (bury-buffer)
+                     (switch-to-buffer-other-frame server-buf))))
 
-  #+end_src
+     #+end_src
 
 **** Subwords
      subword-mode changes all cursor movement/edit commands to stop in between the “camelCase” words.
@@ -1409,309 +1432,309 @@ requires graphvis system package to be installed
 
      To see whether you have subword-mode on, call describe-variable then type “subword-mode”.  Same for superword-mode.
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-(subword-mode 1)
+       (subword-mode 1)
 
-  #+end_src
+     #+end_src
 
 **** Yes/No becomes y/n
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-(fset 'yes-or-no-p 'y-or-n-p)
+       (fset 'yes-or-no-p 'y-or-n-p)
 
-  #+end_src
+     #+end_src
 
 **** Links
      Use [[https://www.mozilla.org/en-US/firefox/new/][Firefox]] to open urls
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-  (setq browse-url-browser-function 'browse-url-generic)
-  (setq browse-url-generic-program "firefox")
+       (setq browse-url-browser-function 'browse-url-generic)
+       (setq browse-url-generic-program "firefox")
 
-  #+end_src
+     #+end_src
 
 **** Multiple cursors
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-(use-package multiple-cursors
-   :config (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-           (global-set-key (kbd "C->") 'mc/mark-next-like-this)
-           (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-           (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
-           (define-key mc/keymap (kbd "<return>") nil))
-  #+end_src
+       (use-package multiple-cursors
+         :config (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+         (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+         (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+         (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+         (define-key mc/keymap (kbd "<return>") nil))
+     #+end_src
 
 **** Magit
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-  (use-package magit
-    :bind ("C-x g" . magit-status))
+       (use-package magit
+         :bind ("C-x g" . magit-status))
 
-  #+end_src
+     #+end_src
 
 **** Project managment with [[https://github.com/bbatsov/projectile][projectile]]
      Helm support using [[https://github.com/bbatsov/helm-projectile][helm-projectile]]
 
-  #+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 
- (use-package projectile
-   :diminish projectile-mode
-   :bind-keymap ("C-c p" . projectile-command-map))
+       (use-package projectile
+         :diminish projectile-mode
+         :bind-keymap ("C-c p" . projectile-command-map))
 
-   (projectile-mode +1)
+       (projectile-mode +1)
 
- (use-package helm-projectile
-   :config (helm-projectile-on))
+       (use-package helm-projectile
+         :config (helm-projectile-on))
 
-  #+end_src
+     #+end_src
 
 **** Autocompletion and Snippets
 
 ***** auto-complete mode
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
- (use-package auto-complete)
+        (use-package auto-complete)
 
-  #+end_src
+      #+end_src
 
 ***** [[http://company-mode.github.io/][company-mode]]
       Company is a text completion framework for Emacs. The name stands for "*COMP*lete *ANY*thing". It uses pluggable back-ends and front-ends to retrieve and display completion candidates.
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
- (use-package company
-   :defer 0.5
-   :delight
-   :custom
-   (company-begin-commands '(self-insert-command))
-   (company-idle-delay .1)
-   (company-minimum-prefix-length 2)
-   (company-show-numbers t)
-   (company-tooltip-align-annotations 't)
-   (global-company-mode t))
-  #+end_src
+        (use-package company
+          :defer 0.5
+          :delight
+          :custom
+          (company-begin-commands '(self-insert-command))
+          (company-idle-delay .1)
+          (company-minimum-prefix-length 2)
+          (company-show-numbers t)
+          (company-tooltip-align-annotations 't)
+          (global-company-mode t))
+      #+end_src
 
 ***** [[https://github.com/emacs-helm/helm][helm]]
       Helm is an Emacs framework for incremental completions and narrowing selections. It helps to rapidly complete file names, buffer names, or any other Emacs interactions requiring selecting an item from a list of possible choices.
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
- (use-package helm
-   :diminish helm-mode
-   :init
-   (progn
-     (require 'helm-config)
-     (setq helm-candidate-number-limit 100)
-     ;; From https://gist.github.com/antifuchs/9238468
-     (setq helm-idle-delay 0.0
-           helm-input-idle-delay 0.01
-           helm-yas-display-key-on-candidate t
-           helm-quick-update t
-           helm-M-x-requires-pattern nil
-           helm-ff-skip-boring-files t)
-     (helm-mode))
-   :bind (("C-c h" . helm-mini)
-          ("C-h a" . helm-apropos)
-          ("C-x C-b" . helm-buffers-list)
-          ("C-x b" . helm-buffers-list)
-          ("M-y" . helm-show-kill-ring)
-          ("M-x" . helm-M-x)
-          ("C-x c o" . helm-occur)
-          ("C-x c s" . helm-swoop)
-          ("C-x c y" . helm-yas-complete)
-          ("C-x c Y" . helm-yas-create-snippet-on-region)
-          ("C-x c b" . my/helm-do-grep-book-notes)
-          ("C-x c SPC" . helm-all-mark-rings)))
-  #+end_src
+        (use-package helm
+          :diminish helm-mode
+          :init
+          (progn
+            (require 'helm-config)
+            (setq helm-candidate-number-limit 100)
+            ;; From https://gist.github.com/antifuchs/9238468
+            (setq helm-idle-delay 0.0
+                  helm-input-idle-delay 0.01
+                  helm-yas-display-key-on-candidate t
+                  helm-quick-update t
+                  helm-M-x-requires-pattern nil
+                  helm-ff-skip-boring-files t)
+            (helm-mode))
+          :bind (("C-c h" . helm-mini)
+                 ("C-h a" . helm-apropos)
+                 ("C-x C-b" . helm-buffers-list)
+                 ("C-x b" . helm-buffers-list)
+                 ("M-y" . helm-show-kill-ring)
+                 ("M-x" . helm-M-x)
+                 ("C-x c o" . helm-occur)
+                 ("C-x c s" . helm-swoop)
+                 ("C-x c y" . helm-yas-complete)
+                 ("C-x c Y" . helm-yas-create-snippet-on-region)
+                 ("C-x c b" . my/helm-do-grep-book-notes)
+                 ("C-x c SPC" . helm-all-mark-rings)))
+      #+end_src
 
 ***** [[https://github.com/smihica/emmet-mode][emmet-mode]]
       This is a major mode for html and css expansion.  Forked from [[https://github.com/rooney/zencoding][zencoding-mode]].
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
- (use-package emmet-mode
-   :config
-     (progn (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
-            (add-hook 'css-mode-hook  'emmet-mode)))
+        (use-package emmet-mode
+          :config
+          (progn (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+                 (add-hook 'css-mode-hook  'emmet-mode)))
 
-  #+end_src
+      #+end_src
 
 ***** [[https://www.emacswiki.org/emacs/Yasnippet][Yasnippet]]
       YASnippet is a template system for Emacs. It allows you to type an abbreviation and automatically expand it into function templates.
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
- (use-package yasnippet
-   :diminish yas-minor-mode
-   :init (yas-global-mode)
-   :config
-   (progn
-     (yas-global-mode)
-     (add-hook 'hippie-expand-try-functions-list 'yas-hippie-try-expand)
-     (setq yas-key-syntaxes '("w_" "w_." "^ "))
-     (setq yas-installed-snippets-dir "~/.emacs.d/elpa/yasnippet-20160801.1142/snippets")
-     (setq yas-expand-only-for-last-commands nil)
+        (use-package yasnippet
+          :diminish yas-minor-mode
+          :init (yas-global-mode)
+          :config
+          (progn
+            (yas-global-mode)
+            (add-hook 'hippie-expand-try-functions-list 'yas-hippie-try-expand)
+            (setq yas-key-syntaxes '("w_" "w_." "^ "))
+            (setq yas-installed-snippets-dir "~/.emacs.d/elpa/yasnippet-20160801.1142/snippets")
+            (setq yas-expand-only-for-last-commands nil)
 
-     (yas-global-mode 1)
+            (yas-global-mode 1)
 
-     (bind-key "\t" 'hippie-expand yas-minor-mode-map)
- ;;    (add-to-list 'yas-prompt-functions 'shk-yas/helm-prompt)
- ;; yasnippet messes with terminal mode tab completion so let's leave it off for that
-     (add-hook 'term-mode-hook (lambda()(yas-minor-mode -1)))))
+            (bind-key "\t" 'hippie-expand yas-minor-mode-map)
+            ;;    (add-to-list 'yas-prompt-functions 'shk-yas/helm-prompt)
+            ;; yasnippet messes with terminal mode tab completion so let's leave it off for that
+            (add-hook 'term-mode-hook (lambda()(yas-minor-mode -1)))))
 
- (use-package react-snippets)
+        (use-package react-snippets)
 
-  #+end_src
+      #+end_src
 
 **** [[https://github.com/Fuco1/smartparens/wiki][smartparens]]
      Smartparens is minor mode for Emacs that deals with parens pairs and
      tries to be smart about it.
 
-  #+begin_src emacs-lisp :tangle yes
+     #+begin_src emacs-lisp :tangle yes
 
-(use-package smartparens-config
-    :ensure smartparens
-    :config
-    (progn
-      (show-smartparens-global-mode t)))
+       (use-package smartparens-config
+         :ensure smartparens
+         :config
+         (progn
+           (show-smartparens-global-mode t)))
 
-(add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
-(add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
+       (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
+       (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 
-  #+end_src
+     #+end_src
 
 **** PDF Tools
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
- (use-package pdf-tools
-   :defer t)
+       (use-package pdf-tools
+         :defer t)
 
-  #+end_src
+     #+end_src
 
 **** Linting
 ***** flycheck
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-(use-package flycheck
-  :config
-    (global-flycheck-mode))
+        (use-package flycheck
+          :config
+          (global-flycheck-mode))
 
-  #+end_src
+      #+end_src
 
 ***** package-lint
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-(use-package package-lint)
+        (use-package package-lint)
 
-  #+end_src
+      #+end_src
 **** Language modes
 ***** configuration management
 ****** ansible-mode
 
-  #+begin_src emacs-lisp :tangle sod.el
+       #+begin_src emacs-lisp :tangle sod.el
 
- (use-package ansible
-   :commands ansible-mode)
+         (use-package ansible
+           :commands ansible-mode)
 
-  #+end_src
+       #+end_src
 
 ****** crontab-mode
 
-  #+begin_src emacs-lisp :tangle sod.el
+       #+begin_src emacs-lisp :tangle sod.el
 
- (use-package crontab-mode
- :mode "\\.cron\\(tab\\)?\\'")
+         (use-package crontab-mode
+           :mode "\\.cron\\(tab\\)?\\'")
 
-  #+end_src
+       #+end_src
 
 ***** CSS
 ****** scss-mode
 
-  #+begin_src emacs-lisp :tangle sod.el
+       #+begin_src emacs-lisp :tangle sod.el
 
- (use-package scss-mode
-   :commands scss-mode
-   :mode "\\.s{a|c}ss?\\'")
+         (use-package scss-mode
+           :commands scss-mode
+           :mode "\\.s{a|c}ss?\\'")
 
-  #+end_src
+       #+end_src
 
 ******* ssh-mode
 
-  #+begin_src emacs-lisp :tangle sod.el
+        #+begin_src emacs-lisp :tangle sod.el
 
- (use-package ssh-config-mode
-   :mode ((".ssh/config\\'"       . ssh-config-mode)
-          ("sshd?_config\\'"      . ssh-config-mode)
-          ("known_hosts\\'"       . ssh-known-hosts-mode)
-          ("authorized_keys2?\\'" . ssh-authorized-keys-mode)))
-  #+end_src
+          (use-package ssh-config-mode
+            :mode ((".ssh/config\\'"       . ssh-config-mode)
+                   ("sshd?_config\\'"      . ssh-config-mode)
+                   ("known_hosts\\'"       . ssh-known-hosts-mode)
+                   ("authorized_keys2?\\'" . ssh-authorized-keys-mode)))
+        #+end_src
 
 ******* yaml-mode
 
-  #+begin_src emacs-lisp :tangle sod.el
+        #+begin_src emacs-lisp :tangle sod.el
 
- (use-package yaml-mode
-   :commands yaml-mode
-   :mode "\\.yml\\'")
-   :delight
+          (use-package yaml-mode
+            :commands yaml-mode
+            :mode "\\.yml\\'")
+          :delight
 
-  #+end_src
+        #+end_src
 ***** GO
 ****** go-mode
 
-  #+begin_src emacs-lisp :tangle sod.el
+       #+begin_src emacs-lisp :tangle sod.el
 
- (use-package go-mode
-   :defer 1
-   :commands go-mode
-   :mode "\\.go$"
-   :config
-    (add-hook 'before-save-hook 'gofmt-before-save))
+         (use-package go-mode
+           :defer 1
+           :commands go-mode
+           :mode "\\.go$"
+           :config
+           (add-hook 'before-save-hook 'gofmt-before-save))
 
-  #+end_src
+       #+end_src
 
 ***** HTML
 ****** emacs-htmlize
 
-  #+begin_src emacs-lisp :tangle sod.el
+       #+begin_src emacs-lisp :tangle sod.el
 
- (use-package htmlize)
+         (use-package htmlize)
 
-  #+end_src
+       #+end_src
 ***** LATEX
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
-  (use-package auctex
-    :defer t)
+        (use-package auctex
+          :defer t)
 
-  #+end_src
+      #+end_src
 
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
- (use-package tex
-   :ensure auctex)
+        (use-package tex
+          :ensure auctex)
 
-  #+end_src
+      #+end_src
 ***** MARKDOWN
 
       #+begin_src emacs-lisp :tangle yes
 
-(use-package markdown-mode
-    :commands (markdown-mode gfm-mode)
-    :mode (("README\\.md\\'" . gfm-mode)
-           ("\\.md\\'" . markdown-mode)
-           ("\\.markdown\\'" . markdown-mode))
-    :init (setq markdown-command "multimarkdown"))
+        (use-package markdown-mode
+          :commands (markdown-mode gfm-mode)
+          :mode (("README\\.md\\'" . gfm-mode)
+                 ("\\.md\\'" . markdown-mode)
+                 ("\\.markdown\\'" . markdown-mode))
+          :init (setq markdown-command "multimarkdown"))
 
       #+end_src
 ***** JAVASCRIPT
@@ -1733,57 +1756,57 @@ requires graphvis system package to be installed
        - code browsing using the `imenu' package
        - many customization options
 
-  #+begin_src emacs-lisp :tangle sod.el
+       #+begin_src emacs-lisp :tangle sod.el
 
-       (use-package js2-mode
-	 :init
-	   (setq js-basic-indent 2)
-	   (setq-default js2-basic-indent 2
+         (use-package js2-mode
+           :init
+           (setq js-basic-indent 2)
+           (setq-default js2-basic-indent 2
                          js2-indent-level 2
-			 js2-auto-indent-p t
-			 js2-cleanup-whitespace t
-			 js2-enter-indents-newline t
-			 js2-indent-on-enter-key t
-			 js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$"))
+                         js2-auto-indent-p t
+                         js2-cleanup-whitespace t
+                         js2-enter-indents-newline t
+                         js2-indent-on-enter-key t
+                         js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$"))
 
            (add-hook 'js2-mode-hook
-	     (lambda ()
-	       (push '("function" . ?ƒ) prettify-symbols-alist)))
+                     (lambda ()
+                       (push '("function" . ?ƒ) prettify-symbols-alist)))
 
            (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
 
-  #+end_src
+       #+end_src
 
 ******* Color defined variables with color-identifiers-mode:
 
-  #+begin_src emacs-lisp :tangle sod.el
+        #+begin_src emacs-lisp :tangle sod.el
 
- (use-package color-identifiers-mode
-     :init
-       (add-hook 'js2-mode-hook 'color-identifiers-mode))
+          (use-package color-identifiers-mode
+            :init
+            (add-hook 'js2-mode-hook 'color-identifiers-mode))
 
-  #+end_src
+        #+end_src
 
 *******  While editing JavaScript is baked into Emacs, it is quite important to have flycheck validate the source based on jshint, and eslint. Let’s prefer eslint:
 
-  #+begin_src emacs-lisp :tangle no
+        #+begin_src emacs-lisp :tangle no
 
- (add-hook 'js2-mode-hook
-           (lambda () (flycheck-select-checker "javascript-eslint")))
+          (add-hook 'js2-mode-hook
+                    (lambda () (flycheck-select-checker "javascript-eslint")))
 
-  #+end_src
+        #+end_src
 
 ****** tern
        The Tern project is a JavaScript analyzer that can be used to improve the JavaScript integration with editors like Emacs.
 
-  #+begin_src emacs-lisp :tangle sod.el
+       #+begin_src emacs-lisp :tangle sod.el
 
- (use-package tern)
+         (use-package tern)
 
- (use-package tern-auto-complete)
+         (use-package tern-auto-complete)
 
 
-  #+end_src
+       #+end_src
 
        The following additional keys are bound:
 
@@ -1824,51 +1847,51 @@ requires graphvis system package to be installed
        - sv is split-var-declaration: Splits a var with multiple vars declared, into several var statements.
        - uw is unwrap: Replaces the parent statement with the selected region.
 
-  #+begin_src emacs-lisp :tangle sod.el
+       #+begin_src emacs-lisp :tangle sod.el
 
- (use-package js2-refactor
-   :init   (add-hook 'js2-mode-hook 'js2-refactor-mode)
-   :config (js2r-add-keybindings-with-prefix "C-c ."))
+         (use-package js2-refactor
+           :init   (add-hook 'js2-mode-hook 'js2-refactor-mode)
+           :config (js2r-add-keybindings-with-prefix "C-c ."))
 
-  #+end_src
+       #+end_src
 
 ****** rjsx-mode
 
-  #+begin_src emacs-lisp :tangle sod.el
+       #+begin_src emacs-lisp :tangle sod.el
 
- (use-package rjsx-mode
-   :commands rjsx-mode
-   :init
-   (progn
-     (add-to-list 'auto-mode-alist '("{components|pages}\\/.*\\.js\\'" . rjsx-mode))
-     (setq js2-basic-offset 2)))
+         (use-package rjsx-mode
+           :commands rjsx-mode
+           :init
+           (progn
+             (add-to-list 'auto-mode-alist '("{components|pages}\\/.*\\.js\\'" . rjsx-mode))
+             (setq js2-basic-offset 2)))
 
-  #+end_src
+       #+end_src
 
 ****** vue-mode
 
-  #+begin_src emacs-lisp :tangle sod.el
+       #+begin_src emacs-lisp :tangle sod.el
 
- (use-package vue-mode
-   :config (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode)))
+         (use-package vue-mode
+           :config (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode)))
 
-  #+end_src
+       #+end_src
 
 ****** vue-html-mode
 
-  #+begin_src emacs-lisp :tangle sod.el
+       #+begin_src emacs-lisp :tangle sod.el
 
- (use-package vue-html-mode)
+         (use-package vue-html-mode)
 
-  #+end_src
+       #+end_src
 ***** PYTHON
 ***** skewer-mode
-  #+begin_src emacs-lisp :tangle sod.el
+      #+begin_src emacs-lisp :tangle sod.el
 
- (use-package skewer-mode
-    :init (add-hook 'js2-mode-hook 'skewer-mode))
+        (use-package skewer-mode
+          :init (add-hook 'js2-mode-hook 'skewer-mode))
 
-  #+end_src
+      #+end_src
 
       Kick things off with run-skewer, and then:
 
@@ -1886,17 +1909,17 @@ requires graphvis system package to be installed
      other things). It offers features that other news and mail readers
      lack. It is highly customizable and extensible.
 
-  #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle sod.el
 
-(require 'gnus)
+       (require 'gnus)
 
-  #+end_src
+     #+end_src
 
 ** End INIT
 
-  #+begin_src emacs-lisp :tangle sod.el
+   #+begin_src emacs-lisp :tangle sod.el
 
-(provide 'init)
-;;; sod.org ends here
+     (provide 'init)
+     ;;; sod.org ends here
 
-  #+end_src
+   #+end_src

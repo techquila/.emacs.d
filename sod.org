@@ -170,10 +170,8 @@
      Activate all the packages, (in particular autoloads), and set load path.
 
      #+begin_src emacs-lisp :tangle sod.el
-
        (require 'package)
-       (package-refresh-contents)
-
+;;     (package-initialize)  ;; re-enable when running profiler script as it errors out otherwise
      #+end_src
 
 **** use-package
@@ -1402,7 +1400,7 @@
      You can solve this problem by setting up Emacs as an edit server, so
      that it “listens” for external edit requests and acts accordingly.
 
-     #+begin_src emacs-lisp :tangle sod.el
+     #+begin_src emacs-lisp :tangle yes
 
        (add-hook 'after-init-hook
                  (lambda ()
@@ -1916,6 +1914,9 @@
      #+end_src
 
 ** End INIT
+   #+begin_src emacs-lisp :tangle sod.el
+(byte-recompile-directory (expand-file-name "~/.emacs.d") 0)
+   #+end_src
 
    #+begin_src emacs-lisp :tangle sod.el
 
